@@ -48,6 +48,10 @@
     <Folder Include="Modules\Gambling\Common\CurrencyEvents\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\src\SearchImages\searchimages\SearchImages.csproj" />
+  </ItemGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'GlobalNadeko' ">
     <DefineConstants>$(DefineConstants);GLOBAL_NADEKO</DefineConstants>
     <NoWarn>$(NoWarn);CS1573;CS1591</NoWarn>
