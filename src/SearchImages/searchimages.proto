@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package nadeko.microservices;
+
+service SearchImages {
+	rpc Boobs(BoobsRequest) returns (UrlReply) {}
+	rpc Butts(ButtsRequest) returns (UrlReply) {}
+	rpc Danbooru(TagRequest) returns (UrlReply) {}
+	rpc Rule34(TagRequest) returns (UrlReply) {}
+	rpc Yandere(TagRequest) returns (UrlReply) {}
+	rpc Gelbooru(TagRequest) returns (UrlReply) {}
+	rpc Hentai(TagRequest) returns (UrlReply) {}
+	rpc SafeBooru(TagRequest) returns (UrlReply) {}
+	rpc Konachan(TagRequest) returns (UrlReply) {}
+	rpc DerpiBooru(TagRequest) returns (UrlReply) {}
+	rpc E621(TagRequest) returns (UrlReply) {}
+	rpc ToggleBlacklistTag(BlacklistTagMessage) returns (BlacklistTagReply) {}
+	rpc GetBlacklsitedTags(GetBlacklistedTagsMessage) returns (GetBlacklistedTagsReply) {}
+	rpc ClearCache(ClearCacheRequest) returns (ClearCacheReply) {}
+}
+
+message BoobsRequest{
+}
+
+message ButtsRequest {
+
+}
+
+message UrlReply {
+	string url = 1;
+	string error = 2;
+	repeated string tags = 3;
+	string provider = 4;
+	string rating = 5;
+}
+
+message TagRequest {
+	repeated string tags = 1;
+	bool forceExplicit = 2;
+	uint64 guildId = 3;
+}
+
+message BlacklistTagMessage {
+	string tag = 1;
+	uint64 guildId = 2;
+}
+
+message BlacklistTagReply {
+	bool isAdded = 1;
+}
+
+message GetBlacklistedTagsMessage {
+	uint64 guildId = 1;
+}
+
+message GetBlacklistedTagsReply {
+	repeated string blacklistedTags = 1;
+}
+
+message ClearCacheRequest {
+	
+}
+
+message ClearCacheReply {
+
+}

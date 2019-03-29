@@ -1,10 +1,13 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Grpc.Core;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Impl;
 using NadekoBot.Extensions;
 using NLog;
+using Serilog;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -152,6 +155,54 @@ namespace NadekoBot.Modules
                     return Task.CompletedTask;
                 });
                 return Task.CompletedTask;
+            }
+        }
+
+        protected async Task<TReply> Rpc<TRequest, TReply>(ICommandContext ctx, Func<TRequest, CallOptions, AsyncUnaryCall<TReply>> rpcFactory, TRequest request) where TReply : class
+        {
+            var (data, err) = await Rpc("en-US", rpcFactory, request).ConfigureAwait(false);
+            if (err is null && data != default)
+            {
+                return data;
+            }
+
+            await ctx.Channel.SendErrorAsync(err).ConfigureAwait(false);
+            throw new RpcException(Status.DefaultCancelled);
+        }
+
+        protected async Task<TReply> ErrorlessRpc<TRequest, TReply>(ICommandContext ctx, Func<TRequest, CallOptions, AsyncUnaryCall<TReply>> rpcFactory, TRequest request) where TReply : class
+        {
+            var (data, err) = await Rpc("en-US", rpcFactory, request).ConfigureAwait(false);
+            if (err is null && data != default)
+            {
+                return data;
+            }
+
+            return null;
+        }
+
+        protected Task<(TReply data, string error)> Rpc<TRequest, TReply>(CultureInfo locale, Func<TRequest, CallOptions, AsyncUnaryCall<TReply>> rpcFactory, TRequest request) where TReply : class
+            => Rpc(locale.Name, rpcFactory, request);
+
+        protected async Task<(TReply data, string error)> Rpc<TRequest, TReply>(string locale, Func<TRequest, CallOptions, AsyncUnaryCall<TReply>> rpcFactory, TRequest request) where TReply : class
+        {
+            try
+            {
+                var options = new CallOptions(headers: new Metadata());
+                options.Headers.Add("accept-language", locale);
+
+                var result = await rpcFactory(request, options);
+                return (result, null);
+            }
+            catch (RpcException rpcEx)
+            {
+                Log.Warning(rpcEx, "Rpc Exception");
+                return (default, rpcEx.Status.Detail);
+            }
+            catch (Exception ex)
+            {
+                Log.Information(ex, "Exception in Rpc: {Message}", ex.Message);
+                return (default, ex.Message);
             }
         }
     }

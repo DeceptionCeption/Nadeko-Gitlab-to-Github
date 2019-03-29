@@ -19,6 +19,7 @@
     <PackageReference Include="Google.Apis.Urlshortener.v1" Version="1.35.1.138" />
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.35.1.1226" />
     <PackageReference Include="Google.Apis.Customsearch.v1" Version="1.35.1.1301" />
+    <PackageReference Include="Grpc.Core" Version="1.19.0" />
     <PackageReference Include="Html2Markdown" Version="3.2.1.341" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.1" />
@@ -34,6 +35,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NLog" Version="4.5.8" />
     <PackageReference Include="Octokit" Version="0.31.0" />
+    <PackageReference Include="Serilog" Version="2.8.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0004" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0004" />
     <PackageReference Include="StackExchange.Redis" Version="1.2.7-alpha-00002" />

@@ -36,6 +36,9 @@ namespace NadekoBot.Extensions
     {
         private static Logger _log = LogManager.GetCurrentClassLogger();
 
+        public static Task OkAsync(this ICommandContext ctx)
+            => ctx.Channel.SendConfirmAsync("👌");
+
         // https://github.com/SixLabors/ImageSharp/tree/master/samples/AvatarWithRoundedCorner
         public static void ApplyRoundedCorners(this Image<Rgba32> img, float cornerRadius)
         {
