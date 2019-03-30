@@ -4,6 +4,7 @@ using NadekoBot.Core.Services.Impl;
 using NadekoBot.Extensions;
 using Newtonsoft.Json;
 using NLog;
+using Serilog;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -165,6 +166,16 @@ namespace NadekoBot.Core.Services
             sub.Subscribe(_key + "_die",
                 (ch, x) => Environment.Exit(0),
                 CommandFlags.FireAndForget);
+
+            var _credsReloader = Task.Run(async () =>
+            {
+                while (true)
+                {
+                    await Task.Delay(10000).ConfigureAwait(false);
+                    Log.Information("Reloading creds");
+                    _creds.Reload();
+                }
+            });
         }
 
         private void OnStop(RedisChannel ch, RedisValue data)
@@ -343,7 +354,6 @@ namespace NadekoBot.Core.Services
 
         private Process StartShard(int shardId)
         {
-            _creds.Reload();
             return Process.Start(new ProcessStartInfo()
             {
                 FileName = _creds.ShardRunCommand,
