@@ -20,23 +20,23 @@ namespace NadekoBot.Modules.NSFW
             _service = service;
         }
 
-        private Task NsfwReply(UrlReply data)
+        public static Task NsfwReply(ICommandContext ctx, UrlReply data)
         {
             if (!string.IsNullOrWhiteSpace(data.Error))
             {
-                return Context.Channel.SendErrorAsync(data.Error);
+                return ctx.Channel.SendErrorAsync(data.Error);
             }
 
-            return Context.Channel.EmbedAsync(new EmbedBuilder()
+            return ctx.Channel.EmbedAsync(new EmbedBuilder()
                 .WithOkColor()
                 .WithImageUrl(data.Url)
                 .WithDescription($"[link]({data.Url})")
                 .WithFooter($"{data.Rating} ({data.Provider}) | {string.Join(" | ", data.Tags.Where(x => !string.IsNullOrWhiteSpace(x)).Take(3))}"));
         }
 
-        private TagRequest GetTagRequest(IEnumerable<string> tags = null, bool forceExplicit = false)
+        public static TagRequest GetTagRequest(ICommandContext ctx, IEnumerable<string> tags = null, bool forceExplicit = false)
         {
-            ulong guildId = Context.Guild?.Id ?? 0;
+            ulong guildId = ctx.Guild?.Id ?? 0;
 
             var tagRequest = new TagRequest
             {
@@ -55,7 +55,7 @@ namespace NadekoBot.Modules.NSFW
         {
             var data = await Rpc(Context, _service.BoobsAsync, new BoobsRequest { });
 
-            await NsfwReply(data);
+            await NsfwReply(Context, data);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
@@ -63,93 +63,93 @@ namespace NadekoBot.Modules.NSFW
         {
             var data = await Rpc(Context, _service.ButtsAsync, new ButtsRequest { });
 
-            await NsfwReply(data);
+            await NsfwReply(Context, data);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         public async Task DanBooru(params string[] tags)
         {
-            var payload = GetTagRequest(tags);
+            var payload = GetTagRequest(Context, tags);
 
             var data = await Rpc(Context, _service.DanbooruAsync, payload);
 
-            await NsfwReply(data);
+            await NsfwReply(Context, data);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         public async Task DerpiBooru(params string[] tags)
         {
-            var payload = GetTagRequest(tags);
+            var payload = GetTagRequest(Context, tags);
 
             var data = await Rpc(Context, _service.DerpiBooruAsync, payload);
 
-            await NsfwReply(data);
+            await NsfwReply(Context, data);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         public async Task GelBooru(params string[] tags)
         {
-            var payload = GetTagRequest(tags);
+            var payload = GetTagRequest(Context, tags);
 
             var data = await Rpc(Context, _service.GelbooruAsync, payload);
 
-            await NsfwReply(data);
+            await NsfwReply(Context, data);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         public async Task E621(params string[] tags)
         {
-            var payload = GetTagRequest(tags);
+            var payload = GetTagRequest(Context, tags);
 
             var data = await Rpc(Context, _service.E621Async, payload);
 
-            await NsfwReply(data);
+            await NsfwReply(Context, data);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         public async Task Konachan(params string[] tags)
         {
-            var payload = GetTagRequest(tags);
+            var payload = GetTagRequest(Context, tags);
 
             var data = await Rpc(Context, _service.KonachanAsync, payload);
 
-            await NsfwReply(data);
+            await NsfwReply(Context, data);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         public async Task Yandere(params string[] tags)
         {
-            var payload = GetTagRequest(tags);
+            var payload = GetTagRequest(Context, tags);
 
             var data = await Rpc(Context, _service.YandereAsync, payload);
 
-            await NsfwReply(data);
+            await NsfwReply(Context, data);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         public async Task Rule34(params string[] tags)
         {
-            var payload = GetTagRequest(tags);
+            var payload = GetTagRequest(Context, tags);
 
             var data = await Rpc(Context, _service.Rule34Async, payload);
 
-            await NsfwReply(data);
+            await NsfwReply(Context, data);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         public async Task Hentai(params string[] tags)
         {
-            var payload = GetTagRequest(tags, forceExplicit: true);
+            var payload = GetTagRequest(Context, tags, forceExplicit: true);
 
             var data = await Rpc(Context, _service.HentaiAsync, payload);
 
-            await NsfwReply(data);
+            await NsfwReply(Context, data);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         public async Task HentaiBomb(params string[] tags)
         {
-            var payload = GetTagRequest(tags, forceExplicit: true);
+            var payload = GetTagRequest(Context, tags, forceExplicit: true);
 
             var images = await Task.WhenAll(ErrorlessRpc(Context, _service.GelbooruAsync, payload),
                                             ErrorlessRpc(Context, _service.DanbooruAsync, payload),

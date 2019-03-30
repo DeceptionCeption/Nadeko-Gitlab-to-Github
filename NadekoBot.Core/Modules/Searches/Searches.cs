@@ -5,6 +5,7 @@ using AngleSharp.Parser.Html;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Nadeko.Microservices;
 using NadekoBot.Common;
 using NadekoBot.Common.Attributes;
 using NadekoBot.Common.Replacements;
@@ -35,12 +36,15 @@ namespace NadekoBot.Modules.Searches
         private readonly IGoogleApiService _google;
         private readonly IHttpClientFactory _httpFactory;
         private static readonly NadekoRandom _rng = new NadekoRandom();
+        private new readonly SearchImages.SearchImagesClient _searchImagesService;
 
-        public Searches(IBotCredentials creds, IGoogleApiService google, IHttpClientFactory factory)
+        public Searches(IBotCredentials creds, IGoogleApiService google, IHttpClientFactory factory,
+            SearchImages.SearchImagesClient service)
         {
             _creds = creds;
             _google = google;
             _httpFactory = factory;
+            _searchImagesService = service;
         }
 
         //for anonymasen :^)
@@ -598,8 +602,14 @@ namespace NadekoBot.Modules.Searches
         }
 
         [NadekoCommand, Usage, Description, Aliases]
-        public Task Safebooru([Remainder] string tag = null)
-            => InternalDapiCommand(Context.Message, tag, DapiSearchType.Safebooru);
+        public async Task Safebooru(params string[] tags)
+        {
+            var payload = NSFW.NSFW.GetTagRequest(Context, tags);
+
+            var data = await Rpc(Context, _searchImagesService.SafeBooruAsync, payload);
+
+            await NSFW.NSFW.NsfwReply(Context, data);
+        }
 
         // done in 3.0
         [NadekoCommand, Usage, Description, Aliases]

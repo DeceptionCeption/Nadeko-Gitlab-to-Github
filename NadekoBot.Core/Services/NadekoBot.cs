@@ -167,7 +167,7 @@ namespace NadekoBot
                 IBotConfigProvider botConfigProvider = new BotConfigProvider(_db, _botConfig, Cache);
 
                 // new stuff
-                var searchImagesMicroservice = RemoteService.CreateClient<Nadeko.Microservices.SearchImages.SearchImagesClient>(Credentials.BotListToken, 25158);
+                var searchImagesMicroservice = RemoteService.CreateClient<Nadeko.Microservices.SearchImages.SearchImagesClient>(Credentials.ServicesIp, 25158);
 
 
                 var s = new ServiceCollection()
