@@ -744,23 +744,6 @@ namespace NadekoBot.Modules.Searches
             }
         }
 
-        public async Task InternalDapiCommand(IUserMessage umsg, string tag, DapiSearchType type)
-        {
-            var channel = umsg.Channel;
-
-            tag = tag?.Trim() ?? "";
-
-            var imgObj = await _service.DapiSearch(tag, type, Context.Guild?.Id).ConfigureAwait(false);
-
-            if (imgObj == null)
-                await channel.SendErrorAsync(umsg.Author.Mention + " " + GetText("no_results")).ConfigureAwait(false);
-            else
-                await channel.EmbedAsync(new EmbedBuilder().WithOkColor()
-                    .WithDescription($"{umsg.Author.Mention} [{tag ?? "url"}]({imgObj.FileUrl})")
-                    .WithImageUrl(imgObj.FileUrl)
-                    .WithFooter(efb => efb.WithText(type.ToString()))).ConfigureAwait(false);
-        }
-
         public async Task<bool> ValidateQuery(IMessageChannel ch, string query)
         {
             if (!string.IsNullOrWhiteSpace(query))
