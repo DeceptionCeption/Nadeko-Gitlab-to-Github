@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Serilog;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -13,7 +12,7 @@ namespace SearchImagesService.Common
 {
     public class SearchImageCacher
     {
-        private readonly ConcurrentDictionary<DapiSearchType, SemaphoreSlim> _locks = new ConcurrentDictionary<DapiSearchType, SemaphoreSlim>();
+        private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         private readonly HttpClient _http;
         private readonly Random _rng;
         private readonly SortedSet<ImageCacherObject> _cache;
@@ -44,7 +43,7 @@ namespace SearchImagesService.Common
             }
 
             blacklistedTags = blacklistedTags.Select(t => t.ToLowerInvariant()).ToHashSet();
-            
+
             if (tags.Any(x => blacklistedTags.Contains(x)))
             {
                 // todo localize blacklisted_tag (already exists)
@@ -55,7 +54,6 @@ namespace SearchImagesService.Common
                 tags = tags.Select(tag => tag?.Replace("yuri", "female/female", StringComparison.InvariantCulture))
                     .ToArray();
 
-            var _lock = GetLock(type);
             await _lock.WaitAsync().ConfigureAwait(false);
             try
             {
@@ -101,11 +99,6 @@ namespace SearchImagesService.Common
             {
                 _lock.Release();
             }
-        }
-
-        private SemaphoreSlim GetLock(DapiSearchType type)
-        {
-            return _locks.GetOrAdd(type, _ => new SemaphoreSlim(1, 1));
         }
 
         public async Task<ImageCacherObject[]> DownloadImagesAsync(string[] tags, bool isExplicit, DapiSearchType type)
