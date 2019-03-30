@@ -1,7 +1,9 @@
 ﻿using Grpc.Core;
 using Nadeko.Microservices;
+using NadekoDb;
 using Newtonsoft.Json.Linq;
 using SearchImagesService.Common;
+using SearchImagesService.Common.Db;
 using Serilog;
 using System;
 using System.Collections.Concurrent;
@@ -17,6 +19,7 @@ namespace SearchImagesService
         private readonly Random _rng;
         private readonly HttpClient _http;
         private readonly SearchImageCacher _cache;
+        private readonly ServiceDb<SearchImageContext> _db;
         private readonly ConcurrentDictionary<ulong, HashSet<string>> _blacklistedTags = new ConcurrentDictionary<ulong, HashSet<string>>();
 
         public SearchImagesService()
@@ -24,6 +27,13 @@ namespace SearchImagesService
             _rng = new Random();
             _http = new HttpClient();
             _cache = new SearchImageCacher();
+            _db = new ServiceDb<SearchImageContext>();
+
+            using (var ctx = _db.GetDbContext())
+            {
+                _blacklistedTags = new ConcurrentDictionary<ulong, HashSet<string>>(ctx.BlacklistedTags
+                    .ToDictionary(x => x.GuildId, x => new HashSet<string>(x.Tags)));
+            }
         }
 
         private Task<UrlReply> GetNsfwImageAsync(TagRequest request, ServerCallContext context, DapiSearchType dapi)
@@ -46,10 +56,9 @@ namespace SearchImagesService
                 };
             }
 
-            Log.Information("Getting {V} image...", dapi.ToString());
+            Log.Information("Getting {V} image for Guild: {GuildId}...", dapi.ToString(), guildId);
             try
             {
-                Console.WriteLine(guildId);
                 _blacklistedTags.TryGetValue(guildId, out var blTags);
 
                 var result = await _cache.GetImage(tags, forceExplicit, dapi, blTags);
@@ -188,6 +197,27 @@ namespace SearchImagesService
                 if (!isAdded)
                 {
                     blacklistedTags.Remove(tag);
+                }
+
+                var tagArr = blacklistedTags.ToArray();
+
+                using (var ctx = _db.GetDbContext())
+                {
+                    var bt = ctx.BlacklistedTags.FirstOrDefault(x => x.GuildId == request.GuildId);
+                    if (bt is null)
+                    {
+                        ctx.BlacklistedTags.Add(new Common.Db.Models.BlacklistedTags
+                        {
+                            GuildId = request.GuildId,
+                            Tags = tagArr
+                        });
+                    }
+                    else
+                    {
+                        bt.Tags = tagArr;
+                    }
+
+                    ctx.SaveChanges();
                 }
 
                 return Task.FromResult(new BlacklistTagReply

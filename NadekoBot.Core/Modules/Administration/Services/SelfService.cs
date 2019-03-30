@@ -1,25 +1,25 @@
-﻿using System.Collections.Immutable;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.WebSocket;
-using NadekoBot.Common.ModuleBehaviors;
-using NadekoBot.Extensions;
-using NadekoBot.Core.Services;
-using NadekoBot.Core.Services.Impl;
-using NLog;
-using StackExchange.Redis;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Newtonsoft.Json;
-using NadekoBot.Common.ShardCom;
 using Microsoft.EntityFrameworkCore;
+using NadekoBot.Common.ModuleBehaviors;
+using NadekoBot.Common.ShardCom;
+using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
-using System.Threading;
-using System.Collections.Concurrent;
-using System;
+using NadekoBot.Core.Services.Impl;
+using NadekoBot.Extensions;
+using Newtonsoft.Json;
+using NLog;
 using Octokit;
+using StackExchange.Redis;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NadekoBot.Modules.Administration.Services
 {
@@ -95,7 +95,11 @@ namespace NadekoBot.Modules.Administration.Services
                 }, null, TimeSpan.FromHours(8), TimeSpan.FromHours(8));
             }
             sub.Subscribe(_creds.RedisKey() + "_reload_bot_config",
-                delegate { _bc.Reload(); }, CommandFlags.FireAndForget);
+                delegate
+                {
+                    _bc.Reload();
+                    _creds.Reload();
+                }, CommandFlags.FireAndForget);
             sub.Subscribe(_creds.RedisKey() + "_leave_guild", async (ch, v) =>
             {
                 try
@@ -135,7 +139,7 @@ namespace NadekoBot.Modules.Administration.Services
                     .ToDictionary(
                         x => x.Key,
                         y => y.ToDictionary(x => x.Id,
-                            x => TimerFromStartupCommand((StartupCommand)x))
+                            x => TimerFromStartupCommand(x))
                     .ToConcurrent())
                     .ToConcurrent();
 

@@ -49,7 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\SearchImages\searchimages\SearchImages.csproj" />
+    <ProjectReference Include="..\src\Services\SearchImages\searchimages\SearchImages.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'GlobalNadeko' ">

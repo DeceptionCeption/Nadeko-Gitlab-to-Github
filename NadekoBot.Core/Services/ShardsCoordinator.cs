@@ -343,6 +343,7 @@ namespace NadekoBot.Core.Services
 
         private Process StartShard(int shardId)
         {
+            _creds.Reload();
             return Process.Start(new ProcessStartInfo()
             {
                 FileName = _creds.ShardRunCommand,

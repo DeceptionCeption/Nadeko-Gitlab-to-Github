@@ -1,26 +1,27 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using NadekoBot.Core.Services;
-using NadekoBot.Core.Services.Impl;
-using NLog;
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Collections.Immutable;
-using System.Diagnostics;
-using NadekoBot.Core.Services.Database.Models;
-using System.Threading;
-using System.IO;
-using NadekoBot.Extensions;
-using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using NadekoBot.Common;
 using NadekoBot.Common.ShardCom;
-using StackExchange.Redis;
+using NadekoBot.Core.Common;
+using NadekoBot.Core.Services;
+using NadekoBot.Core.Services.Database.Models;
+using NadekoBot.Core.Services.Impl;
+using NadekoBot.Extensions;
 using Newtonsoft.Json;
-using Microsoft.Extensions.DependencyInjection;
+using NLog;
+using StackExchange.Redis;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NadekoBot
 {
@@ -165,6 +166,10 @@ namespace NadekoBot
 
                 IBotConfigProvider botConfigProvider = new BotConfigProvider(_db, _botConfig, Cache);
 
+                // new stuff
+                var searchImagesMicroservice = RemoteService.CreateClient<Nadeko.Microservices.SearchImages.SearchImagesClient>(Credentials.BotListToken, 25158);
+
+
                 var s = new ServiceCollection()
                     .AddSingleton<IBotCredentials>(Credentials)
                     .AddSingleton(_db)
@@ -173,6 +178,7 @@ namespace NadekoBot
                     .AddSingleton(botConfigProvider)
                     .AddSingleton(this)
                     .AddSingleton(uow)
+                    .AddSingleton(searchImagesMicroservice)
                     .AddSingleton(Cache);
 
                 s.AddHttpClient();

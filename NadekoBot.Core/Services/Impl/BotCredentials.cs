@@ -10,46 +10,52 @@ using System.Linq;
 
 namespace NadekoBot.Core.Services.Impl
 {
-    public class BotCredentials : IBotCredentials
+    public partial class BotCredentials : IBotCredentials
     {
         private Logger _log;
 
-        public ulong ClientId { get; }
-        public string GoogleApiKey { get; }
-        public string MashapeKey { get; }
-        public string Token { get; }
+        public ulong ClientId { get; private set; }
+        public string GoogleApiKey { get; private set; }
+        public string MashapeKey { get; private set; }
+        public string Token { get; private set; }
 
-        public ImmutableArray<ulong> OwnerIds { get; }
+        public ImmutableArray<ulong> OwnerIds { get; private set; }
 
-        public string LoLApiKey { get; }
-        public string OsuApiKey { get; }
-        public string CleverbotApiKey { get; }
-        public RestartConfig RestartCommand { get; }
-        public DBConfig Db { get; }
-        public int TotalShards { get; }
-        public string CarbonKey { get; }
+        public string LoLApiKey { get; private set; }
+        public string OsuApiKey { get; private set; }
+        public string CleverbotApiKey { get; private set; }
+        public RestartConfig RestartCommand { get; private set; }
+        public DBConfig Db { get; private set; }
+        public int TotalShards { get; private set; }
+        public string CarbonKey { get; private set; }
 
         private readonly string _credsFileName = Path.Combine(Directory.GetCurrentDirectory(), "credentials.json");
-        public string PatreonAccessToken { get; }
-        public string ShardRunCommand { get; }
-        public string ShardRunArguments { get; }
-        public int ShardRunPort { get; }
+        public string PatreonAccessToken { get; private set; }
+        public string ShardRunCommand { get; private set; }
+        public string ShardRunArguments { get; private set; }
+        public int ShardRunPort { get; private set; }
 
-        public string PatreonCampaignId { get; }
-        public string MiningProxyUrl { get; }
-        public string MiningProxyCreds { get; }
+        public string PatreonCampaignId { get; private set; }
+        public string MiningProxyUrl { get; private set; }
+        public string MiningProxyCreds { get; private set; }
 
-        public string TwitchClientId { get; }
+        public string TwitchClientId { get; private set; }
 
-        public string VotesUrl { get; }
-        public string VotesToken { get; }
-        public string BotListToken { get; }
-        public string RedisOptions { get; }
+        public string VotesUrl { get; private set; }
+        public string VotesToken { get; private set; }
+        public string BotListToken { get; private set; }
+        public string RedisOptions { get; private set; }
+        public string ServicesIp { get; private set; }
 
         public BotCredentials()
         {
             _log = LogManager.GetCurrentClassLogger();
 
+            Reload();
+        }
+
+        public void Reload()
+        {
             try { File.WriteAllText("./credentials_example.json", JsonConvert.SerializeObject(new CredentialsModel(), Formatting.Indented)); } catch { }
             if (!File.Exists(_credsFileName))
                 _log.Warn($"credentials.json is missing. Attempting to load creds from environment variables prefixed with 'NadekoBot_'. Example is in {Path.GetFullPath("./credentials_example.json")}");
@@ -89,6 +95,7 @@ namespace NadekoBot.Core.Services.Impl
                 VotesToken = data[nameof(VotesToken)];
                 VotesUrl = data[nameof(VotesUrl)];
                 BotListToken = data[nameof(BotListToken)];
+                ServicesIp = data[nameof(ServicesIp)];
 
                 var restartSection = data.GetSection(nameof(RestartCommand));
                 var cmd = restartSection["cmd"];
@@ -146,38 +153,6 @@ namespace NadekoBot.Core.Services.Impl
                 _log.Fatal(ex);
                 throw;
             }
-
-        }
-
-        private class CredentialsModel
-        {
-            public ulong ClientId { get; set; } = 123123123;
-            public string Token { get; set; } = "";
-            public ulong[] OwnerIds { get; set; } = new ulong[1];
-            public string LoLApiKey { get; set; } = "";
-            public string GoogleApiKey { get; set; } = "";
-            public string MashapeKey { get; set; } = "";
-            public string OsuApiKey { get; set; } = "";
-            public string SoundCloudClientId { get; set; } = "";
-            public string CleverbotApiKey { get; } = "";
-            public string CarbonKey { get; set; } = "";
-            public DBConfig Db { get; set; } = new DBConfig("sqlite", "Data Source=data/NadekoBot.db");
-            public int TotalShards { get; set; } = 1;
-            public string PatreonAccessToken { get; set; } = "";
-            public string PatreonCampaignId { get; set; } = "334038";
-            public string RestartCommand { get; set; } = null;
-
-            public string ShardRunCommand { get; set; } = "";
-            public string ShardRunArguments { get; set; } = "";
-            public int? ShardRunPort { get; set; } = null;
-            public string MiningProxyUrl { get; set; } = null;
-            public string MiningProxyCreds { get; set; } = null;
-
-            public string BotListToken { get; set; }
-            public string TwitchClientId { get; set; }
-            public string VotesToken { get; set; }
-            public string VotesUrl { get; set; }
-            public string RedisOptions { get; set; }
         }
 
         public bool IsOwner(IUser u) => OwnerIds.Contains(u.Id);
