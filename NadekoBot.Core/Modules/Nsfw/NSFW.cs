@@ -166,7 +166,7 @@ namespace NadekoBot.Modules.NSFW
             await Context.Channel.SendMessageAsync(string.Join("\n\n", linksEnum.Select(x => x.Url))).ConfigureAwait(false);
         }
 
-        [NadekoCommand("nsfwtagbl")]
+        [NadekoCommand, Usage, Description, Aliases]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         public async Task NsfwTagBlacklist(string tag = null)
         {
