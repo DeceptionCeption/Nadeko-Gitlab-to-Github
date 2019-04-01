@@ -4,6 +4,7 @@ using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
 using NadekoBot.Modules.Utility.Common;
 using NLog;
+using Serilog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace NadekoBot.Modules.Utility.Services
             var _ = Task.Run(async () =>
             {
                 await bot.Ready.Task.ConfigureAwait(false);
+                Log.Information("Loading message repeaters on shard {ShardId}.", client.ShardId);
                 Repeaters = new ConcurrentDictionary<ulong, ConcurrentDictionary<int, RepeatRunner>>(
                     bot.AllGuildConfigs
                         .Select(gc =>
@@ -37,7 +39,10 @@ namespace NadekoBot.Modules.Utility.Services
                             {
                                 var guild = client.GetGuild(gc.GuildId);
                                 if (guild is null)
+                                {
+                                    Log.Information("Unable to find guild {GuildId} for message repeaters.", gc.GuildId);
                                     return (0, null);
+                                }
 
                                 gc.GuildRepeaters
                                         .Select(gr => new KeyValuePair<int, RepeatRunner>(gr.Id, new RepeatRunner(guild, gr, this)))
