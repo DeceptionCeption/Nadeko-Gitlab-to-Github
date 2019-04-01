@@ -1,4 +1,5 @@
 ﻿using NadekoBot.Core.Services;
+using Serilog;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -27,6 +28,15 @@ namespace NadekoBot
                 await Task.Delay(-1);
 #endif
             }
+        }
+
+        private static void SetupLogger()
+        {
+            var log = new LoggerConfiguration()
+                .WriteTo.Console(Serilog.Events.LogEventLevel.Information)
+                .CreateLogger();
+
+            Log.Logger = log;
         }
     }
 }
