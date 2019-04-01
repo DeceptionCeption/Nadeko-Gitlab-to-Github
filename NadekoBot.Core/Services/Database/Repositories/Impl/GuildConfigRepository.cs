@@ -1,8 +1,8 @@
-﻿using NadekoBot.Core.Services.Database.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using NadekoBot.Core.Services.Database.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace NadekoBot.Core.Services.Database.Repositories.Impl
 {
@@ -52,7 +52,6 @@ namespace NadekoBot.Core.Services.Database.Repositories.Impl
                     .ThenInclude(x => x.GuildConfig)
                 .Include(gc => gc.FollowedStreams)
                 .Include(gc => gc.StreamRole)
-                .Include(gc => gc.NsfwBlacklistedTags)
                 .Include(gc => gc.XpSettings)
                     .ThenInclude(x => x.ExclusionList)
                 .Include(gc => gc.MusicSettings)

@@ -1,11 +1,9 @@
 ﻿using AngleSharp;
 using Discord;
 using Discord.WebSocket;
-using Microsoft.EntityFrameworkCore;
 using NadekoBot.Common;
 using NadekoBot.Core.Modules.Searches.Common;
 using NadekoBot.Core.Services;
-using NadekoBot.Core.Services.Database.Models;
 using NadekoBot.Core.Services.Impl;
 using NadekoBot.Extensions;
 using NadekoBot.Modules.Searches.Common;
@@ -56,8 +54,6 @@ namespace NadekoBot.Modules.Searches.Services
         public ConcurrentDictionary<ulong, Timer> AutoBoobTimers { get; } = new ConcurrentDictionary<ulong, Timer>();
         public ConcurrentDictionary<ulong, Timer> AutoButtTimers { get; } = new ConcurrentDictionary<ulong, Timer>();
 
-        private readonly ConcurrentDictionary<ulong, HashSet<string>> _blacklistedTags = new ConcurrentDictionary<ulong, HashSet<string>>();
-
         public SearchesService(DiscordSocketClient client, IGoogleApiService google,
             DbService db, NadekoBot bot, IDataCache cache, IHttpClientFactory factory,
             FontProvider fonts, IBotCredentials creds)
@@ -72,11 +68,6 @@ namespace NadekoBot.Modules.Searches.Services
             _fonts = fonts;
             _creds = creds;
             _rng = new NadekoRandom();
-
-            _blacklistedTags = new ConcurrentDictionary<ulong, HashSet<string>>(
-                bot.AllGuildConfigs.ToDictionary(
-                    x => x.GuildId,
-                    x => new HashSet<string>(x.NsfwBlacklistedTags.Select(y => y.Tag))));
 
             //translate commands
             _client.MessageReceived += (msg) =>
@@ -330,41 +321,6 @@ namespace NadekoBot.Modules.Searches.Services
             return (await _google.Translate(text, from, to).ConfigureAwait(false)).SanitizeMentions();
         }
 
-        public HashSet<string> GetBlacklistedTags(ulong guildId)
-        {
-            if (_blacklistedTags.TryGetValue(guildId, out var tags))
-                return tags;
-            return new HashSet<string>();
-        }
-
-        public bool ToggleBlacklistedTag(ulong guildId, string tag)
-        {
-            var tagObj = new NsfwBlacklitedTag
-            {
-                Tag = tag
-            };
-
-            bool added;
-            using (var uow = _db.UnitOfWork)
-            {
-                var gc = uow.GuildConfigs.ForId(guildId, set => set.Include(y => y.NsfwBlacklistedTags));
-                if (gc.NsfwBlacklistedTags.Add(tagObj))
-                    added = true;
-                else
-                {
-                    gc.NsfwBlacklistedTags.Remove(tagObj);
-                    var toRemove = gc.NsfwBlacklistedTags.FirstOrDefault(x => x.Equals(tagObj));
-                    if (toRemove != null)
-                        uow._context.Remove(toRemove);
-                    added = false;
-                }
-                var newTags = new HashSet<string>(gc.NsfwBlacklistedTags.Select(x => x.Tag));
-                _blacklistedTags.AddOrUpdate(guildId, newTags, delegate { return newTags; });
-
-                uow.Complete();
-            }
-            return added;
-        }
         public async Task<string> GetYomamaJoke()
         {
             using (var http = _httpFactory.CreateClient())
