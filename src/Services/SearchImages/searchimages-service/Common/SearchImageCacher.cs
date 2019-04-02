@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Nadeko.Common;
+using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace SearchImagesService.Common
         public SearchImageCacher()
         {
             _http = new HttpClient();
+            _http.AddFakeHeaders();
             _rng = new Random();
             _cache = new SortedSet<ImageCacherObject>();
         }
@@ -103,7 +105,10 @@ namespace SearchImagesService.Common
 
         public async Task<ImageCacherObject[]> DownloadImagesAsync(string[] tags, bool isExplicit, DapiSearchType type)
         {
-            var tag = "rating%3Aexplicit+";
+            isExplicit = type == DapiSearchType.Safebooru
+                ? false
+                : isExplicit;
+            var tag = "";
             tag += string.Join('+', tags.Select(x => x.Replace(" ", "_", StringComparison.InvariantCulture).ToLowerInvariant()));
             if (isExplicit)
                 tag = "rating%3Aexplicit+" + tag;
@@ -111,7 +116,7 @@ namespace SearchImagesService.Common
             switch (type)
             {
                 case DapiSearchType.Safebooru:
-                    website = $"https://safebooru.org/index.php?page=dapi&s=post&q=index&limit=1000&tags={tag}";
+                    website = $"https://safebooru.org/index.php?page=dapi&s=post&q=index&limit=1000&tags=yuri+kissing&json=1";
                     break;
                 case DapiSearchType.E621:
                     website = $"https://e621.net/post/index.json?limit=1000&tags={tag}";
@@ -136,6 +141,7 @@ namespace SearchImagesService.Common
                     break;
             }
 
+            Log.Information(website);
             try
             {
                 if (type == DapiSearchType.Konachan || type == DapiSearchType.Yandere ||
@@ -151,13 +157,21 @@ namespace SearchImagesService.Common
                 if (type == DapiSearchType.Derpibooru)
                 {
                     var data = await _http.GetStringAsync(website).ConfigureAwait(false);
+                    Log.Information(data);
                     return JsonConvert.DeserializeObject<DerpiContainer>(data)
                         .Search
                         .Where(x => !string.IsNullOrWhiteSpace(x.Image))
                         .Select(x => new ImageCacherObject("https:" + x.Image,
                             type, x.Tags, x.Score))
                         .ToArray();
+                }
 
+                if (type == DapiSearchType.Safebooru)
+                {
+                    var data = await _http.GetStringAsync(website).ConfigureAwait(false);
+                    return JsonConvert.DeserializeObject<SafebooruElement[]>(data)
+                        .Select(x => new ImageCacherObject(x.FileUrl, type, x.Tags, x.Rating))
+                        .ToArray();
                 }
 
                 return (await LoadXmlAsync(website, type).ConfigureAwait(false)).ToArray();
