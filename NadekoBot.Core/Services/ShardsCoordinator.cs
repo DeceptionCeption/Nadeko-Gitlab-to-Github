@@ -4,7 +4,6 @@ using NadekoBot.Core.Services.Impl;
 using NadekoBot.Extensions;
 using Newtonsoft.Json;
 using NLog;
-using Serilog;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -172,7 +171,6 @@ namespace NadekoBot.Core.Services
                 while (true)
                 {
                     await Task.Delay(10000).ConfigureAwait(false);
-                    Log.Information("Reloading creds");
                     _creds.Reload();
                 }
             });
