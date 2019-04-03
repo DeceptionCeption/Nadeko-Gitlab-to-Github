@@ -1,18 +1,18 @@
 ﻿using Discord;
+using Discord.WebSocket;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.SyndicationFeed;
 using Microsoft.SyndicationFeed.Rss;
-using NadekoBot.Extensions;
 using NadekoBot.Core.Services;
+using NadekoBot.Core.Services.Database.Models;
+using NadekoBot.Extensions;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
-using System.Collections.Generic;
-using NadekoBot.Core.Services.Database.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Concurrent;
-using Discord.WebSocket;
 
 namespace NadekoBot.Modules.Searches.Services
 {
@@ -21,7 +21,7 @@ namespace NadekoBot.Modules.Searches.Services
         private readonly DbService _db;
         private readonly ConcurrentDictionary<string, HashSet<FeedSub>> _subs;
         private readonly DiscordSocketClient _client;
-        private readonly ConcurrentDictionary<string, DateTime> _lastPosts = 
+        private readonly ConcurrentDictionary<string, DateTime> _lastPosts =
             new ConcurrentDictionary<string, DateTime>();
 
         public FeedsService(NadekoBot bot, DbService db, DiscordSocketClient client)
@@ -43,11 +43,11 @@ namespace NadekoBot.Modules.Searches.Services
                 // only the updates from after the bot has started
                 _lastPosts.AddOrUpdate(kvp.Key, DateTime.UtcNow, (k, old) => DateTime.UtcNow);
             }
-#if !GLOBAL_NADEKO
+
             var _ = Task.Run(TrackFeeds);
-#endif
+
         }
-        
+
         public async Task<EmbedBuilder> TrackFeeds()
         {
             while (true)
@@ -163,7 +163,7 @@ namespace NadekoBot.Modules.Searches.Services
                 {
                     return false;
                 }
-                else if (gc.FeedSubs.Count >= 10)
+                else if (gc.FeedSubs.Count >= 5)
                 {
                     return false;
                 }
