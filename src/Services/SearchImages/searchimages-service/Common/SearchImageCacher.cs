@@ -1,4 +1,4 @@
-﻿using Nadeko.Common;
+using Nadeko.Common;
 using Newtonsoft.Json;
 using Serilog;
 using System;
@@ -17,7 +17,6 @@ namespace SearchImagesService.Common
         private readonly HttpClient _http;
         private readonly Random _rng;
         private readonly SortedSet<ImageCacherObject> _cache;
-
         private static readonly List<string> defaultTagBlacklist = new List<string>() {
             "loli",
             "lolicon",
