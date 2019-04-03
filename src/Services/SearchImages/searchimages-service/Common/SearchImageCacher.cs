@@ -141,7 +141,6 @@ namespace SearchImagesService.Common
                     break;
             }
 
-            Log.Information(website);
             try
             {
                 if (type == DapiSearchType.Konachan || type == DapiSearchType.Yandere ||
@@ -157,7 +156,6 @@ namespace SearchImagesService.Common
                 if (type == DapiSearchType.Derpibooru)
                 {
                     var data = await _http.GetStringAsync(website).ConfigureAwait(false);
-                    Log.Information(data);
                     return JsonConvert.DeserializeObject<DerpiContainer>(data)
                         .Search
                         .Where(x => !string.IsNullOrWhiteSpace(x.Image))
