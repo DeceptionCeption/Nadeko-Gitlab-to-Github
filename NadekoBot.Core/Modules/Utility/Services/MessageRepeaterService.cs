@@ -5,7 +5,6 @@ using NadekoBot.Core.Services.Database.Models;
 using NadekoBot.Extensions;
 using NadekoBot.Modules.Utility.Common;
 using NLog;
-using Serilog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -39,7 +38,7 @@ namespace NadekoBot.Modules.Utility.Services
 #if GLOBAL_NADEKO
             await Task.Delay(30000);
 #endif
-            Log.Information("Loading message repeaters on shard {ShardId}.", _client.ShardId);
+            _log.Info("Loading message repeaters on shard {ShardId}.", _client.ShardId);
 
             var repeaters = new Dictionary<ulong, ConcurrentDictionary<int, RepeatRunner>>();
             var toDelete = new List<Repeater>();
@@ -50,7 +49,7 @@ namespace NadekoBot.Modules.Utility.Services
                     var guild = _client.GetGuild(gc.GuildId);
                     if (guild is null)
                     {
-                        Log.Information("Unable to find guild {GuildId} for message repeaters. Removing.", gc.GuildId);
+                        _log.Info("Unable to find guild {GuildId} for message repeaters. Removing.", gc.GuildId);
                         toDelete.AddRange(gc.GuildRepeaters);
                         continue;
                     }
