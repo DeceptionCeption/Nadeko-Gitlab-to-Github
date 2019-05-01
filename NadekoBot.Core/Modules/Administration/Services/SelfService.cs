@@ -188,11 +188,11 @@ namespace NadekoBot.Modules.Administration.Services
 
         private void SetNewLastUpdate(DateTime dt)
         {
-            using (var uow = _db.UnitOfWork)
+            using (var uow = _db.GetGetDbContext())
             {
                 var bc = uow.BotConfig.GetOrCreate(set => set);
                 bc.LastUpdate = dt;
-                uow.Complete();
+                uow.SaveChanges();
             }
 
             _bc.BotConfig.LastUpdate = dt;
@@ -214,11 +214,11 @@ namespace NadekoBot.Modules.Administration.Services
 
         public void SetUpdateCheck(UpdateCheckType type)
         {
-            using (var uow = _db.UnitOfWork)
+            using (var uow = _db.GetGetDbContext())
             {
                 var bc = uow.BotConfig.GetOrCreate(set => set);
                 _bc.BotConfig.CheckForUpdates = bc.CheckForUpdates = type;
-                uow.Complete();
+                uow.SaveChanges();
             }
 
             if (type == UpdateCheckType.None)
@@ -254,13 +254,13 @@ namespace NadekoBot.Modules.Administration.Services
 
         public void AddNewAutoCommand(StartupCommand cmd)
         {
-            using (var uow = _db.UnitOfWork)
+            using (var uow = _db.GetGetDbContext())
             {
                 uow.BotConfig
                    .GetOrCreate(set => set.Include(x => x.StartupCommands))
                    .StartupCommands
                    .Add(cmd);
-                uow.Complete();
+                uow.SaveChanges();
             }
 
             var autos = _autoCommands.GetOrAdd(cmd.GuildId, new ConcurrentDictionary<int, Timer>());
@@ -273,7 +273,7 @@ namespace NadekoBot.Modules.Administration.Services
 
         public IEnumerable<StartupCommand> GetStartupCommands()
         {
-            using (var uow = _db.UnitOfWork)
+            using (var uow = _db.GetGetDbContext())
             {
                 return uow.BotConfig
                    .GetOrCreate(set => set.Include(x => x.StartupCommands))
@@ -380,7 +380,7 @@ namespace NadekoBot.Modules.Administration.Services
 
         public bool RemoveStartupCommand(int index, out StartupCommand cmd)
         {
-            using (var uow = _db.UnitOfWork)
+            using (var uow = _db.GetGetDbContext())
             {
                 var cmds = uow.BotConfig
                    .GetOrCreate(set => set.Include(x => x.StartupCommands))
@@ -395,7 +395,7 @@ namespace NadekoBot.Modules.Administration.Services
                         if (autos.TryRemove(cmd.Id, out var timer))
                             timer.Change(Timeout.Infinite, Timeout.Infinite);
 
-                    uow.Complete();
+                    uow.SaveChanges();
                     return true;
                 }
             }
@@ -430,13 +430,13 @@ namespace NadekoBot.Modules.Administration.Services
 
         public void ClearStartupCommands()
         {
-            using (var uow = _db.UnitOfWork)
+            using (var uow = _db.GetGetDbContext())
             {
                 uow.BotConfig
                    .GetOrCreate(set => set.Include(x => x.StartupCommands))
                    .StartupCommands
                    .Clear();
-                uow.Complete();
+                uow.SaveChanges();
             }
         }
 
@@ -462,11 +462,11 @@ namespace NadekoBot.Modules.Administration.Services
 
         public void ForwardMessages()
         {
-            using (var uow = _db.UnitOfWork)
+            using (var uow = _db.GetGetDbContext())
             {
                 var config = uow.BotConfig.GetOrCreate(set => set);
                 _bc.BotConfig.ForwardMessages = config.ForwardMessages = !config.ForwardMessages;
-                uow.Complete();
+                uow.SaveChanges();
             }
         }
 
@@ -492,11 +492,11 @@ namespace NadekoBot.Modules.Administration.Services
 
         public void ForwardToAll()
         {
-            using (var uow = _db.UnitOfWork)
+            using (var uow = _db.GetGetDbContext())
             {
                 var config = uow.BotConfig.GetOrCreate(set => set);
                 _bc.BotConfig.ForwardToAllOwners = config.ForwardToAllOwners = !config.ForwardToAllOwners;
-                uow.Complete();
+                uow.SaveChanges();
             }
         }
 

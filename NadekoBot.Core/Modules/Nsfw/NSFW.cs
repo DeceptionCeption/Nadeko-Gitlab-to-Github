@@ -168,8 +168,8 @@ namespace NadekoBot.Modules.NSFW
 
         [NadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
-        [RequireUserPermission(GuildPermission.ManageMessages)]
-        public async Task NsfwTagBlacklist([Remainder] string tag = null)
+        [UserPerm(GuildPermission.ManageMessages)]
+        public async Task NsfwTagBlacklist([Leftover] string tag = null)
         {
             if (string.IsNullOrWhiteSpace(tag))
             {
