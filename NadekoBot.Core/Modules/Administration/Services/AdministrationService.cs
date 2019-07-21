@@ -35,17 +35,17 @@ namespace NadekoBot.Modules.Administration.Services
                 .Where(g => g.DeleteMessageOnCommand)
                 .Select(g => g.GuildId));
 
-            DeleteMessagesOnCommandChannels = new ConcurrentDictionary<ulong, bool>(bot.AllGuildConfigs
+            DeleteMessagesOnCommandChannels = bot.AllGuildConfigs
                 .SelectMany(x => x.DelMsgOnCmdChannels)
                 .ToDictionary(x => x.ChannelId, x => x.State)
-                .ToConcurrent());
+                .ToConcurrent();
 
             cmdHandler.CommandExecuted += DelMsgOnCmd_Handler;
         }
 
         public (bool DelMsgOnCmd, IEnumerable<DelMsgOnCmdChannel> channels) GetDelMsgOnCmdData(ulong guildId)
         {
-            using (var uow = _db.GetGetDbContext())
+            using (var uow = _db.GetDbContext())
             {
                 var conf = uow.GuildConfigs.ForId(guildId,
                     set => set.Include(x => x.DelMsgOnCmdChannels));
@@ -81,7 +81,7 @@ namespace NadekoBot.Modules.Administration.Services
         public bool ToggleDeleteMessageOnCommand(ulong guildId)
         {
             bool enabled;
-            using (var uow = _db.GetGetDbContext())
+            using (var uow = _db.GetDbContext())
             {
                 var conf = uow.GuildConfigs.ForId(guildId, set => set);
                 enabled = conf.DeleteMessageOnCommand = !conf.DeleteMessageOnCommand;
@@ -93,7 +93,7 @@ namespace NadekoBot.Modules.Administration.Services
 
         public async Task SetDelMsgOnCmdState(ulong guildId, ulong chId, Administration.State s)
         {
-            using (var uow = _db.GetGetDbContext())
+            using (var uow = _db.GetDbContext())
             {
                 var conf = uow.GuildConfigs.ForId(guildId,
                     set => set.Include(x => x.DelMsgOnCmdChannels));

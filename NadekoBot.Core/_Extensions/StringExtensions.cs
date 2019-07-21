@@ -133,11 +133,13 @@ namespace NadekoBot.Extensions
         public static async Task<Stream> ToStream(this string str)
         {
             var ms = new MemoryStream();
-            var sw = new StreamWriter(ms);
-            await sw.WriteAsync(str).ConfigureAwait(false);
-            await sw.FlushAsync().ConfigureAwait(false);
-            ms.Position = 0;
-            return ms;
+            using (var sw = new StreamWriter(ms))
+            {
+                await sw.WriteAsync(str).ConfigureAwait(false);
+                await sw.FlushAsync().ConfigureAwait(false);
+                ms.Position = 0;
+                return ms;
+            }
         }
 
         private static readonly Regex filterRegex = new Regex(@"(?:discord(?:\.gg|.me|app\.com\/invite)\/(?<id>([\w]{16}|(?:[\w]+-?){3})))", RegexOptions.Compiled | RegexOptions.IgnoreCase);

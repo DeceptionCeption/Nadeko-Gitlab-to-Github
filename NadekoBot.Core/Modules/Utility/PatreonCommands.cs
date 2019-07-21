@@ -13,7 +13,7 @@ namespace NadekoBot.Modules.Utility
     {
         [Group]
         public class PatreonCommands : NadekoSubmodule<PatreonRewardsService>
-        {
+        {   
             private readonly IBotCredentials _creds;
             private readonly DbService _db;
             private readonly ICurrencyService _currency;
