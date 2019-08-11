@@ -90,6 +90,7 @@ namespace NadekoBot
                 TotalShards = Credentials.TotalShards,
                 ShardId = shardId,
                 AlwaysDownloadUsers = false,
+                DefaultRetryMode = RetryMode.Retry502,
             });
 
             CommandService = new CommandService(new CommandServiceConfig()
