@@ -128,7 +128,6 @@ namespace NadekoBot.Modules.Utility.Services
                         {
                             users.Add(new RewardedUser()
                             {
-                                UserId = userId,
                                 PatreonUserId = data.User.id,
                                 LastReward = now,
                                 AmountRewardedThisMonth = amount,
@@ -144,7 +143,6 @@ namespace NadekoBot.Modules.Utility.Services
                         {
                             usr.LastReward = now;
                             usr.AmountRewardedThisMonth = amount;
-                            usr.UserId = userId;
 
                             await uow.SaveChangesAsync();
 
@@ -158,10 +156,9 @@ namespace NadekoBot.Modules.Utility.Services
 
                             usr.LastReward = now;
                             usr.AmountRewardedThisMonth = amount;
-                            usr.UserId = userId;
                             await uow.SaveChangesAsync();
 
-                            await _currency.AddAsync(usr.UserId, "Patreon reward - update", toAward, gamble: true);
+                            await _currency.AddAsync(userId, "Patreon reward - update", toAward, gamble: true);
                             return toAward;
                         }
                     }
