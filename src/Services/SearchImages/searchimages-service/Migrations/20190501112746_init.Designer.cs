@@ -10,16 +10,15 @@ using SearchImagesService.Common.Db;
 namespace SearchImagesService.Migrations
 {
     [DbContext(typeof(SearchImageContext))]
-    [Migration("20190329043734_bl-tags-db")]
-    partial class bltagsdb
+    [Migration("20190501112746_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("searchimages")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("SearchImagesService.Common.Db.Models.BlacklistedTags", b =>

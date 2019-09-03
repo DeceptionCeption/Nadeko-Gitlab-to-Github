@@ -4,16 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace SearchImagesService.Migrations
 {
-    public partial class bltagsdb : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "searchimages");
-
             migrationBuilder.CreateTable(
                 name: "blacklistedtags",
-                schema: "searchimages",
                 columns: table => new
                 {
                     id = table.Column<int>(nullable: false)
@@ -31,8 +27,7 @@ namespace SearchImagesService.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "blacklistedtags",
-                schema: "searchimages");
+                name: "blacklistedtags");
         }
     }
 }
