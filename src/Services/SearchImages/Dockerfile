@@ -2,8 +2,6 @@ FROM kwoth/nadeko-service-base:latest
 
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
-RUN apk update && apk add libc6-compat
-
 # copy csproj so that i can restore, in order to avoid
 # restore when the container is running
 COPY "searchimages/SearchImages.csproj" "/app/searchimages/SearchImages.csproj"

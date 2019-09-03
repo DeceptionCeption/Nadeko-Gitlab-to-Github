@@ -1,6 +1,7 @@
 ﻿using Grpc.Core;
+using Ayu.Common;
+using Nadeko.Db;
 using Nadeko.Microservices;
-using NadekoDb;
 using Newtonsoft.Json.Linq;
 using SearchImagesService.Common;
 using SearchImagesService.Common.Db;
@@ -26,12 +27,13 @@ namespace SearchImagesService
         {
             _rng = new Random();
             _http = new HttpClient();
+            _http.AddFakeHeaders();
             _cache = new SearchImageCacher();
-            _db = new ServiceDb<SearchImageContext>();
+            _db = new ServiceDb<SearchImageContext>(SearchImageContext.BaseOptions.Build());
 
-            using (var ctx = _db.GetDbContext())
+            using (var uow = _db.GetDbContext())
             {
-                _blacklistedTags = new ConcurrentDictionary<ulong, HashSet<string>>(ctx.BlacklistedTags
+                _blacklistedTags = new ConcurrentDictionary<ulong, HashSet<string>>(uow.BlacklistedTags
                     .ToDictionary(x => x.GuildId, x => new HashSet<string>(x.Tags)));
             }
         }
@@ -65,7 +67,6 @@ namespace SearchImagesService
 
                 if (result is null)
                 {
-                    // todo localize
                     return new UrlReply
                     {
                         Error = "Image not found.",
@@ -201,12 +202,12 @@ namespace SearchImagesService
 
                 var tagArr = blacklistedTags.ToArray();
 
-                using (var ctx = _db.GetDbContext())
+                using (var uow = _db.GetDbContext())
                 {
-                    var bt = ctx.BlacklistedTags.FirstOrDefault(x => x.GuildId == request.GuildId);
+                    var bt = uow.BlacklistedTags.FirstOrDefault(x => x.GuildId == request.GuildId);
                     if (bt is null)
                     {
-                        ctx.BlacklistedTags.Add(new Common.Db.Models.BlacklistedTags
+                        uow.BlacklistedTags.Add(new Common.Db.Models.BlacklistedTags
                         {
                             GuildId = request.GuildId,
                             Tags = tagArr
@@ -217,7 +218,7 @@ namespace SearchImagesService
                         bt.Tags = tagArr;
                     }
 
-                    ctx.SaveChanges();
+                    uow.SaveChanges();
                 }
 
                 return Task.FromResult(new BlacklistTagReply

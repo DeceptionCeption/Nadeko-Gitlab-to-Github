@@ -8,7 +8,9 @@ namespace SearchImagesService
 {
     public class Program
     {
-        private const int port = 2452;
+        private const int port =
+            2452
+            ;
         public static async Task Main(string[] args)
         {
             SetupLogger();

@@ -1,4 +1,4 @@
-﻿using NadekoDb;
+﻿using Nadeko.Db;
 
 namespace SearchImagesService.Common.Db.Models
 {

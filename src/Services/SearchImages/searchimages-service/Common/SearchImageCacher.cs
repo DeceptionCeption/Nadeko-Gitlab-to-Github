@@ -1,4 +1,4 @@
-using Nadeko.Common;
+﻿using Ayu.Common;
 using Newtonsoft.Json;
 using Serilog;
 using System;
@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
+#nullable enable
 namespace SearchImagesService.Common
 {
     public class SearchImageCacher
@@ -17,6 +18,7 @@ namespace SearchImagesService.Common
         private readonly HttpClient _http;
         private readonly Random _rng;
         private readonly SortedSet<ImageCacherObject> _cache;
+
         private static readonly List<string> defaultTagBlacklist = new List<string>() {
             "loli",
             "lolicon",
@@ -31,12 +33,15 @@ namespace SearchImagesService.Common
             _cache = new SortedSet<ImageCacherObject>();
         }
 
-        public async Task<ImageCacherObject> GetImage(string[] tags, bool forceExplicit, DapiSearchType type,
-            HashSet<string> blacklistedTags = null)
+        public async Task<ImageCacherObject?> GetImage(string[] tags, bool forceExplicit, DapiSearchType type,
+            HashSet<string>? blacklistedTags = null)
         {
-            tags = tags.Select(tag => tag?.ToLowerInvariant()).ToArray();
+            tags = tags
+                .Where(x => !(x is null))
+                .Select(tag => tag.ToLowerInvariant())
+                .ToArray();
 
-            blacklistedTags = blacklistedTags ?? new HashSet<string>();
+            blacklistedTags ??= new HashSet<string>();
 
             foreach (var item in defaultTagBlacklist)
             {
@@ -47,12 +52,11 @@ namespace SearchImagesService.Common
 
             if (tags.Any(x => blacklistedTags.Contains(x)))
             {
-                // todo localize blacklisted_tag (already exists)
-                throw new Exception("One of the specified tags is blacklisted");
+                return null;
             }
 
             if (type == DapiSearchType.E621)
-                tags = tags.Select(tag => tag?.Replace("yuri", "female/female", StringComparison.InvariantCulture))
+                tags = tags.Select(tag => tag.Replace("yuri", "female/female", StringComparison.InvariantCulture))
                     .ToArray();
 
             await _lock.WaitAsync().ConfigureAwait(false);
@@ -68,7 +72,7 @@ namespace SearchImagesService.Common
                     imgs = _cache.Where(x => x.SearchType == type).ToArray();
                 }
                 imgs = imgs.Where(x => x.Tags.All(t => !blacklistedTags.Contains(t.ToLowerInvariant()))).ToArray();
-                ImageCacherObject img;
+                ImageCacherObject? img;
                 if (imgs.Length == 0)
                     img = null;
                 else
