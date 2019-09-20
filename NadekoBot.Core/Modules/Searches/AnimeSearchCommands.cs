@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using NadekoBot.Common.Attributes;
-using AngleSharp.Html.Dom;
+using AngleSharp.Dom.Html;
 
 namespace NadekoBot.Modules.Searches
 {

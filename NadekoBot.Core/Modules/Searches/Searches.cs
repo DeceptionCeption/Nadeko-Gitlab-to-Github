@@ -1,7 +1,7 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
-using AngleSharp.Html.Parser;
+using AngleSharp.Dom.Html;
+using AngleSharp.Parser.Html;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -336,7 +336,7 @@ namespace NadekoBot.Modules.Searches
                 var test = "";
                 using (var http = _httpFactory.CreateClient())
                 using (var response = await http.SendAsync(msg).ConfigureAwait(false))
-                using (var document = await parser.ParseDocumentAsync(test = await response.Content.ReadAsStringAsync().ConfigureAwait(false)).ConfigureAwait(false))
+                using (var document = await parser.ParseAsync(test = await response.Content.ReadAsStringAsync().ConfigureAwait(false)).ConfigureAwait(false))
                 {
                     var elems = document.QuerySelectorAll("div.g");
 
