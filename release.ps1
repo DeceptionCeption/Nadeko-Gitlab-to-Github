@@ -20,6 +20,7 @@ function Build-Installer($versionNumber)
 {
     $env:NADEKOBOT_INSTALL_VERSION = $versionNumber
 
+	dotnet clean
     dotnet publish -c Release --runtime win7-x64
     .\rcedit-x64.exe "src\NadekoBot\bin\Release\netcoreapp2.1\win7-x64\nadekobot.exe" --set-icon "src\NadekoBot\bin\Release\netcoreapp2.1\win7-x64\nadeko_icon.ico"
 
