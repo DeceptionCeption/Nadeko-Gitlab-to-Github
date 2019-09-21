@@ -25,9 +25,31 @@ function Build-Installer($versionNumber)
 
     & "iscc.exe" "/O+" ".\NadekoBot.iss"
 
-    $path = [Environment]::GetFolderPath('MyDocuments') + "\_projekti\NadekoInstallerOutput\NadekoBot-setup-$versionNumber.exe";
-    $dest = [Environment]::GetFolderPath('MyDocuments') + "\_projekti\NadekoInstallerOutput\nadeko-setup.exe";
-    Copy-Item -Path $path -Destination $dest -Force
+    $path = [Environment]::GetFolderPath('MyDocuments') + "\_projekti\NadekoInstallerOutput\$versionNumber\nadeko-setup-$versionNumber.exe";
+    Copy-Item -Path $path -Destination $dest -Force -ErrorAction Stop
+
+	return $path
+}
+
+function DigitaloceanRelease($versionNumber) {	
+
+	# pull the changes if they exist
+	git pull
+	# attempt to build teh installer
+	# $path = Build-Installer $versionNumber
+
+	# get changelog before tagging
+    $changelog = Get-Changelog
+	# tag the release
+	git tag $tag
+
+	# print out the changelog to the console
+    Write-Host $changelog 	
+
+	$jsonReleaseFile = "[{""VersionName"": ""$versionNumber"", ""DownloadLink"": ""https://nadeko-pictures.nyc3.digitaloceanspaces.com/releases/nadeko-setup-$versionNumber.exe"", ""Changelog"": ""$changelog""}]"
+
+	$releaseJsonOutPath = [Environment]::GetFolderPath('MyDocuments') + "\_projekti\NadekoInstallerOutput\$versionNumber\"
+	New-Item -Path $releaseJsonOutPath -Value $jsonReleaseFile -Name "releases.json" -Force
 }
 
 function GitHub-Release($versionNumber) {
@@ -57,7 +79,6 @@ function GitHub-Release($versionNumber) {
     Build-Installer
     $artifact = "nadekobot-setup.exe";
     $auth = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($gitHubApiKey + ":x-oauth-basic"));
-    Write-Host $changelog
     $result = GitHubMake-Release $versionNumber $commitId $TRUE $gitHubApiKey $auth "" "$changelog"
     $releaseId = $result | Select-Object -ExpandProperty id
     $uploadUri = $result | Select-Object -ExpandProperty upload_url
