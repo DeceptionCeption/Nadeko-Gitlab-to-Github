@@ -115,6 +115,7 @@ namespace NadekoBot.Modules.Utility.Services
                 var datas = _pledges?.Where(x => x.User.attributes?.social_connections?.discord?.user_id == userId.ToString())
                     ?? Enumerable.Empty<PatreonUserAndReward>();
 
+                var totalAmount = 0;
                 foreach (var data in datas)
                 {
                     var amount = (int)(data.Reward.attributes.amount_cents * _bc.BotConfig.PatreonCurrencyPerCent);
@@ -136,7 +137,8 @@ namespace NadekoBot.Modules.Utility.Services
                             await uow.SaveChangesAsync();
 
                             await _currency.AddAsync(userId, "Patreon reward - new", amount, gamble: true);
-                            return amount;
+                            totalAmount += amount;
+                            continue;
                         }
 
                         if (usr.LastReward.Month != now.Month)
@@ -147,7 +149,8 @@ namespace NadekoBot.Modules.Utility.Services
                             await uow.SaveChangesAsync();
 
                             await _currency.AddAsync(userId, "Patreon reward - recurring", amount, gamble: true);
-                            return amount;
+                            totalAmount += amount;
+                            continue;
                         }
 
                         if (usr.AmountRewardedThisMonth < amount)
@@ -159,13 +162,13 @@ namespace NadekoBot.Modules.Utility.Services
                             await uow.SaveChangesAsync();
 
                             await _currency.AddAsync(userId, "Patreon reward - update", toAward, gamble: true);
-                            return toAward;
+                            totalAmount += toAward;
+                            continue;
                         }
                     }
-                    return 0;
                 }
 
-                return 0;
+                return totalAmount;
             }
             finally
             {
