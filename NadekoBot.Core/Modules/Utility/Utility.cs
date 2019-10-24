@@ -287,7 +287,11 @@ namespace NadekoBot.Modules.Utility
         public async Task SaveChat(int cnt)
         {
             var msgs = new List<IMessage>(cnt);
-            await ctx.Channel.GetMessagesAsync(cnt).ForEachAsync(dled => msgs.AddRange(dled)).ConfigureAwait(false);
+
+            await foreach (var dled in ctx.Channel.GetMessagesAsync(cnt))
+            {
+                msgs.AddRange(dled);
+            }
 
             var title = $"Chatlog-{ctx.Guild.Name}/#{ctx.Channel.Name}-{DateTime.Now}.txt";
             var grouping = msgs.GroupBy(x => $"{x.CreatedAt.Date:dd.MM.yyyy}")

@@ -20,6 +20,7 @@
     <PackageReference Include="Google.Apis.Customsearch.v1" Version="1.35.1.1301" />
     <PackageReference Include="Grpc.Core" Version="1.19.0" />
     <PackageReference Include="Html2Markdown" Version="3.2.1.341" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.1" />

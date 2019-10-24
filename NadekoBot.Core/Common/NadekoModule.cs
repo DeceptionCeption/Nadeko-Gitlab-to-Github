@@ -163,7 +163,7 @@ namespace NadekoBot.Modules
         protected async Task<TReply> Rpc<TRequest, TReply>(ICommandContext ctx, Func<TRequest, CallOptions, AsyncUnaryCall<TReply>> rpcFactory, TRequest request) where TReply : class
         {
             var (data, err) = await Rpc("en-US", rpcFactory, request).ConfigureAwait(false);
-            if (err is null && data != default)
+            if (err is null && data != default(TReply))
             {
                 return data;
             }
@@ -175,7 +175,7 @@ namespace NadekoBot.Modules
         protected async Task<TReply> ErrorlessRpc<TRequest, TReply>(ICommandContext ctx, Func<TRequest, CallOptions, AsyncUnaryCall<TReply>> rpcFactory, TRequest request) where TReply : class
         {
             var (data, err) = await Rpc("en-US", rpcFactory, request).ConfigureAwait(false);
-            if (err is null && data != default)
+            if (err is null && data != default(TReply))
             {
                 return data;
             }
