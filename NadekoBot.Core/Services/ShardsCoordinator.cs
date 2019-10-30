@@ -105,11 +105,13 @@ namespace NadekoBot.Core.Services
 
             _shardProcesses = new Process[_creds.TotalShards];
 
+            var _nadekoServerShard = 64;
+
 #if GLOBAL_NADEKO
-            var shardIdsEnum = Enumerable.Range(1, 31)
-                .Concat(Enumerable.Range(33, _creds.TotalShards - 33))
+            var shardIdsEnum = Enumerable.Range(1, _nadekoServerShard - 1)
+                .Concat(Enumerable.Range(_nadekoServerShard + 1, _creds.TotalShards - _nadekoServerShard - 1))
                 .Shuffle()
-                .Prepend(32)
+                .Prepend(_nadekoServerShard)
                 .Prepend(0);
 #else
             var shardIdsEnum = Enumerable.Range(1, _creds.TotalShards - 1)
