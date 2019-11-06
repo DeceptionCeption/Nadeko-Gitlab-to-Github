@@ -112,8 +112,16 @@ namespace NadekoBot.Modules.Utility.Services
             var now = DateTime.UtcNow;
             try
             {
-                var datas = _pledges?.Where(x => x.User.attributes?.social_connections?.discord?.user_id == userId.ToString())
-                    ?? Enumerable.Empty<PatreonUserAndReward>();
+
+                var datas = _pledges?.Where(x => x.User.attributes?.social_connections?.discord?.user_id == userId.ToString()).ToArray()
+                    ?? Array.Empty<PatreonUserAndReward>();
+
+                _log.Info($"User has {datas.Length} connected accounts. Pledges: {string.Join("\n", datas.Select(x => $"{x.User.attributes.full_name}: {x.Reward.attributes.amount_cents}"))}");
+
+                if(!datas.Any())
+                {
+                    _log.Info("No pledges found for this user.");
+                }
 
                 var totalAmount = 0;
                 foreach (var data in datas)
@@ -127,6 +135,7 @@ namespace NadekoBot.Modules.Utility.Services
 
                         if (usr == null)
                         {
+                            _log.Info("Full reward. First pledge.");
                             users.Add(new RewardedUser()
                             {
                                 PatreonUserId = data.User.id,
@@ -143,6 +152,7 @@ namespace NadekoBot.Modules.Utility.Services
 
                         if (usr.LastReward.Month != now.Month)
                         {
+                            _log.Info("Full reward. Last claim was not this month.");
                             usr.LastReward = now;
                             usr.AmountRewardedThisMonth = amount;
 
@@ -155,6 +165,7 @@ namespace NadekoBot.Modules.Utility.Services
 
                         if (usr.AmountRewardedThisMonth < amount)
                         {
+                            _log.Info("Partial reward. Already claimed a part this month.");
                             var toAward = amount - usr.AmountRewardedThisMonth;
 
                             usr.LastReward = now;
