@@ -112,7 +112,6 @@ namespace NadekoBot.Modules.Utility.Services
             var now = DateTime.UtcNow;
             try
             {
-
                 var datas = _pledges?.Where(x => x.User.attributes?.social_connections?.discord?.user_id == userId.ToString()).ToArray()
                     ?? Array.Empty<PatreonUserAndReward>();
 

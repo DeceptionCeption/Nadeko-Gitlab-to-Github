@@ -12,13 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.9.10" />
-    <PackageReference Include="CommandLineParser" Version="2.3.0" />
-    <PackageReference Include="CoreCLR-NCalc" Version="2.2.34" />
-    <PackageReference Include="Google.Apis.Urlshortener.v1" Version="1.35.1.138" />
-    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.35.1.1226" />
-    <PackageReference Include="Google.Apis.Customsearch.v1" Version="1.35.1.1301" />
     <PackageReference Include="Grpc.Core" Version="1.19.0" />
+    <PackageReference Include="AngleSharp" Version="0.13.0" />
+    <PackageReference Include="CommandLineParser" Version="2.6.0" />
+    <PackageReference Include="CoreCLR-NCalc" Version="2.2.63" />
+    <PackageReference Include="Google.Apis.Urlshortener.v1" Version="1.41.1.138" />
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.41.1.1699" />
+    <PackageReference Include="Google.Apis.Customsearch.v1" Version="1.41.1.1369" />
     <PackageReference Include="Html2Markdown" Version="3.2.1.341" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
@@ -33,8 +33,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
     <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="NLog" Version="4.5.8" />
-    <PackageReference Include="Octokit" Version="0.31.0" />
+    <PackageReference Include="NLog" Version="4.6.7" />
     <PackageReference Include="Serilog" Version="2.8.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0004" />
