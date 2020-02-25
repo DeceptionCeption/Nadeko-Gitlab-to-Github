@@ -35,7 +35,7 @@ Now, if that command was ran in a server, anyone on that server can make the bot
 If you want to disable some global expressions which you do not like, and you do not want to remove them or you are not the bot owner you can do so by adding a new expression with the same trigger on your server, and set the response to `-`.
 
 For example:
-`.acr .hug -`
+`.exprad .hug -`
 
 Now if you try to trigger `.hug`, it won't print anything.
 
