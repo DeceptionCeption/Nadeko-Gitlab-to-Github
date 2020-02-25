@@ -17,12 +17,12 @@
 
 #### Now that we know the commands, let's take a look at an example of adding an expression with `.exprad`,
 
-`.exprad "Nice Weather" It sure is, %user%!`
+`.exprad "Nice Weather" It sure is, %user.mention%!`
 
 This command can be split into two different arguments:
 
 - The trigger, `"Nice Weather"`
-- And the response, `It sure is, %user%!`
+- And the response, `It sure is, %user.mention%!`
 
 An important thing to note about the triger is that, to be more than one word, we had to wrap it with quotation marks, `"Like this"` otherwise, only the first word would have been recognised as the trigger, and the second word would have been recognised as part of the response.
 
