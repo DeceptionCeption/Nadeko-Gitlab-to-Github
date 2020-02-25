@@ -26,7 +26,7 @@ If you want to contribute, be sure to PR on the current **[default][repo]** bran
 - Features Explained
     - [Permissions System](Permissions System.md)
     - [JSON Explanations](JSON Explanations.md)
-    - [Custom Reactions](Custom Reactions.md)
+    - [Expressions](Expressions.md)
     - [Placeholders](Placeholders.md)
     - [Bot Config](Bce Guide.md)
 - [Frequently Asked Questions](Frequently Asked Questions.md)

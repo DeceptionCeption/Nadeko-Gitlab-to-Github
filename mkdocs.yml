@@ -13,7 +13,7 @@ pages:
 - Features Explained:
     - JSON Explanations: JSON Explanations.md
     - Permissions System: Permissions System.md
-    - Custom Reactions: Custom Reactions.md
+    - Expressions: Expressions.md
     - Placeholders: Placeholders.md
     - Bot Config: Bce Guide.md
 - Frequently Asked Questions: Frequently Asked Questions.md
