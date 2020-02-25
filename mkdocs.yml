@@ -5,15 +5,14 @@ site_author: Kwoth
 nav:
 - Home: index.md
 - 'Commands List': 'https://nadeko.bot/commands/v3'
-- Guides:
-    - Guide: guides/guides.md
-- Features Explained:
-    - Permissions System: perms.md
+- Features:
+    - 'Permissions System': perms.md
     - Expressions: expressions.md
     - Placeholders: placeholders.md
     - Configs: configs.md
-- Frequently Asked Questions: faq.md
-- ❤ Contribute ❤: contribute.md
+- Guides:
+    - 'Guide': guides/guides.md
+- 'Frequently Asked Questions': faq.md
+- '❤ Contribute ❤': contribute.md
 - License: license.md
-
 theme: readthedocs
