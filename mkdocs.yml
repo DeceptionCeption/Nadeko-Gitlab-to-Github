@@ -4,7 +4,6 @@ repo_url: 'https://gitlab.com/kwoth/nadekobot'
 site_author: 'Kwoth'
 nav:
 - Home: 'index.md'
-- 'Commands List': 'https://nadeko.bot/commands/v3'
 - Features:
     - 'Permissions System': 'perms.md'
     - Expressions: 'expressions.md'
@@ -12,6 +11,7 @@ nav:
     - Configs: 'configs.md'
 - Guides:    
     - 'Guide': 'guides/guides.md'
+- 'Commands List': 'https://nadeko.bot/commands/v3'
 - 'Frequently Asked Questions': 'faq.md'
 - '❤ Contribute ❤': 'contribute.md'
 - License: 'license.md'

@@ -8,7 +8,7 @@ Only users with **Manage Server permission** can add bots to a server.
 ### 2: I want to change bot permissions, but it isn't working!
 
 - You must have **Administrator Server permission** or the `.permrole` to be able to use any command from the Permissions module.  
-- For more information about permissions, check the [Permissions](http://nadekobot.readthedocs.io/en/latest/Permissions.md) guide.
+- For more information about permissions, check the [Permissions](perms.md) guide.
 
 ### 3: I want to enable NSFW on a channel.
 
@@ -38,7 +38,7 @@ Only users with **Manage Server permission** can add bots to a server.
 
 - You can see the description and usage of certain commands by using `.h command` i.e. `.h .sm`. Additionally, you can check all commands within a module by typing `.cmds moduleName`.
 
-- Alternatively, you can check out the [the full list of commands](https://nadeko.bot/commands)
+- Alternatively, you can check out the [the full list of commands](https://nadeko.bot/commands/v3)
 
 ### 7: Music isn't working?
 
