@@ -1,23 +1,17 @@
 site_name: NadekoBot
 pages:
 - Home: index.md
-- About: about.md
 - Guides:
-    - Windows Guide: guides/Windows Guide.md
-    - Linux Guide: guides/Linux Guide.md
-    - OSX Guide: guides/OSX Guide.md
-    - From Source: guides/From Source.md
+    - Guide: guides/guides.md
 - Commands:
-    - Readme: Readme.md
-    - Commands List: Commands List.md
+    - Commands List: https://nadeko.bot/commands/v3
 - Features Explained:
-    - JSON Explanations: JSON Explanations.md
-    - Permissions System: Permissions System.md
-    - Expressions: Expressions.md
-    - Placeholders: Placeholders.md
-    - Bot Config: Bce Guide.md
-- Frequently Asked Questions: Frequently Asked Questions.md
-- Contribution Guide: Contribution Guide.md
-- ❤ Donate ❤: Donate.md
+    - Permissions System: perms.md
+    - Expressions: expressions.md
+    - Placeholders: placeholders.md
+    - Configs: configs.md
+- Frequently Asked Questions: faq.md
+- ❤ Contribute ❤: contribute.md
+- License: license.md
 
 theme: readthedocs

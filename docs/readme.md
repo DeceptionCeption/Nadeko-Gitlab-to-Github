@@ -4,13 +4,12 @@
 
 - *Bot Owner Only* commands refer to the commands only the **owner** of the bot can use.
 - *Bot Owner Only* commands do **not** refer to the owner of the **server**, just the owner of the **bot**.
-- *Owner of the bot* is a person who is **hosting** their own bot, and their **ID** is inside of **credentials.json** file.
-- You are **not** the bot **owner** if you invited the bot using **Carbonitex** or other invitation links.
+- *Owner of the bot* is a person who is **hosting** their own bot, and their **ID** is inside of **creds.yml** file.
 
 ### Music on the public Nadeko
 
 - In case you got Nadeko in your server by the invitation from **Carbonitex**, our **GitLab** invite or **help (.h)**, music is disabled.
-- Music is **disabled** due to large maintenance expenses, unless Kwoth is **testing** music module.
+- Music is **disabled** due to large maintenance expenses
 - If you want to have music module on your server, you will have to **host** the bot on your PC, or any of the external servers.
 - How to **host** the bot, check the **guides** on the left side.
 

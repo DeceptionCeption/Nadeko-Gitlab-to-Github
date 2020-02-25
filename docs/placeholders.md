@@ -1,6 +1,8 @@
-Placeholders are used in Quotes, Custom Reactions, Greet/Bye messages, playing statuses, and a few other places.
+## Placeholders
 
-They can be used to make the message more user friendly, generate random numbers or pictures, etc...
+Placeholders are used in Quotes, Expressions, Greet/Bye messages, playing statuses, and a few other places.
+
+They can be used to make the message more user friendly, generate random numbers, or post basic information about relevant user, channel, or server.
 
 Some features have their own specific placeholders which are noted in that feature's command help. Some placeholders are not available in certain features because they don't make sense there.
 
@@ -10,8 +12,6 @@ Some features have their own specific placeholders which are noted in that featu
 
 **Bot placeholders**
 
-- `%bot.status%` - Bot's status (Online, Idle, DoNotDisturb, Invisible)
-- `%bot.latency%` - Bot latency
 - `%bot.name%` - Bot username
 - `%bot.mention%` - Bot mention (clickable)
 - `%bot.fullname%` - Bot username#discriminator
@@ -74,3 +74,54 @@ Some features have their own specific placeholders which are noted in that featu
 - `%img:stuff%` - Returns an `imgur.com` search for "stuff" **(only works on custom reactions)**
 
 ![img](https://puu.sh/B7mgI.png)
+
+
+KOTZ HERE ARE THE NEW PLACEHOLDERS
+
+%prefix%
+%bot.mention%
+%bot.name%
+%bot.fullname%
+%bot.time%
+%bot.discrim%
+%bot.id%
+%bot.avatar%
+%bot.shardid%
+%shard.id%
+
+%bot.shards%
+
+
+%server.id%
+%server.name%
+%server%
+%server.members%
+%server.time%
+
+%channel.mention%
+%channel.name%
+%channel.id%
+%channel.created%
+%channel.created_time%
+%channel.created_date%
+%channel.nsfw%
+%channel.topic%
+
+
+%user.mention%
+%user.fullname%
+%user%
+%user.name%
+%user.discrim%
+%user.avatar%
+%user.id%
+%user.created%
+%user.created_time%
+%user.created_date%
+%user.joined_time%
+%user.joined_date%
+
+%stats.servercount%
+- `%target%` - Returns anything the user has written after the trigger **(only works on custom reactions)**
+%stats.usercount%
+- `%rngX-Y%` - Returns a random number between X and Y
