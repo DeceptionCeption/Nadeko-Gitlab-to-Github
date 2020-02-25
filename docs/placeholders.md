@@ -6,7 +6,7 @@ They can be used to make the message more user friendly, generate random numbers
 
 Some features have their own specific placeholders which are noted in that feature's command help. Some placeholders are not available in certain features because they don't make sense there.
 
-### Here is a list of the usual placeholders:
+### List of Placeholders
 
 **If you're using placeholders in embeds, don't use %user.mention% and %bot.mention% in titles, footers and field names. They will not show properly.**
 

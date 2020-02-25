@@ -22,7 +22,7 @@ Only users with **Manage Server permission** can add bots to a server.
     - [Voting](https://discordbots.org/bot/nadeko/vote) for her on discordbots website (once you vote you will start getting 10🌸 per hour for 24h)
     - Keeping an eye for events in `#giveaways` channel on [NadekoLog](https://discord.nadeko.bot) discord server
     - Picking (`.pick`) flowers in [NadekoLog](https://discord.nadeko.bot) `#chat` channel when they appear,   
-    - [Donating❤️](Contribute.md)
+    - [Donating❤️](contribute.md)
 - If you already have some flowers, but want more, you can gamble them for potential profit with `.betflip`, `.betroll` and other gambling commands (`.cmds gambling`).  
 
 - On **self-hosts** (not public bot), bot owner can set-up timely `.timely`
@@ -43,11 +43,11 @@ Only users with **Manage Server permission** can add bots to a server.
 ### 7: Music isn't working?
 
 - Music is disabled on public Nadeko due to large hosting costs.
-- **If you would like music in the meantime, you must [host Nadeko yourself](Guides.md)**. *Read the section on setting up music **carefully***
+- **If you would like music in the meantime, you must [host Nadeko yourself](guides/guides.md)**. *Read the section on setting up music **carefully***
 
 ### 9: I want to change flowers to something else, or make other changes, how?
 
-- You can't change currency sign and other configuration on public bot `@Nadeko#6685`. For that you need to [host Nadeko yourself](Guides.md)
+- You can't change currency sign and other configuration on public bot `@Nadeko#6685`. For that you need to [host Nadeko yourself](guides/guides.md)
 
 ### 10: The .greet and .bye commands don't work, but everything else does!
 

@@ -10,9 +10,9 @@ nav:
     - Expressions: 'expressions.md'
     - Placeholders: 'placeholders.md'
     - Configs: 'configs.md'
-- Guides:
+- Guides:    
     - 'Guide': 'guides/guides.md'
 - 'Frequently Asked Questions': 'faq.md'
 - '❤ Contribute ❤': 'contribute.md'
 - License: 'license.md'
-theme: 'readthedocs'
+theme: 'material'
