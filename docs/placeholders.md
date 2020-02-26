@@ -19,11 +19,14 @@ Some features have their own specific placeholders which are noted in that featu
 - `%bot.discrim%` - Bot's discriminator
 - `%bot.id%` - Bot's user ID
 - `%bot.avatar%` - Bot's avatar url
+- `%bot.shardid%` or `%shard.id%` - The shard that's currently servicing your server
+- `%bot.shards%` - Amount of shards that are currently up
 
 **Server placeholders**
 
+- `%prefix%` - Shows the bot's prefix on the server
 - `%server.id%` - Server ID
-- `%server.name%` - Server name
+- `%server.name%` or `%server%` - Server name
 - `%server.members%` - Member count
 - `%server.time%` - Server time (requires `.timezone` to be set)
 
@@ -33,95 +36,35 @@ Some features have their own specific placeholders which are noted in that featu
 - `%channel.name%` - Channel name
 - `%channel.id%` - Channel ID
 - `%channel.created%` - Channel creation date
-- `%channel.nsfw%` - Returns either `True` or `False`, depending on if the channel is designated as NSFW using discord
+- `%channel.created_time%` - Channel creation date (only local time)
+- `%channel.created_date%` - Channel creation date (without local time)
+- `%channel.nsfw%` - Returns either `True` or `False`, depending on if the channel is designated as NSFW using Discord
 - `%channel.topic%` - Channel topic
 
 **User placeholders**
 
 - `%user.mention%` - User mention
 - `%user.fullname%` - Username#discriminator
-- `%user.name%` - Username
+- `%user.name%` or `%user%` - Username
 - `%user.discrim%` - Discriminator
 - `%user.avatar%` - User's avatar url
 - `%user.id%` - User ID
-- `%user.created_time%` - Account creation time (local time)
-- `%user.created_date%` - Account creation date
-- `%user.joined_time%` - Account join time (local time)
-- `%user.joined_date%` - Account join date
+- `%user.created%` - Account creation date 
+- `%user.created_time%` - Account creation time (only local time)
+- `%user.created_date%` - Account creation date (without local time)
+- `%user.joined_time%` - Account join time (only local time)
+- `%user.joined_date%` - Account join date (without local time)
 
 **Bot stats placeholders**
 
 - `%servers%` - Server count bot has joined
 - `%users%` - Combined user count on servers the bot has joined
 
-**Shard stats placeholders**
-
-- `%shard.servercount%` - Server count on current shard
-- `%shard.usercount%` - Combined user count on current shard
-- `%shard.id%` - Shard ID
-
-**Music placeholders**
-
-*Note: These placeholders will only work in rotating playing statuses.*
-
-- `%music.queued%` - Amount of songs currently queued
-- `%music.playing%` - Current song name
-
 **Miscellaneous placeholders**
 
 - `%rngX-Y%` - Returns a random number between X and Y
-- `%target%` - Returns anything the user has written after the trigger **(only works on custom reactions)**
-- `%img:stuff%` - Returns an `imgur.com` search for "stuff" **(only works on custom reactions)**
+- `%stats.servercount%` - The amount of servers serviced by the current shard
 
-![img](https://puu.sh/B7mgI.png)
-
-
-KOTZ HERE ARE THE NEW PLACEHOLDERS
-
-%prefix%
-%bot.mention%
-%bot.name%
-%bot.fullname%
-%bot.time%
-%bot.discrim%
-%bot.id%
-%bot.avatar%
-%bot.shardid%
-%shard.id%
-
-%bot.shards%
+![img](https://i.imgur.com/0wZsi1n.png)
 
 
-%server.id%
-%server.name%
-%server%
-%server.members%
-%server.time%
-
-%channel.mention%
-%channel.name%
-%channel.id%
-%channel.created%
-%channel.created_time%
-%channel.created_date%
-%channel.nsfw%
-%channel.topic%
-
-
-%user.mention%
-%user.fullname%
-%user%
-%user.name%
-%user.discrim%
-%user.avatar%
-%user.id%
-%user.created%
-%user.created_time%
-%user.created_date%
-%user.joined_time%
-%user.joined_date%
-
-%stats.servercount%
-- `%target%` - Returns anything the user has written after the trigger **(only works on custom reactions)**
-%stats.usercount%
-- `%rngX-Y%` - Returns a random number between X and Y
