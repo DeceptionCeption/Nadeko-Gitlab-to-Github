@@ -32,6 +32,8 @@
             public string VotesUrl { get; set; }
             public string RedisOptions { get; set; }
             public string ServicesIp { get; set; }
+            public string LocationIqApiKey { get; set; }
+            public string TimezoneDbApiKey { get; set;  }
         }
     }
 }

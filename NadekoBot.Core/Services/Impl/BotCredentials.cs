@@ -46,6 +46,8 @@ namespace NadekoBot.Core.Services.Impl
         public string BotListToken { get; private set; }
         public string RedisOptions { get; private set; }
         public string ServicesIp { get; private set; }
+        public string LocationIqApiKey { get; private set; }
+        public string TimezoneDbApiKey { get; private set; }
 
         public BotCredentials()
         {
@@ -87,6 +89,8 @@ namespace NadekoBot.Core.Services.Impl
                 CleverbotApiKey = data[nameof(CleverbotApiKey)];
                 MiningProxyUrl = data[nameof(MiningProxyUrl)];
                 MiningProxyCreds = data[nameof(MiningProxyCreds)];
+                LocationIqApiKey = data[nameof(LocationIqApiKey)];
+                TimezoneDbApiKey = data[nameof(TimezoneDbApiKey)];
                 if (!string.IsNullOrWhiteSpace(data[nameof(RedisOptions)]))
                     RedisOptions = data[nameof(RedisOptions)];
                 else
@@ -153,6 +157,7 @@ namespace NadekoBot.Core.Services.Impl
                 _log.Fatal(ex);
                 throw;
             }
+
         }
 
         public bool IsOwner(IUser u) => OwnerIds.Contains(u.Id);

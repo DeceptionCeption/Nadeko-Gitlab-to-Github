@@ -1,10 +1,12 @@
 ﻿using AngleSharp;
+using AngleSharp.Browser;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.Caching.Memory;
 using Nadeko.Microservices;
 using NadekoBot.Common;
 using NadekoBot.Common.Attributes;
@@ -22,6 +24,7 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Drawing;
 using SixLabors.Primitives;
 using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -35,16 +38,18 @@ namespace NadekoBot.Modules.Searches
         private readonly IBotCredentials _creds;
         private readonly IGoogleApiService _google;
         private readonly IHttpClientFactory _httpFactory;
+        private readonly IMemoryCache _cache;
         private static readonly NadekoRandom _rng = new NadekoRandom();
         private new readonly SearchImages.SearchImagesClient _searchImagesService;
 
         public Searches(IBotCredentials creds, IGoogleApiService google, IHttpClientFactory factory,
-            SearchImages.SearchImagesClient service)
+            SearchImages.SearchImagesClient service, IMemoryCache cache)
         {
             _creds = creds;
             _google = google;
             _httpFactory = factory;
             _searchImagesService = service;
+            _cache = cache;
         }
 
         //for anonymasen :^)
@@ -149,18 +154,31 @@ namespace NadekoBot.Modules.Searches
             if (!await ValidateQuery(ctx.Channel, query).ConfigureAwait(false))
                 return;
 
-            if (string.IsNullOrWhiteSpace(_creds.GoogleApiKey))
+            await ctx.Channel.TriggerTypingAsync().ConfigureAwait(false);
+
+            var (data, err) = await _service.GetTimeDataAsync(query).ConfigureAwait(false);
+            if (!(err == null))
             {
-                await ReplyErrorLocalizedAsync("google_api_key_missing").ConfigureAwait(false);
+                //var errorKey = err switch
+                //{
+                //    TimeErrors.ApiKeyMissing => "api_key_missing",
+                //    TimeErrors.InvalidInput => "invalid_input",
+                //    TimeErrors.NotFound => "not_found",
+                //    TimeErrors.Unknown => "error_occured",
+                //    _ => "error_occured",
+                //};
+                await ReplyErrorLocalizedAsync("error_occured").ConfigureAwait(false);
                 return;
             }
 
-            var data = await _service.GetTimeDataAsync(query).ConfigureAwait(false);
+            var eb = new EmbedBuilder()
+                .WithOkColor()
+                .WithTitle(GetText("time_new"))
+                .WithDescription(Format.Code(data.Time.ToString()))
+                .AddField(GetText("location"), string.Join('\n', data.Address.Split(", ")), inline: true)
+                .AddField(GetText("timezone"), data.TimeZoneName, inline: true);
 
-            await ReplyConfirmLocalizedAsync("time",
-                Format.Bold(data.Address),
-                Format.Code(data.Time.ToString("HH:mm")),
-                data.TimeZoneName).ConfigureAwait(false);
+            await ctx.Channel.SendMessageAsync(embed: eb.Build()).ConfigureAwait(false);
         }
 
         // done in 3.0
@@ -294,26 +312,61 @@ namespace NadekoBot.Modules.Searches
                            .ConfigureAwait(false);
         }
 
-        // done in 3.0
+        public class ShortenData
+        {
+            [JsonProperty("result_url")]
+            public string ResultUrl { get; set; }
+        }
+
+        private static readonly ConcurrentDictionary<string, string> cachedShortenedLinks = new ConcurrentDictionary<string, string>();
+
         [NadekoCommand, Usage, Description, Aliases]
         public async Task Shorten([Leftover] string query)
         {
             if (!await ValidateQuery(ctx.Channel, query).ConfigureAwait(false))
                 return;
 
-            var shortened = await _google.ShortenUrl(query).ConfigureAwait(false);
-
-            if (shortened == query)
+            query = query.Trim();
+            if (!cachedShortenedLinks.TryGetValue(query, out var shortLink))
             {
-                await ReplyErrorLocalizedAsync("shorten_fail").ConfigureAwait(false);
-                return;
+                try
+                {
+                    using (var _http = _httpFactory.CreateClient())
+                    using (var req = new HttpRequestMessage(HttpMethod.Post, "https://goolnk.com/api/v1/shorten"))
+                    {
+                        var formData = new MultipartFormDataContent
+                    {
+                        { new StringContent(query), "url" }
+                    };
+                        req.Content = formData;
+
+                        using (var res = await _http.SendAsync(req).ConfigureAwait(false))
+                        {
+                            var content = await res.Content.ReadAsStringAsync();
+                            var data = JsonConvert.DeserializeObject<ShortenData>(content);
+
+                            if (!string.IsNullOrWhiteSpace(data?.ResultUrl))
+                                cachedShortenedLinks.TryAdd(query, data.ResultUrl);
+                            else
+                                return;
+
+                            shortLink = data.ResultUrl;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _log.Error(ex, "Error shortening a link: {Message}", ex.Message);
+                    return;
+                }
             }
 
-            await ctx.Channel.EmbedAsync(new EmbedBuilder().WithColor(NadekoBot.OkColor)
+            await ctx.Channel.EmbedAsync(new EmbedBuilder()
+                .WithColor(NadekoBot.OkColor)
                 .AddField(efb => efb.WithName(GetText("original_url"))
                                     .WithValue($"<{query}>"))
                 .AddField(efb => efb.WithName(GetText("short_url"))
-                                    .WithValue($"<{shortened}>")))
+                                    .WithValue($"<{shortLink}>")))
                 .ConfigureAwait(false);
         }
 
@@ -351,7 +404,7 @@ namespace NadekoBot.Modules.Searches
                     {
                         var aTag = elem.QuerySelector("a") as IHtmlAnchorElement; // <h3> -> <a>
                         var href = aTag?.Href;
-                        var name = aTag?.Children.FirstOrDefault()?.TextContent;
+                        var name = aTag?.QuerySelector("h3")?.TextContent;
                         if (href == null || name == null)
                             return null;
 
@@ -487,75 +540,63 @@ namespace NadekoBot.Modules.Searches
             if (!await ValidateQuery(ctx.Channel, word).ConfigureAwait(false))
                 return;
 
-            using (var http = _httpFactory.CreateClient())
+            using (var _http = _httpFactory.CreateClient())
             {
-                var res = await http.GetStringAsync("http://api.pearson.com/v2/dictionaries/entries?headword=" + WebUtility.UrlEncode(word.Trim())).ConfigureAwait(false);
-
-                var data = JsonConvert.DeserializeObject<DefineModel>(res);
-
-                var sense = data.Results.FirstOrDefault(x => x.Senses?[0].Definition != null)?.Senses[0];
-
-                if (sense?.Definition == null)
-                {
-                    await ReplyErrorLocalizedAsync("define_unknown").ConfigureAwait(false);
-                    return;
-                }
-
-                var definition = sense.Definition.ToString();
-                if (!(sense.Definition is string))
-                    definition = ((JArray)JToken.Parse(sense.Definition.ToString())).First.ToString();
-
-                var embed = new EmbedBuilder().WithOkColor()
-                    .WithTitle(GetText("define") + " " + word)
-                    .WithDescription(definition)
-                    .WithFooter(efb => efb.WithText(sense.Gramatical_info?.Type));
-
-                if (sense.Examples != null)
-                    embed.AddField(efb => efb.WithName(GetText("example")).WithValue(sense.Examples.First().Text));
-
-                await ctx.Channel.EmbedAsync(embed).ConfigureAwait(false);
-            }
-        }
-
-        // done in 3.0
-        [NadekoCommand, Usage, Description, Aliases]
-        public async Task Hashtag([Leftover] string query)
-        {
-            if (!await ValidateQuery(ctx.Channel, query).ConfigureAwait(false))
-                return;
-
-            if (string.IsNullOrWhiteSpace(_creds.MashapeKey))
-            {
-                await ReplyErrorLocalizedAsync("mashape_api_missing").ConfigureAwait(false);
-                return;
-            }
-
-            try
-            {
-                await ctx.Channel.TriggerTypingAsync().ConfigureAwait(false);
                 string res;
-                using (var http = _httpFactory.CreateClient())
+                try
                 {
-                    http.DefaultRequestHeaders.Clear();
-                    http.DefaultRequestHeaders.Add("X-Mashape-Key", _creds.MashapeKey);
-                    res = await http.GetStringAsync($"https://tagdef.p.mashape.com/one.{Uri.EscapeUriString(query)}.json").ConfigureAwait(false);
-                }
+                    res = await _cache.GetOrCreateAsync($"define_{word}", e =>
+                     {
+                         e.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(12);
+                         return _http.GetStringAsync("https://api.pearson.com/v2/dictionaries/entries?headword=" + WebUtility.UrlEncode(word));
+                     }).ConfigureAwait(false);
 
-                var items = JObject.Parse(res);
-                var item = items["defs"]["def"];
-                //var hashtag = item["hashtag"].ToString();
-                var link = item["uri"].ToString();
-                var desc = item["text"].ToString();
-                await ctx.Channel.EmbedAsync(new EmbedBuilder().WithOkColor()
-                                                                 .WithAuthor(eab => eab.WithUrl(link)
-                                                                                       .WithIconUrl("http://res.cloudinary.com/urbandictionary/image/upload/a_exif,c_fit,h_200,w_200/v1394975045/b8oszuu3tbq7ebyo7vo1.jpg")
-                                                                                       .WithName(query))
-                                                                 .WithDescription(desc))
-                                                                 .ConfigureAwait(false);
-            }
-            catch
-            {
-                await ReplyErrorLocalizedAsync("hashtag_error").ConfigureAwait(false);
+                    var data = JsonConvert.DeserializeObject<DefineModel>(res);
+
+                    var datas = data.Results
+                        .Where(x => !(x.Senses is null) && x.Senses.Count > 0 && !(x.Senses[0].Definition is null))
+                        .Select(x => (Sense: x.Senses[0], x.PartOfSpeech));
+
+                    if (!datas.Any())
+                    {
+                        _log.Warn("Definition not found: {Word}", word);
+                        await ReplyErrorLocalizedAsync("define_unknown").ConfigureAwait(false);
+                    }
+
+
+                    var col = datas.Select(data => (
+                        Definition: data.Sense.Definition is string
+                            ? data.Sense.Definition.ToString()
+                            : ((JArray)JToken.Parse(data.Sense.Definition.ToString())).First.ToString(),
+                        Example: data.Sense.Examples is null || data.Sense.Examples.Count == 0
+                            ? string.Empty
+                            : data.Sense.Examples[0].Text,
+                        Word: word,
+                        WordType: data.PartOfSpeech
+                    )).ToList();
+
+                    _log.Info($"Sending {col.Count} definition for: {word}");
+
+                    await ctx.SendPaginatedConfirmAsync(0, page =>
+                    {
+                        var data = col.Skip(page).First();
+                        var embed = new EmbedBuilder()
+                            .WithDescription(ctx.User.Mention)
+                            .AddField(GetText("word"), data.Word, inline: true)
+                            .AddField(GetText("class"), data.WordType, inline: true)
+                            .AddField(GetText("definition"), data.Definition)
+                            .WithOkColor();
+
+                        if (!string.IsNullOrWhiteSpace(data.Example))
+                            embed.AddField(efb => efb.WithName(GetText("example")).WithValue(data.Example));
+
+                        return embed;
+                    }, col.Count, 1);
+                }
+                catch (Exception ex)
+                {
+                    _log.Error(ex, "Error retrieving definition data for: {Word}", word);
+                }
             }
         }
 

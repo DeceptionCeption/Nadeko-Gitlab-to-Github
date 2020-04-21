@@ -35,6 +35,8 @@ namespace NadekoBot.Core.Services
         string ServicesIp { get; }
 
         void Reload();
+        string LocationIqApiKey { get; }
+        string TimezoneDbApiKey { get; }
     }
 
     public class RestartConfig
