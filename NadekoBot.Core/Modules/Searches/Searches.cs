@@ -159,15 +159,28 @@ namespace NadekoBot.Modules.Searches
             var (data, err) = await _service.GetTimeDataAsync(query).ConfigureAwait(false);
             if (!(err == null))
             {
-                //var errorKey = err switch
-                //{
-                //    TimeErrors.ApiKeyMissing => "api_key_missing",
-                //    TimeErrors.InvalidInput => "invalid_input",
-                //    TimeErrors.NotFound => "not_found",
-                //    TimeErrors.Unknown => "error_occured",
-                //    _ => "error_occured",
-                //};
-                await ReplyErrorLocalizedAsync("error_occured").ConfigureAwait(false);
+                string errorKey;
+                switch (err)
+                {
+                    case TimeErrors.ApiKeyMissing:
+                        errorKey = "api_key_missing";
+                        break;
+                    case TimeErrors.InvalidInput:
+                        errorKey = "invalid_input";
+                        break;
+                    case TimeErrors.NotFound:
+                        errorKey = "not_found";
+                        break;
+                    default:
+                        errorKey = "error_occured";
+                        break;
+                }
+                await ReplyErrorLocalizedAsync(errorKey).ConfigureAwait(false);
+                return;
+            }
+            else if (string.IsNullOrWhiteSpace(data.TimeZoneName))
+            {
+                await ReplyErrorLocalizedAsync("timezone_db_api_key").ConfigureAwait(false);
                 return;
             }
 
@@ -572,7 +585,7 @@ namespace NadekoBot.Modules.Searches
                             ? string.Empty
                             : data.Sense.Examples[0].Text,
                         Word: word,
-                        WordType: data.PartOfSpeech
+                        WordType: string.IsNullOrWhiteSpace(data.PartOfSpeech) ? "-" : data.PartOfSpeech
                     )).ToList();
 
                     _log.Info($"Sending {col.Count} definition for: {word}");
