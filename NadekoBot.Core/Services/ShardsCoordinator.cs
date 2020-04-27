@@ -105,23 +105,18 @@ namespace NadekoBot.Core.Services
 
             _shardProcesses = new Process[_creds.TotalShards];
 
-            var _nadekoServerShard = 64;
+            var nadekoLogShard = (int)((117523346618318850 >> 22) % _creds.TotalShards);
+            //var v3TestingShard = (int)((236275461590745088 >> 22) % data.TotalShards);
 
-#if GLOBAL_NADEKO
-            var shardIdsEnum = Enumerable.Range(1, _nadekoServerShard - 1)
-                .Concat(Enumerable.Range(_nadekoServerShard + 1, _creds.TotalShards - _nadekoServerShard - 1))
-                .Shuffle()
-                .Prepend(_nadekoServerShard)
-                .Prepend(0);
-#else
-            var shardIdsEnum = Enumerable.Range(1, _creds.TotalShards - 1)
-                .Shuffle()
-                .Prepend(0);
-#endif
+            var shardIds = Enumerable.Range(0, _creds.TotalShards) // get all shards which need to be restarted, at startup, that's all shards
+                .Except(new int[] { 0, nadekoLogShard }) // remove shard 0 and #NadekoLog shard from startup list, to make them start first
+                .Shuffle() // start all shards in a random order
+                .Prepend(nadekoLogShard) // 2 - then start #NadekoLog shard
+                .Prepend(0) // 1 - first start shard 0
+                .Distinct() // make sure no duplicates
+                .ToList();
 
-            var shardIds = shardIdsEnum
-                .ToArray();
-            for (var i = 0; i < shardIds.Length; i++)
+            for (var i = 0; i < shardIds.Count; i++)
             {
                 var id = shardIds[i];
                 //add it to the list of shards which should be started
@@ -249,7 +244,7 @@ namespace NadekoBot.Core.Services
 
         public async Task RunAsync()
         {
-            //this task will complete when the initial start of the shards 
+            //this task will complete when the initial start of the shards
             //is complete, but will keep running in order to restart shards
             //which are disconnected for too long
             TaskCompletionSource<bool> tsc = new TaskCompletionSource<bool>();
@@ -257,7 +252,7 @@ namespace NadekoBot.Core.Services
             {
                 do
                 {
-                    //start a shard which is scheduled for start every 6 seconds 
+                    //start a shard which is scheduled for start every 6 seconds
                     while (_shardStartQueue.TryPeek(out var id))
                     {
                         // if the shard is on the waiting list again
