@@ -34,7 +34,7 @@ namespace NadekoBot.Modules.Gambling
                 _cs = cs;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [NadekoOptionsAttribute(typeof(EventOptions))]
             [OwnerOnly]

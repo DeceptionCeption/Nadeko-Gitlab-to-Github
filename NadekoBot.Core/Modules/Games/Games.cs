@@ -28,7 +28,7 @@ namespace NadekoBot.Modules.Games
             _httpFactory = factory;
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Choose([Leftover] string list = null)
         {
             if (string.IsNullOrWhiteSpace(list))
@@ -40,7 +40,7 @@ namespace NadekoBot.Modules.Games
             await ctx.Channel.SendConfirmAsync("🤔", listArr[rng.Next(0, listArr.Length)]).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task EightBall([Leftover] string question = null)
         {
             if (string.IsNullOrWhiteSpace(question))
@@ -52,7 +52,7 @@ namespace NadekoBot.Modules.Games
                 .AddField(efb => efb.WithName("🎱 " + GetText("8ball")).WithValue(_service.EightBallResponses[new NadekoRandom().Next(0, _service.EightBallResponses.Length)]).WithIsInline(false))).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task RateGirl(IGuildUser usr)
         {
@@ -133,7 +133,7 @@ namespace NadekoBot.Modules.Games
             return new GirlRating(_images, _httpFactory, crazy, hot, roll, advice);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Linux(string guhnoo, string loonix)
         {
             await ctx.Channel.SendConfirmAsync(

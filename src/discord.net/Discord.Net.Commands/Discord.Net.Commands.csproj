@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Discord.Net.Commands</AssemblyName>
+    <RootNamespace>Discord.Commands</RootNamespace>
+    <Description>A Discord.Net extension adding support for bot commands.</Description>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Discord.Net.Core\Discord.Net.Core.csproj" />
+  </ItemGroup>
+</Project>

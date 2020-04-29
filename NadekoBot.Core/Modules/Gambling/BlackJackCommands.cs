@@ -33,7 +33,7 @@ namespace NadekoBot.Modules.Gambling
                 _db = db;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task BlackJack(ShmartNumber amount)
             {
@@ -155,15 +155,15 @@ namespace NadekoBot.Modules.Gambling
                 return $"{playerName} | Bet: {x.Bet}\n";
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public Task Hit() => InternalBlackJack(BjAction.Hit);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public Task Stand() => InternalBlackJack(BjAction.Stand);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public Task Double() => InternalBlackJack(BjAction.Double);
 

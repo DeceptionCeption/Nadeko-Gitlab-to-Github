@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>preview</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ApplicationIcon>nadeko_icon.ico</ApplicationIcon>
@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.Core" Version="1.19.0" />
+    <PackageReference Include="Grpc.Core" Version="2.27.0" />
     <PackageReference Include="AngleSharp" Version="0.13.0" />
     <PackageReference Include="CommandLineParser" Version="2.6.0" />
     <PackageReference Include="CoreCLR-NCalc" Version="2.2.63" />
@@ -45,11 +45,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="discord.net\" />
     <Folder Include="Modules\Gambling\Common\CurrencyEvents\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\src\discord.net\Discord.Net.Commands\Discord.Net.Commands.csproj" />
+    <ProjectReference Include="..\src\discord.net\Discord.Net.Core\Discord.Net.Core.csproj" />
+    <ProjectReference Include="..\src\discord.net\Discord.Net.Providers.WS4Net\Discord.Net.Providers.WS4Net.csproj" />
+    <ProjectReference Include="..\src\discord.net\Discord.Net.Rest\Discord.Net.Rest.csproj" />
+    <ProjectReference Include="..\src\discord.net\Discord.Net.WebSocket\Discord.Net.WebSocket.csproj" />
     <ProjectReference Include="..\src\Services\SearchImages\searchimages\SearchImages.csproj" />
+    <ProjectReference Include="..\..\Ayu\services\expressions\base\Expressions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,7 +76,7 @@
       <HintPath>discord.net\Discord.Net.WebSocket.dll</HintPath>
     </Reference>
   </ItemGroup>
-
+  
   <PropertyGroup Condition=" '$(Configuration)' == 'GlobalNadeko' ">
     <DefineConstants>$(DefineConstants);GLOBAL_NADEKO</DefineConstants>
     <NoWarn>$(NoWarn);CS1573;CS1591</NoWarn>

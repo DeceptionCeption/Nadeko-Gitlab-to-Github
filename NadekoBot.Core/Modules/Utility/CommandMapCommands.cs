@@ -28,7 +28,7 @@ namespace NadekoBot.Modules.Utility
                 _client = client;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             public async Task AliasesClear()
@@ -37,7 +37,7 @@ namespace NadekoBot.Modules.Utility
                 await ReplyConfirmLocalizedAsync("aliases_cleared", count).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [UserPerm(GuildPerm.Administrator)]
             [RequireContext(ContextType.Guild)]
             public async Task Alias(string trigger, [Leftover] string mapping = null)
@@ -114,7 +114,7 @@ namespace NadekoBot.Modules.Utility
             }
 
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task AliasList(int page = 1)
             {

@@ -26,7 +26,7 @@ namespace NadekoBot.Modules.Permissions
                 _db = db;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public async Task Lgp()
             {
@@ -47,7 +47,7 @@ namespace NadekoBot.Modules.Permissions
                 await ctx.Channel.EmbedAsync(embed).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public async Task Gmod(ModuleOrCrInfo module)
             {
@@ -81,7 +81,7 @@ namespace NadekoBot.Modules.Permissions
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public async Task Gcmd(CommandOrCrInfo cmd)
             {

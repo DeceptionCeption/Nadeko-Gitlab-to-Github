@@ -40,7 +40,7 @@ namespace NadekoBot.Modules.Utility
             _httpFactory = factory;
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task TogetherTube()
         {
             Uri target;
@@ -57,7 +57,7 @@ namespace NadekoBot.Modules.Utility
                 .WithDescription(ctx.User.Mention + " " + GetText("togtub_room_link") + "\n" + target)).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task WhosPlaying([Leftover] string game)
         {
@@ -89,7 +89,7 @@ namespace NadekoBot.Modules.Utility
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task InRole([Leftover] IRole role)
         {
@@ -110,7 +110,7 @@ namespace NadekoBot.Modules.Utility
 
         public enum MeOrBot { Me, Bot }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task CheckPerms(MeOrBot who = MeOrBot.Me)
         {
@@ -126,7 +126,7 @@ namespace NadekoBot.Modules.Utility
             await ctx.Channel.SendConfirmAsync(builder.ToString()).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task UserId([Leftover] IGuildUser target = null)
         {
@@ -135,7 +135,7 @@ namespace NadekoBot.Modules.Utility
                 Format.Code(usr.Id.ToString())).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task RoleId([Leftover] IRole role)
         {
@@ -143,14 +143,14 @@ namespace NadekoBot.Modules.Utility
                 Format.Code(role.Id.ToString())).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task ChannelId()
         {
             await ReplyConfirmLocalizedAsync("channelid", "🆔", Format.Code(ctx.Channel.Id.ToString()))
                 .ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task ServerId()
         {
@@ -158,7 +158,7 @@ namespace NadekoBot.Modules.Utility
                 .ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Roles(IGuildUser target, int page = 1)
         {
@@ -199,12 +199,12 @@ namespace NadekoBot.Modules.Utility
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public Task Roles(int page = 1) =>
             Roles(null, page);
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task ChannelTopic([Leftover]ITextChannel channel = null)
         {
@@ -218,7 +218,7 @@ namespace NadekoBot.Modules.Utility
                 await ctx.Channel.SendConfirmAsync(GetText("channel_topic"), topic).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Stats()
         {
             var ownerIds = string.Join("\n", _creds.OwnerIds);
@@ -243,7 +243,7 @@ namespace NadekoBot.Modules.Utility
                             _bot.GuildCount, _stats.TextChannels, _stats.VoiceChannels)).WithIsInline(true))).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Showemojis([Leftover] string _) // need to have the parameter so that the message.tags gets populated
         {
             var tags = ctx.Message.Tags.Where(t => t.Type == TagType.Emoji).Select(t => (Emote)t.Value);
@@ -256,7 +256,7 @@ namespace NadekoBot.Modules.Utility
                 await ctx.Channel.SendMessageAsync(result.TrimTo(2000)).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [OwnerOnly]
         public async Task ListServers(int page = 1)
         {
@@ -283,7 +283,7 @@ namespace NadekoBot.Modules.Utility
         }
 
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [OwnerOnly]
         public async Task SaveChat(int cnt)
@@ -328,7 +328,7 @@ namespace NadekoBot.Modules.Utility
         }
         private static SemaphoreSlim sem = new SemaphoreSlim(1, 1);
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
 #if GLOBAL_NADEKO
         [Ratelimit(30)]
 #endif

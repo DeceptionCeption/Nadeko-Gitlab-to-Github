@@ -13,7 +13,7 @@ namespace NadekoBot.Modules.Utility
     {
         [Group]
         public class PatreonCommands : NadekoSubmodule<PatreonRewardsService>
-        {   
+        {
             private readonly IBotCredentials _creds;
             private readonly DbService _db;
             private readonly ICurrencyService _currency;
@@ -24,8 +24,8 @@ namespace NadekoBot.Modules.Utility
                 _db = db;
                 _currency = currency;
             }
-            
-            [NadekoCommand, Usage, Description, Aliases]
+
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.DM)]
             [OwnerOnly]
             public async Task PatreonRewardsReload()
@@ -37,7 +37,7 @@ namespace NadekoBot.Modules.Utility
                 await ctx.Channel.SendConfirmAsync("👌").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.DM)]
             public async Task ClaimPatreonRewards()
             {

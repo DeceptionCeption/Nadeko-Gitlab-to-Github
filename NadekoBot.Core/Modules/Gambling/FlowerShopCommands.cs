@@ -41,7 +41,7 @@ namespace NadekoBot.Modules.Gambling
                 _client = client;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task Shop(int page = 1)
             {
@@ -74,7 +74,7 @@ namespace NadekoBot.Modules.Gambling
                 }, entries.Count, 9, true).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task Buy(int index)
             {
@@ -201,7 +201,7 @@ namespace NadekoBot.Modules.Gambling
             private static long GetProfitAmount(int price) =>
                 (int)(Math.Ceiling(0.90 * price));
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             [BotPerm(GuildPerm.ManageRoles)]
@@ -231,7 +231,7 @@ namespace NadekoBot.Modules.Gambling
                     .WithTitle(GetText("shop_item_add"))).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             public async Task ShopAdd(List _, int price, [Leftover]string name)
@@ -259,7 +259,7 @@ namespace NadekoBot.Modules.Gambling
                     .WithTitle(GetText("shop_item_add"))).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             public async Task ShopListAdd(int index, [Leftover] string itemText)
@@ -298,7 +298,7 @@ namespace NadekoBot.Modules.Gambling
                     await ReplyConfirmLocalizedAsync("shop_list_item_added").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             public async Task ShopRemove(int index)

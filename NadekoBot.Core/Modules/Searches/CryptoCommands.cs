@@ -11,7 +11,7 @@ namespace NadekoBot.Modules.Searches
     {
         public class CryptoCommands : NadekoSubmodule<CryptoService>
         {
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task Crypto(string name)
             {

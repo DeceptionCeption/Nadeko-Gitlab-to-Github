@@ -22,7 +22,7 @@ namespace NadekoBot.Modules.Games
                 _client = client;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task Nunchi()
             {
@@ -53,7 +53,7 @@ namespace NadekoBot.Modules.Games
                 nunchi.OnUserGuessed += Nunchi_OnUserGuessed;
                 nunchi.OnRoundStarted += Nunchi_OnRoundStarted;
                 _client.MessageReceived += _client_MessageReceived;
-                
+
                 var success = await nunchi.Initialize().ConfigureAwait(false);
                 if (!success)
                 {
@@ -99,8 +99,8 @@ namespace NadekoBot.Modules.Games
 
             private Task Nunchi_OnRoundStarted(NunchiGame arg, int cur)
             {
-                return ConfirmLocalizedAsync("nunchi_round_started", 
-                    Format.Bold(arg.ParticipantCount.ToString()), 
+                return ConfirmLocalizedAsync("nunchi_round_started",
+                    Format.Bold(arg.ParticipantCount.ToString()),
                     Format.Bold(cur.ToString()));
             }
 

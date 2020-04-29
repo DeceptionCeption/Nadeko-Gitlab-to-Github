@@ -16,7 +16,7 @@ namespace NadekoBot.Modules.Gambling
         [Group]
         public class WaifuClaimCommands : NadekoSubmodule<WaifuService>
         {
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task WaifuReset()
             {
                 var price = _service.GetResetPrice(ctx.User);
@@ -35,7 +35,7 @@ namespace NadekoBot.Modules.Gambling
                 await ReplyErrorLocalizedAsync("waifu_reset_fail");
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task WaifuClaim(int amount, [Leftover]IUser target)
             {
@@ -73,7 +73,7 @@ namespace NadekoBot.Modules.Gambling
                 await ctx.Channel.SendConfirmAsync(ctx.User.Mention + msg);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task WaifuTransfer(IUser waifu, IUser newOwner)
             {
@@ -90,12 +90,12 @@ namespace NadekoBot.Modules.Gambling
                     Format.Bold(newOwner.ToString()));
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [Priority(0)]
             public Task Divorce([Leftover]IGuildUser target) => Divorce(target.Id);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [Priority(1)]
             public async Task Divorce([Leftover]ulong targetId)
@@ -125,7 +125,7 @@ namespace NadekoBot.Modules.Gambling
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task WaifuClaimerAffinity([Leftover]IGuildUser u = null)
             {
@@ -163,7 +163,7 @@ namespace NadekoBot.Modules.Gambling
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task WaifuLeaderboard(int page = 1)
             {
@@ -197,7 +197,7 @@ namespace NadekoBot.Modules.Gambling
                 await ctx.Channel.EmbedAsync(embed);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task WaifuInfo([Leftover]IGuildUser target = null)
             {
@@ -231,7 +231,7 @@ namespace NadekoBot.Modules.Gambling
                 await ctx.Channel.EmbedAsync(embed).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [Priority(1)]
             public async Task WaifuGift(int page = 1)
@@ -257,7 +257,7 @@ namespace NadekoBot.Modules.Gambling
                 }, Enum.GetValues(typeof(WaifuItem.ItemName)).Length, 9);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [Priority(0)]
             public async Task WaifuGift(WaifuItem.ItemName item, [Leftover] IUser waifu)

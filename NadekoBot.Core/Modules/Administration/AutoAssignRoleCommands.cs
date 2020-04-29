@@ -15,7 +15,7 @@ namespace NadekoBot.Modules.Administration
         public class AutoAssignRoleCommands : NadekoSubmodule<AutoAssignRoleService>
         {
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageRoles)]
             public async Task AutoAssignRole([Leftover] IRole role = null)

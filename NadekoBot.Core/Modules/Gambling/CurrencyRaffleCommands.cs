@@ -16,13 +16,13 @@ namespace NadekoBot.Modules.Gambling
         {
             public enum Mixed { Mixed }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [Priority(0)]
             public Task RaffleCur(Mixed _, ShmartNumber amount) =>
                 RaffleCur(amount, true);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [Priority(1)]
             public async Task RaffleCur(ShmartNumber amount, bool mixed = false)

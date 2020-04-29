@@ -17,7 +17,7 @@ namespace NadekoBot.Modules.Searches
         [Group]
         public class FeedCommands : NadekoSubmodule<FeedsService>
         {
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public async Task Feed(string url, [Leftover] ITextChannel channel = null)
@@ -55,7 +55,7 @@ namespace NadekoBot.Modules.Searches
                 await ReplyErrorLocalizedAsync("feed_not_valid").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public async Task FeedRemove(int index)
@@ -68,7 +68,7 @@ namespace NadekoBot.Modules.Searches
                     await ReplyErrorLocalizedAsync("feed_out_of_range").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public async Task FeedList()

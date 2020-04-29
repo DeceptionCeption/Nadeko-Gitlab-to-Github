@@ -36,6 +36,9 @@ namespace NadekoBot.Extensions
     {
         private static Logger _log = LogManager.GetCurrentClassLogger();
 
+        public static Task<IUserMessage> SendAsync(this IMessageChannel chan, EmbedBuilder embed)
+            => chan.SendMessageAsync(embed: embed.Build());
+
         public static Task OkAsync(this ICommandContext ctx)
             => ctx.Channel.SendConfirmAsync("👌");
 
@@ -122,10 +125,11 @@ namespace NadekoBot.Extensions
                 return embed.WithFooter(efb => efb.WithText(curPage.ToString()));
         }
 
-        public static EmbedBuilder WithOkColor(this EmbedBuilder eb) =>
+        public static EmbedBuilder WithOkColor(this EmbedBuilder eb, ICommandContext ctx = null) =>
             eb.WithColor(NadekoBot.OkColor);
-
-        public static EmbedBuilder WithErrorColor(this EmbedBuilder eb) =>
+        public static EmbedBuilder WithPendingColor(this EmbedBuilder eb, ICommandContext ctx = null) =>
+            eb.WithColor(NadekoBot.PendingColor);
+        public static EmbedBuilder WithErrorColor(this EmbedBuilder eb, ICommandContext ctx = null) =>
             eb.WithColor(NadekoBot.ErrorColor);
 
         public static ReactionEventWrapper OnReaction(this IUserMessage msg, DiscordSocketClient client, Func<SocketReaction, Task> reactionAdded, Func<SocketReaction, Task> reactionRemoved = null)
@@ -394,7 +398,7 @@ namespace NadekoBot.Extensions
                 if (collection.FirstOrDefault(x => x.ServiceType == serviceType) != null) // if that type is already added, skip
                     continue;
 
-                //also add the same type 
+                //also add the same type
                 var interfaceType = interfaces.FirstOrDefault(x => serviceType.GetInterfaces().Contains(x));
                 if (interfaceType != null)
                 {

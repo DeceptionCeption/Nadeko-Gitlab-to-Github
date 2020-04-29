@@ -12,7 +12,7 @@ namespace NadekoBot.Modules.Administration
         [Group]
         public class ServerGreetCommands : NadekoSubmodule<GreetSettingsService>
         {
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageGuild)]
             public async Task GreetDel(int timer = 30)
@@ -28,7 +28,7 @@ namespace NadekoBot.Modules.Administration
                     await ReplyConfirmLocalizedAsync("greetdel_off").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageGuild)]
             public async Task Greet()
@@ -41,7 +41,7 @@ namespace NadekoBot.Modules.Administration
                     await ReplyConfirmLocalizedAsync("greet_off").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageGuild)]
             public Task GreetMsg()
@@ -50,7 +50,7 @@ namespace NadekoBot.Modules.Administration
                 return ReplyConfirmLocalizedAsync("greetmsg_cur", greetMsg?.SanitizeMentions());
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageGuild)]
             public async Task GreetMsg([Leftover] string text)
@@ -58,7 +58,7 @@ namespace NadekoBot.Modules.Administration
                 if (string.IsNullOrWhiteSpace(text))
                 {
                     await GreetMsg().ConfigureAwait(false);
-                    return;                    
+                    return;
                 }
 
                 var sendGreetEnabled = _service.SetGreetMessage(ctx.Guild.Id, ref text);
@@ -68,7 +68,7 @@ namespace NadekoBot.Modules.Administration
                     await ReplyConfirmLocalizedAsync("greetmsg_enable", $"`{Prefix}greet`").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageGuild)]
             public async Task GreetDm()
@@ -81,7 +81,7 @@ namespace NadekoBot.Modules.Administration
                     await ReplyConfirmLocalizedAsync("greetdm_off").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageGuild)]
             public Task GreetDmMsg()
@@ -90,7 +90,7 @@ namespace NadekoBot.Modules.Administration
                 return ReplyConfirmLocalizedAsync("greetdmmsg_cur", dmGreetMsg?.SanitizeMentions());
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageGuild)]
             public async Task GreetDmMsg([Leftover] string text = null)
@@ -108,7 +108,7 @@ namespace NadekoBot.Modules.Administration
                     await ReplyConfirmLocalizedAsync("greetdmmsg_enable", $"`{Prefix}greetdm`").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageGuild)]
             public async Task Bye()
@@ -121,7 +121,7 @@ namespace NadekoBot.Modules.Administration
                     await ReplyConfirmLocalizedAsync("bye_off").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageGuild)]
             public Task ByeMsg()
@@ -130,7 +130,7 @@ namespace NadekoBot.Modules.Administration
                 return ReplyConfirmLocalizedAsync("byemsg_cur", byeMsg?.SanitizeMentions());
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageGuild)]
             public async Task ByeMsg([Leftover] string text)
@@ -148,7 +148,7 @@ namespace NadekoBot.Modules.Administration
                     await ReplyConfirmLocalizedAsync("byemsg_enable", $"`{Prefix}bye`").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageGuild)]
             public async Task ByeDel(int timer = 30)

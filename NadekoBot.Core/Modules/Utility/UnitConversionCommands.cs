@@ -15,7 +15,7 @@ namespace NadekoBot.Modules.Utility
         [Group]
         public class UnitConverterCommands : NadekoSubmodule<ConverterService>
         {
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task ConvertList()
             {
                 var units = _service.Units;
@@ -29,12 +29,12 @@ namespace NadekoBot.Modules.Utility
                 await ctx.Channel.EmbedAsync(res).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [Priority(1)]
             public Task Convert(string origin, string target, ShmartNumber value)
                 => Convert(origin, target, (decimal)value.Value);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [Priority(0)]
             public async Task Convert(string origin, string target, decimal value)
             {

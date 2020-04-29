@@ -23,7 +23,7 @@ namespace NadekoBot.Modules.Games
                 _client = client;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [UserPerm(GuildPerm.ManageMessages)]
             [RequireContext(ContextType.Guild)]
             public async Task Poll([Leftover] string arg)
@@ -55,7 +55,7 @@ namespace NadekoBot.Modules.Games
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [UserPerm(GuildPerm.ManageMessages)]
             [RequireContext(ContextType.Guild)]
             public async Task PollStats()
@@ -66,7 +66,7 @@ namespace NadekoBot.Modules.Games
                 await ctx.Channel.EmbedAsync(GetStats(pr.Poll, GetText("current_poll_results"))).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [UserPerm(GuildPerm.ManageMessages)]
             [RequireContext(ContextType.Guild)]
             public async Task Pollend()

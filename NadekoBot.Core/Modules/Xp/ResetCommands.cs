@@ -12,13 +12,13 @@ namespace NadekoBot.Modules.Xp
         public class ResetCommands : NadekoSubmodule<XpService>
         {
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             public Task XpReset(IGuildUser user)
                 => XpReset(user.Id);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             public async Task XpReset(ulong userId)
@@ -35,7 +35,7 @@ namespace NadekoBot.Modules.Xp
                 await ReplyConfirmLocalizedAsync("reset_user", userId).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             public async Task XpReset()

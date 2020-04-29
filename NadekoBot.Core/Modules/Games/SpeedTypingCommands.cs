@@ -27,7 +27,7 @@ namespace NadekoBot.Modules.Games
                 _client = client;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [NadekoOptionsAttribute(typeof(TypingGame.Options))]
             public async Task TypeStart(params string[] args)
@@ -50,7 +50,7 @@ namespace NadekoBot.Modules.Games
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task TypeStop()
             {
@@ -64,7 +64,7 @@ namespace NadekoBot.Modules.Games
             }
 
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [OwnerOnly]
             public async Task Typeadd([Leftover] string text)
@@ -73,12 +73,12 @@ namespace NadekoBot.Modules.Games
                 if (string.IsNullOrWhiteSpace(text))
                     return;
 
-                _games.AddTypingArticle(ctx.User, text);                
+                _games.AddTypingArticle(ctx.User, text);
 
                 await channel.SendConfirmAsync("Added new article for typing game.").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task Typelist(int page = 1)
             {
@@ -99,7 +99,7 @@ namespace NadekoBot.Modules.Games
                              .ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [OwnerOnly]
             public async Task Typedel(int index)
@@ -112,7 +112,7 @@ namespace NadekoBot.Modules.Games
 
                 var removed = _games.TypingArticles[index];
                 _games.TypingArticles.RemoveAt(index);
-                
+
                 File.WriteAllText(_games.TypingArticlesPath, JsonConvert.SerializeObject(_games.TypingArticles));
 
                 await channel.SendConfirmAsync($"`Removed typing article:` #{index + 1} - {removed.Text.TrimTo(50)}")

@@ -23,7 +23,7 @@ namespace NadekoBot.Modules.Searches
                 _google = google;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task Translate(string langs, [Leftover] string text = null)
             {
                 try
@@ -65,7 +65,7 @@ namespace NadekoBot.Modules.Searches
                 Nodel
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             [OwnerOnly]
@@ -79,7 +79,7 @@ namespace NadekoBot.Modules.Searches
                     await ReplyConfirmLocalizedAsync("atl_ad_started").ConfigureAwait(false);
                     return;
                 }
-                
+
                 if (_searches.TranslatedChannels.TryRemove(channel.Id, out _))
                 {
                     await ReplyConfirmLocalizedAsync("atl_stopped").ConfigureAwait(false);
@@ -91,7 +91,7 @@ namespace NadekoBot.Modules.Searches
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task AutoTransLang([Leftover] string langs = null)
             {
@@ -121,7 +121,7 @@ namespace NadekoBot.Modules.Searches
                 await ReplyConfirmLocalizedAsync("atl_set", from, to).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task Translangs()
             {

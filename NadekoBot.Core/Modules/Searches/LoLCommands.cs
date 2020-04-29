@@ -25,7 +25,7 @@ namespace NadekoBot.Modules.Searches
             ((IDictionary<string, JToken>)JObject.Parse(File.ReadAllText("data/lolchamps.json")))
                 .ToDictionary(x => (int)x.Value["id"], x => x.Value["name"].ToString()), true);
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Lolban()
         {
             try

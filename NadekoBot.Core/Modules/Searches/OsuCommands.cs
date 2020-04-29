@@ -28,7 +28,7 @@ namespace NadekoBot.Modules.Searches
                 _httpFactory = factory;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task Osu(string usr, [Leftover] string mode = null)
             {
                 if (string.IsNullOrWhiteSpace(usr))
@@ -47,7 +47,7 @@ namespace NadekoBot.Modules.Searches
                 await Context.Channel.SendMessageAsync(embed: eb.Build()).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task Osub([Leftover] string map)
             {
                 if (string.IsNullOrWhiteSpace(_creds.OsuApiKey))
@@ -81,7 +81,7 @@ namespace NadekoBot.Modules.Searches
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task Osu5(string user, [Leftover] string mode = null)
             {
                 var channel = (ITextChannel)ctx.Channel;

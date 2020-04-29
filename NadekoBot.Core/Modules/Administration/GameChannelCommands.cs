@@ -12,7 +12,7 @@ namespace NadekoBot.Modules.Administration
         [Group]
         public class GameChannelCommands : NadekoSubmodule<GameVoiceChannelService>
         {
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             [BotPerm(GuildPerm.MoveMembers)]

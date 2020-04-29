@@ -11,7 +11,7 @@ namespace NadekoBot.Modules.Utility
         [Group]
         public class VerboseErrorCommands : NadekoSubmodule<VerboseErrorsService>
         {
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public async Task VerboseError()

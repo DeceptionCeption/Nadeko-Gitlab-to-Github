@@ -12,7 +12,7 @@ namespace NadekoBot.Modules.Searches
         [Group]
         public class PlaceCommands : NadekoSubmodule
         {
-            private static readonly string _typesStr = 
+            private static readonly string _typesStr =
                 string.Join(", ", Enum.GetNames(typeof(PlaceType)));
 
             public enum PlaceType
@@ -27,15 +27,15 @@ namespace NadekoBot.Modules.Searches
                 Xoart, //http://xoart.link
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task Placelist()
             {
-                await ctx.Channel.SendConfirmAsync(GetText("list_of_place_tags", Prefix), 
+                await ctx.Channel.SendConfirmAsync(GetText("list_of_place_tags", Prefix),
                     _typesStr)
                              .ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task Place(PlaceType placeType, uint width = 0, uint height = 0)
             {
                 var url = "";

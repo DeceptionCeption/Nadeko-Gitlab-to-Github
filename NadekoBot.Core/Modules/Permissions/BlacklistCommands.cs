@@ -25,27 +25,27 @@ namespace NadekoBot.Modules.Permissions
                 _creds = creds;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public Task UserBlacklist(AddRemove action, ulong id)
                 => Blacklist(action, id, BlacklistType.User);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public Task UserBlacklist(AddRemove action, IUser usr)
                 => Blacklist(action, usr.Id, BlacklistType.User);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public Task ChannelBlacklist(AddRemove action, ulong id)
                 => Blacklist(action, id, BlacklistType.Channel);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public Task ServerBlacklist(AddRemove action, ulong id)
                 => Blacklist(action, id, BlacklistType.Server);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public Task ServerBlacklist(AddRemove action, IGuild guild)
                 => Blacklist(action, guild.Id, BlacklistType.Server);

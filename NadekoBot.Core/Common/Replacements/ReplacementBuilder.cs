@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using NadekoBot.Core.Services;
 using NadekoBot.Extensions;
 using NadekoBot.Modules.Administration.Services;
 using NadekoBot.Modules.Music.Services;
@@ -11,6 +12,14 @@ using System.Text.RegularExpressions;
 
 namespace NadekoBot.Common.Replacements
 {
+
+    public class ReplacementBuilderService : INService
+    {
+        public ReplacementBuilder CreateReplacementBuilder()
+        {
+            return new ReplacementBuilder();
+        }
+    }
     public class ReplacementBuilder
     {
         private static readonly Regex rngRegex = new Regex("%rng(?:(?<from>(?:-)?\\d+)-(?<to>(?:-)?\\d+))?%", RegexOptions.Compiled);

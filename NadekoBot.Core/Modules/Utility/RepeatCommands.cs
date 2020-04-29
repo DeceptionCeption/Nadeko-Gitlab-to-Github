@@ -33,7 +33,7 @@ namespace NadekoBot.Modules.Utility
                 _db = db;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public async Task RepeatInvoke(int index)
@@ -61,7 +61,7 @@ namespace NadekoBot.Modules.Utility
                 try { await ctx.Message.AddReactionAsync(new Emoji("🔄")).ConfigureAwait(false); } catch { }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public async Task RepeatRemove(int index)
@@ -103,7 +103,7 @@ namespace NadekoBot.Modules.Utility
                     GetText("repeater_stopped", index + 1) + $"\n\n{repeater.Value}").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             [NadekoOptions(typeof(Repeater.Options))]
@@ -111,7 +111,7 @@ namespace NadekoBot.Modules.Utility
             public Task Repeat(params string[] options)
                 => Repeat(null, options);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             [NadekoOptions(typeof(Repeater.Options))]
@@ -172,7 +172,7 @@ namespace NadekoBot.Modules.Utility
                         Format.Bold(rep.Repeater.Interval.Minutes.ToString())) + " " + secondPart).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public async Task RepeatList()

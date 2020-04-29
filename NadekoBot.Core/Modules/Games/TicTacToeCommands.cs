@@ -23,7 +23,7 @@ namespace NadekoBot.Modules.Games
                 _client = client;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [NadekoOptions(typeof(TicTacToe.Options))]
             public async Task TicTacToe(params string[] args)

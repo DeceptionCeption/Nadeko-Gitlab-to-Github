@@ -50,7 +50,7 @@ namespace NadekoBot.Modules.NSFW
             return tagRequest;
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Boobs()
         {
             var data = await Rpc(Context, _service.BoobsAsync, new BoobsRequest { });
@@ -58,7 +58,7 @@ namespace NadekoBot.Modules.NSFW
             await NsfwReply(Context, data);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Butts()
         {
             var data = await Rpc(Context, _service.ButtsAsync, new ButtsRequest { });
@@ -66,7 +66,7 @@ namespace NadekoBot.Modules.NSFW
             await NsfwReply(Context, data);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task DanBooru(params string[] tags)
         {
             var payload = GetTagRequest(Context, tags);
@@ -76,7 +76,7 @@ namespace NadekoBot.Modules.NSFW
             await NsfwReply(Context, data);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task DerpiBooru(params string[] tags)
         {
             var payload = GetTagRequest(Context, tags);
@@ -86,7 +86,7 @@ namespace NadekoBot.Modules.NSFW
             await NsfwReply(Context, data);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task GelBooru(params string[] tags)
         {
             var payload = GetTagRequest(Context, tags);
@@ -96,7 +96,7 @@ namespace NadekoBot.Modules.NSFW
             await NsfwReply(Context, data);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task E621(params string[] tags)
         {
             var payload = GetTagRequest(Context, tags);
@@ -106,7 +106,7 @@ namespace NadekoBot.Modules.NSFW
             await NsfwReply(Context, data);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Konachan(params string[] tags)
         {
             var payload = GetTagRequest(Context, tags);
@@ -116,7 +116,7 @@ namespace NadekoBot.Modules.NSFW
             await NsfwReply(Context, data);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Yandere(params string[] tags)
         {
             var payload = GetTagRequest(Context, tags);
@@ -126,7 +126,7 @@ namespace NadekoBot.Modules.NSFW
             await NsfwReply(Context, data);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Rule34(params string[] tags)
         {
             var payload = GetTagRequest(Context, tags);
@@ -136,7 +136,7 @@ namespace NadekoBot.Modules.NSFW
             await NsfwReply(Context, data);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Hentai(params string[] tags)
         {
             var payload = GetTagRequest(Context, tags, forceExplicit: true);
@@ -146,7 +146,7 @@ namespace NadekoBot.Modules.NSFW
             await NsfwReply(Context, data);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task HentaiBomb(params string[] tags)
         {
             var payload = GetTagRequest(Context, tags, forceExplicit: true);
@@ -166,7 +166,7 @@ namespace NadekoBot.Modules.NSFW
             await Context.Channel.SendMessageAsync(string.Join("\n\n", linksEnum.Select(x => x.Url))).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [UserPerm(GuildPerm.ManageMessages)]
         public async Task NsfwTagBlacklist([Leftover] string tag = null)
@@ -202,7 +202,7 @@ namespace NadekoBot.Modules.NSFW
 
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [OwnerOnly]
         public async Task NsfwCc()
         {

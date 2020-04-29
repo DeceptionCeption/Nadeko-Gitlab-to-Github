@@ -33,7 +33,7 @@ namespace NadekoBot.Modules.Utility
                 Me, Here
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [Priority(1)]
             public async Task Remind(MeOrHere meorhere, StoopidTime time, [Leftover] string message)
             {
@@ -45,7 +45,7 @@ namespace NadekoBot.Modules.Utility
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             [Priority(0)]
@@ -66,7 +66,7 @@ namespace NadekoBot.Modules.Utility
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task RemindList(int page = 1)
             {
                 if (--page < 0)
@@ -104,7 +104,7 @@ namespace NadekoBot.Modules.Utility
                 await ctx.Channel.EmbedAsync(embed).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task RemindDelete(int index)
             {
@@ -181,7 +181,7 @@ namespace NadekoBot.Modules.Utility
                 return true;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public async Task RemindTemplate([Leftover] string arg)
             {

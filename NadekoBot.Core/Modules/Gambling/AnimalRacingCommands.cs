@@ -32,7 +32,7 @@ namespace NadekoBot.Modules.Gambling
 
             private IUserMessage raceMessage = null;
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [NadekoOptionsAttribute(typeof(RaceOptions))]
             public Task Race(params string[] args)
@@ -132,7 +132,7 @@ namespace NadekoBot.Modules.Gambling
                 return ReplyErrorLocalizedAsync("animal_race_failed");
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task JoinRace(ShmartNumber amount = default)
             {

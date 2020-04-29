@@ -12,7 +12,7 @@ namespace NadekoBot.Modules.Utility
     {
         public class StreamRoleCommands : NadekoSubmodule<StreamRoleService>
         {
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [BotPerm(GuildPerm.ManageRoles)]
             [UserPerm(GuildPerm.ManageRoles)]
             [RequireContext(ContextType.Guild)]
@@ -23,7 +23,7 @@ namespace NadekoBot.Modules.Utility
                 await ReplyConfirmLocalizedAsync("stream_role_enabled", Format.Bold(fromRole.ToString()), Format.Bold(addRole.ToString())).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [BotPerm(GuildPerm.ManageRoles)]
             [UserPerm(GuildPerm.ManageRoles)]
             [RequireContext(ContextType.Guild)]
@@ -33,21 +33,21 @@ namespace NadekoBot.Modules.Utility
                 await ReplyConfirmLocalizedAsync("stream_role_disabled").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [BotPerm(GuildPerm.ManageRoles)]
             [UserPerm(GuildPerm.ManageRoles)]
             [RequireContext(ContextType.Guild)]
             public async Task StreamRoleKeyword([Leftover]string keyword = null)
             {
                 string kw = await this._service.SetKeyword(ctx.Guild, keyword).ConfigureAwait(false);
-                
+
                 if(string.IsNullOrWhiteSpace(keyword))
                     await ReplyConfirmLocalizedAsync("stream_role_kw_reset").ConfigureAwait(false);
                 else
                     await ReplyConfirmLocalizedAsync("stream_role_kw_set", Format.Bold(kw)).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [BotPerm(GuildPerm.ManageRoles)]
             [UserPerm(GuildPerm.ManageRoles)]
             [RequireContext(ContextType.Guild)]
@@ -68,7 +68,7 @@ namespace NadekoBot.Modules.Utility
                         await ReplyErrorLocalizedAsync("stream_role_bl_rem_fail", Format.Bold(user.ToString())).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [BotPerm(GuildPerm.ManageRoles)]
             [UserPerm(GuildPerm.ManageRoles)]
             [RequireContext(ContextType.Guild)]
@@ -82,7 +82,7 @@ namespace NadekoBot.Modules.Utility
                         await ReplyConfirmLocalizedAsync("stream_role_wl_add", Format.Bold(user.ToString())).ConfigureAwait(false);
                     else
                         await ReplyConfirmLocalizedAsync("stream_role_wl_add_fail", Format.Bold(user.ToString())).ConfigureAwait(false);
-                else 
+                else
                     if (success)
                         await ReplyConfirmLocalizedAsync("stream_role_wl_rem", Format.Bold(user.ToString())).ConfigureAwait(false);
                     else

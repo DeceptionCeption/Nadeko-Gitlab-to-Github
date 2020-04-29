@@ -11,7 +11,7 @@ namespace NadekoBot.Modules.Utility
     {
         public class BotConfigCommands : NadekoSubmodule
         {
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public async Task BotConfigEdit()
             {
@@ -19,7 +19,7 @@ namespace NadekoBot.Modules.Utility
                 await ReplyAsync(string.Join(", ", names)).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public async Task BotConfigEdit(BotConfigEditType type, [Leftover]string newValue = null)
             {

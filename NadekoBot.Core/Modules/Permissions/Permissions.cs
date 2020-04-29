@@ -24,7 +24,7 @@ namespace NadekoBot.Modules.Permissions
             _db = db;
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Verbose(PermissionAction action)
         {
@@ -45,7 +45,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [UserPerm(GuildPerm.Administrator)]
         [Priority(0)]
@@ -53,7 +53,7 @@ namespace NadekoBot.Modules.Permissions
         {
             if (role != null && role == role.Guild.EveryoneRole)
                 return;
-            
+
             if (role == null)
             {
                 var cache = _service.GetCacheFor(ctx.Guild.Id);
@@ -82,7 +82,7 @@ namespace NadekoBot.Modules.Permissions
 
         public enum Reset { Reset };
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [UserPerm(GuildPerm.Administrator)]
         [Priority(1)]
@@ -99,7 +99,7 @@ namespace NadekoBot.Modules.Permissions
             await ReplyConfirmLocalizedAsync("permrole_reset").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task ListPerms(int page = 1)
         {
@@ -134,7 +134,7 @@ namespace NadekoBot.Modules.Permissions
             await ctx.Channel.SendMessageAsync(toSend).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task RemovePerm(int index)
         {
@@ -164,7 +164,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task MovePerm(int from, int to)
         {
@@ -215,7 +215,7 @@ namespace NadekoBot.Modules.Permissions
             await ReplyErrorLocalizedAsync("perm_out_of_range").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task SrvrCmd(CommandOrCrInfo command, PermissionAction action)
         {
@@ -243,7 +243,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task SrvrMdl(ModuleOrCrInfo module, PermissionAction action)
         {
@@ -270,7 +270,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task UsrCmd(CommandOrCrInfo command, PermissionAction action, [Leftover] IGuildUser user)
         {
@@ -300,7 +300,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task UsrMdl(ModuleOrCrInfo module, PermissionAction action, [Leftover] IGuildUser user)
         {
@@ -329,7 +329,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task RoleCmd(CommandOrCrInfo command, PermissionAction action, [Leftover] IRole role)
         {
@@ -362,7 +362,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task RoleMdl(ModuleOrCrInfo module, PermissionAction action, [Leftover] IRole role)
         {
@@ -395,7 +395,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task ChnlCmd(CommandOrCrInfo command, PermissionAction action, [Leftover] ITextChannel chnl)
         {
@@ -425,7 +425,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task ChnlMdl(ModuleOrCrInfo module, PermissionAction action, [Leftover] ITextChannel chnl)
         {
@@ -454,7 +454,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task AllChnlMdls(PermissionAction action, [Leftover] ITextChannel chnl)
         {
@@ -479,7 +479,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task AllRoleMdls(PermissionAction action, [Leftover] IRole role)
         {
@@ -507,7 +507,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task AllUsrMdls(PermissionAction action, [Leftover] IUser user)
         {
@@ -532,7 +532,7 @@ namespace NadekoBot.Modules.Permissions
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task AllSrvrMdls(PermissionAction action)
         {

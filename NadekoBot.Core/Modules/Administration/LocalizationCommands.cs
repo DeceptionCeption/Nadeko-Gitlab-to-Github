@@ -46,7 +46,7 @@ namespace NadekoBot.Modules.Administration
                 {"uk-UA", "Українська, Україна" }
             }.ToImmutableDictionary();
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [Priority(0)]
             public async Task LanguageSet()
@@ -56,7 +56,7 @@ namespace NadekoBot.Modules.Administration
                     .ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             [Priority(1)]
@@ -84,14 +84,14 @@ namespace NadekoBot.Modules.Administration
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task LanguageSetDefault()
             {
                 var cul = Localization.DefaultCultureInfo;
                 await ReplyConfirmLocalizedAsync("lang_set_bot_show", cul, cul.NativeName).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
             public async Task LanguageSetDefault(string name)
             {
@@ -116,7 +116,7 @@ namespace NadekoBot.Modules.Administration
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task LanguagesList()
             {
                 await ctx.Channel.EmbedAsync(new EmbedBuilder().WithOkColor()
@@ -127,7 +127,7 @@ namespace NadekoBot.Modules.Administration
         }
     }
 }
-/* list of language codes for reference. 
+/* list of language codes for reference.
  * taken from https://github.com/dotnet/coreclr/blob/ee5862c6a257e60e263537d975ab6c513179d47f/src/mscorlib/src/System/Globalization/CultureData.cs#L192
             { "029", "en-029" },
             { "AE",  "ar-AE" },

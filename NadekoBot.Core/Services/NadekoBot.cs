@@ -43,6 +43,7 @@ namespace NadekoBot
          * want to send a confirm or error message, so
          * I'll keep this for now */
         public static Color OkColor { get; set; }
+        public static Color PendingColor { get; set; }
         public static Color ErrorColor { get; set; }
 
         public TaskCompletionSource<bool> Ready { get; private set; } = new TaskCompletionSource<bool>();

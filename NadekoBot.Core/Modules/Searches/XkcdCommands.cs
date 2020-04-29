@@ -22,7 +22,7 @@ namespace NadekoBot.Modules.Searches
                 _httpFactory = factory;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [Priority(0)]
             public async Task Xkcd(string arg = null)
             {
@@ -56,7 +56,7 @@ namespace NadekoBot.Modules.Searches
                 await Xkcd(new NadekoRandom().Next(1, 1750)).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [Priority(1)]
             public async Task Xkcd(int num)
             {

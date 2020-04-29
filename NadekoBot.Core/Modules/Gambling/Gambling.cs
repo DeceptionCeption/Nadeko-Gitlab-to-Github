@@ -54,7 +54,7 @@ namespace NadekoBot.Modules.Gambling
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Economy()
         {
             var ec = _service.GetEconomy();
@@ -76,7 +76,7 @@ namespace NadekoBot.Modules.Gambling
             await ctx.Channel.EmbedAsync(embed).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Timely()
         {
             var val = Bc.BotConfig.TimelyCurrency;
@@ -99,7 +99,7 @@ namespace NadekoBot.Modules.Gambling
             await ReplyConfirmLocalizedAsync("timely", n(val) + Bc.BotConfig.CurrencySign, period).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [OwnerOnly]
         public async Task TimelyReset()
         {
@@ -107,7 +107,7 @@ namespace NadekoBot.Modules.Gambling
             await ReplyConfirmLocalizedAsync("timely_reset").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [OwnerOnly]
         public async Task TimelySet(int num, int period = 24)
         {
@@ -126,7 +126,7 @@ namespace NadekoBot.Modules.Gambling
                 await ReplyConfirmLocalizedAsync("timely_set", Format.Bold(n(num) + Bc.BotConfig.CurrencySign), Format.Bold(period.ToString())).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Raffle([Leftover] IRole role = null)
         {
@@ -142,7 +142,7 @@ namespace NadekoBot.Modules.Gambling
             await ctx.Channel.SendConfirmAsync("🎟 " + GetText("raffled_user"), $"**{usr.Username}#{usr.Discriminator}**", footer: $"ID: {usr.Id}").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task RaffleAny([Leftover] IRole role = null)
         {
@@ -158,7 +158,7 @@ namespace NadekoBot.Modules.Gambling
             await ctx.Channel.SendConfirmAsync("🎟 " + GetText("raffled_user"), $"**{usr.Username}#{usr.Discriminator}**", footer: $"ID: {usr.Id}").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [Priority(1)]
         public async Task Cash([Leftover] IUser user = null)
         {
@@ -166,18 +166,18 @@ namespace NadekoBot.Modules.Gambling
             await ConfirmLocalizedAsync("has", Format.Bold(user.ToString()), $"{GetCurrency(user.Id)} {CurrencySign}").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [Priority(2)]
         public Task CurrencyTransactions(int page = 1) =>
             InternalCurrencyTransactions(ctx.User.Id, page);
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [OwnerOnly]
         [Priority(0)]
         public Task CurrencyTransactions([Leftover] IUser usr) =>
             InternalCurrencyTransactions(usr.Id, 1);
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [OwnerOnly]
         [Priority(1)]
         public Task CurrencyTransactions(IUser usr, int page) =>
@@ -212,14 +212,14 @@ namespace NadekoBot.Modules.Gambling
             await ctx.Channel.EmbedAsync(embed).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [Priority(0)]
         public async Task Cash(ulong userId)
         {
             await ReplyConfirmLocalizedAsync("has", Format.Code(userId.ToString()), $"{GetCurrency(userId)} {CurrencySign}").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [Priority(0)]
         public async Task Give(ShmartNumber amount, IGuildUser receiver, [Leftover] string msg = null)
@@ -237,27 +237,27 @@ namespace NadekoBot.Modules.Gambling
                 .ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [Priority(1)]
         public Task Give(ShmartNumber amount, [Leftover] IGuildUser receiver)
             => Give(amount, receiver, null);
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [OwnerOnly]
         [Priority(0)]
         public Task Award(ShmartNumber amount, IGuildUser usr, [Leftover] string msg) =>
             Award(amount, usr.Id, msg);
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [OwnerOnly]
         [Priority(1)]
         public Task Award(ShmartNumber amount, [Leftover] IGuildUser usr) =>
             Award(amount, usr.Id);
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [OwnerOnly]
         [Priority(2)]
         public async Task Award(ShmartNumber amount, ulong usrId, [Leftover] string msg = null)
@@ -272,7 +272,7 @@ namespace NadekoBot.Modules.Gambling
             await ReplyConfirmLocalizedAsync("awarded", n(amount) + CurrencySign, $"<@{usrId}>").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [OwnerOnly]
         [Priority(2)]
@@ -294,7 +294,7 @@ namespace NadekoBot.Modules.Gambling
                 Format.Bold(role.Name)).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [OwnerOnly]
         public async Task Take(ShmartNumber amount, [Leftover] IGuildUser user)
@@ -310,7 +310,7 @@ namespace NadekoBot.Modules.Gambling
         }
 
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [OwnerOnly]
         public async Task Take(ShmartNumber amount, [Leftover] ulong usrId)
         {
@@ -326,7 +326,7 @@ namespace NadekoBot.Modules.Gambling
 
         private IUserMessage rdMsg = null;
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task RollDuel(IUser u)
         {
@@ -341,7 +341,7 @@ namespace NadekoBot.Modules.Gambling
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task RollDuel(ShmartNumber amount, IUser u)
         {
@@ -477,11 +477,11 @@ namespace NadekoBot.Modules.Gambling
             await ctx.Channel.SendConfirmAsync(str).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public Task BetRoll(ShmartNumber amount)
             => InternallBetroll(amount);
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Leaderboard(int page = 1)
         {
             if (page < 1)
@@ -539,7 +539,7 @@ namespace NadekoBot.Modules.Gambling
             Draw,
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Rps(RpsPick pick, ShmartNumber amount = default)
         {
             long oldAmount = amount;

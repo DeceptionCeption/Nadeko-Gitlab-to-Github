@@ -29,7 +29,7 @@ namespace NadekoBot.Modules.Searches
                 _db = db;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public Task Smashcast([Leftover] string username) =>
@@ -39,7 +39,7 @@ namespace NadekoBot.Modules.Searches
                     username,
                     FollowedStream.FType.Smashcast);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public Task Twitch([Leftover] string username) =>
@@ -49,7 +49,7 @@ namespace NadekoBot.Modules.Searches
                     username,
                     FollowedStream.FType.Twitch);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public Task Picarto([Leftover] string username) =>
@@ -59,7 +59,7 @@ namespace NadekoBot.Modules.Searches
                     username,
                     FollowedStream.FType.Picarto);
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public Task Mixer([Leftover] string username) =>
@@ -86,7 +86,7 @@ namespace NadekoBot.Modules.Searches
                 { FollowedStream.FType.Twitch, twitchRegex },
             };
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public async Task StreamAdd(string link)
@@ -112,7 +112,7 @@ namespace NadekoBot.Modules.Searches
                 await ReplyErrorLocalizedAsync("stream_not_exist").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             [Priority(0)]
@@ -139,7 +139,7 @@ namespace NadekoBot.Modules.Searches
                 await ReplyErrorLocalizedAsync("stream_not_exist").ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
             public async Task StreamsClear()
@@ -148,7 +148,7 @@ namespace NadekoBot.Modules.Searches
                 await ReplyConfirmLocalizedAsync("streams_cleared", count).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task ListStreams(int page = 1)
             {
@@ -202,7 +202,7 @@ namespace NadekoBot.Modules.Searches
                 }, streams.Count(), 15).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public async Task StreamOffline()
@@ -218,7 +218,7 @@ namespace NadekoBot.Modules.Searches
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             public async Task StreamMessage(string url, [Leftover] string message)
@@ -259,7 +259,7 @@ namespace NadekoBot.Modules.Searches
                 return false;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.ManageMessages)]
             [Priority(1)]
@@ -298,7 +298,7 @@ namespace NadekoBot.Modules.Searches
                     type).ConfigureAwait(false);
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             public async Task CheckStream(FollowedStream.FType platform, [Leftover] string username)
             {

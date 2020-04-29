@@ -71,7 +71,7 @@ namespace NadekoBot.Modules.Music
         //            }
 
         //            ////if some other user moved
-        //            //if ((player.VoiceChannel == newState.VoiceChannel && //if joined first, and player paused, unpause 
+        //            //if ((player.VoiceChannel == newState.VoiceChannel && //if joined first, and player paused, unpause
         //            //        player.Paused &&
         //            //        newState.VoiceChannel.Users.Count >= 2) ||  // keep in mind bot is in the channel (+1)
         //            //    (player.VoiceChannel == oldState.VoiceChannel && // if left last, and player unpaused, pause
@@ -140,7 +140,7 @@ namespace NadekoBot.Modules.Music
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Play([Leftover] string query = null)
         {
@@ -164,7 +164,7 @@ namespace NadekoBot.Modules.Music
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public Task Queue([Leftover] string query)
             => InternalPlay(query, forceplay: false);
@@ -180,7 +180,7 @@ namespace NadekoBot.Modules.Music
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task QueueNext([Leftover] string query)
         {
@@ -193,7 +193,7 @@ namespace NadekoBot.Modules.Music
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task QueueSearch([Leftover] string query)
         {
@@ -230,7 +230,7 @@ namespace NadekoBot.Modules.Music
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task ListQueue(int page = 0)
         {
@@ -316,7 +316,7 @@ namespace NadekoBot.Modules.Music
                 itemsPerPage, false).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Next(int skipCount = 1)
         {
@@ -328,7 +328,7 @@ namespace NadekoBot.Modules.Music
             mp.Next(skipCount);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Stop()
         {
@@ -336,7 +336,7 @@ namespace NadekoBot.Modules.Music
             mp.Stop();
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task AutoDisconnect()
         {
@@ -348,14 +348,14 @@ namespace NadekoBot.Modules.Music
                 await ReplyConfirmLocalizedAsync("autodc_disable").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Destroy()
         {
             await _service.DestroyPlayer(ctx.Guild.Id).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Pause()
         {
@@ -363,7 +363,7 @@ namespace NadekoBot.Modules.Music
             mp.TogglePause();
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Volume(int val)
         {
@@ -377,7 +377,7 @@ namespace NadekoBot.Modules.Music
             await ReplyConfirmLocalizedAsync("volume_set", val).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Defvol([Leftover] int val)
         {
@@ -394,7 +394,7 @@ namespace NadekoBot.Modules.Music
             await ReplyConfirmLocalizedAsync("defvol_set", val).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [Priority(1)]
         public async Task SongRemove(int index)
@@ -423,7 +423,7 @@ namespace NadekoBot.Modules.Music
         }
 
         public enum All { All }
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [Priority(0)]
         public async Task SongRemove(All _)
@@ -435,7 +435,7 @@ namespace NadekoBot.Modules.Music
             await ReplyConfirmLocalizedAsync("queue_cleared").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Playlists([Leftover] int num = 1)
         {
@@ -457,7 +457,7 @@ namespace NadekoBot.Modules.Music
             await ctx.Channel.EmbedAsync(embed).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task DeletePlaylist([Leftover] int id)
         {
@@ -490,7 +490,7 @@ namespace NadekoBot.Modules.Music
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task PlaylistShow(int id, int page = 1)
         {
@@ -517,7 +517,7 @@ namespace NadekoBot.Modules.Music
             }, mpl.Songs.Count, 20).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Save([Leftover] string name)
         {
@@ -554,7 +554,7 @@ namespace NadekoBot.Modules.Music
 
         private static readonly ConcurrentHashSet<ulong> PlaylistLoadBlacklist = new ConcurrentHashSet<ulong>();
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Load([Leftover] int id)
         {
@@ -599,7 +599,7 @@ namespace NadekoBot.Modules.Music
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Fairplay()
         {
@@ -616,7 +616,7 @@ namespace NadekoBot.Modules.Music
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task SongAutoDelete()
         {
@@ -634,7 +634,7 @@ namespace NadekoBot.Modules.Music
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task SoundCloudQueue([Leftover] string query)
         {
@@ -643,7 +643,7 @@ namespace NadekoBot.Modules.Music
             await InternalQueue(mp, song, false).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task SoundCloudPl([Leftover] string pl)
         {
@@ -679,7 +679,7 @@ namespace NadekoBot.Modules.Music
             }
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task NowPlaying()
         {
@@ -698,7 +698,7 @@ namespace NadekoBot.Modules.Music
             await ctx.Channel.EmbedAsync(embed).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task ShufflePlaylist()
         {
@@ -710,7 +710,7 @@ namespace NadekoBot.Modules.Music
                 await ReplyConfirmLocalizedAsync("songs_shuffle_disable").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Playlist([Leftover] string playlist)
         {
@@ -760,7 +760,7 @@ namespace NadekoBot.Modules.Music
             await msg.ModifyAsync(m => m.Content = "✅ " + Format.Bold(GetText("playlist_queue_complete"))).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Radio(string radioLink)
         {
@@ -769,7 +769,7 @@ namespace NadekoBot.Modules.Music
             await InternalQueue(mp, song, false).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [OwnerOnly]
         public async Task Local([Leftover] string path)
@@ -779,7 +779,7 @@ namespace NadekoBot.Modules.Music
             await InternalQueue(mp, song, false).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [OwnerOnly]
         public async Task LocalPl([Leftover] string dirPath)
@@ -814,7 +814,7 @@ namespace NadekoBot.Modules.Music
             await ReplyConfirmLocalizedAsync("dir_queue_complete").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Move()
         {
@@ -831,7 +831,7 @@ namespace NadekoBot.Modules.Music
             await mp.SetVoiceChannel(vch).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task MoveSong([Leftover] string fromto)
         {
@@ -865,7 +865,7 @@ namespace NadekoBot.Modules.Music
             await ctx.Channel.EmbedAsync(embed).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task SetMaxQueue(uint size = 0)
         {
@@ -881,7 +881,7 @@ namespace NadekoBot.Modules.Music
                 await ReplyConfirmLocalizedAsync("max_queue_x", size).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task SetMaxPlaytime(uint seconds)
         {
@@ -896,7 +896,7 @@ namespace NadekoBot.Modules.Music
                 await ReplyConfirmLocalizedAsync("max_playtime_set", seconds).ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task ReptCurSong()
         {
@@ -917,7 +917,7 @@ namespace NadekoBot.Modules.Music
                                             .ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task RepeatPl()
         {
@@ -929,7 +929,7 @@ namespace NadekoBot.Modules.Music
                 await ReplyConfirmLocalizedAsync("rpl_disabled").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         public async Task Autoplay()
         {
@@ -941,7 +941,7 @@ namespace NadekoBot.Modules.Music
                 await ReplyConfirmLocalizedAsync("autoplay_enabled").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [UserPerm(GuildPerm.ManageMessages)]
         public async Task SetMusicChannel()
@@ -954,7 +954,7 @@ namespace NadekoBot.Modules.Music
             await ReplyConfirmLocalizedAsync("set_music_channel").ConfigureAwait(false);
         }
 
-        [NadekoCommand, Usage, Description, Aliases]
+        [OldNadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
         [UserPerm(GuildPerm.ManageMessages)]
         public async Task UnsetMusicChannel()

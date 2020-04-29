@@ -36,7 +36,7 @@ namespace NadekoBot.Modules.Searches
                 _httpFactory = factory;
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task Memelist()
             {
                 using (var http = _httpFactory.CreateClient("memelist"))
@@ -49,7 +49,7 @@ namespace NadekoBot.Modules.Searches
                 }
             }
 
-            [NadekoCommand, Usage, Description, Aliases]
+            [OldNadekoCommand, Usage, Description, Aliases]
             public async Task Memegen(string meme, string topText, string botText)
             {
                 var top = Replace(topText);
