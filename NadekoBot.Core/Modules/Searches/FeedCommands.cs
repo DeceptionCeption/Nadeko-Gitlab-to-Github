@@ -1,14 +1,11 @@
 ﻿using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
-using Microsoft.SyndicationFeed.Rss;
 using NadekoBot.Common.Attributes;
 using NadekoBot.Extensions;
 using NadekoBot.Modules.Searches.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace NadekoBot.Modules.Searches
 {
@@ -36,15 +33,15 @@ namespace NadekoBot.Modules.Searches
                         _log.Warn(ex);
                         success = false;
                     }
+                }
 
+                if (success)
+                {
+                    success = _service.AddFeed(ctx.Guild.Id, channel.Id, url);
                     if (success)
                     {
-                        success = _service.AddFeed(ctx.Guild.Id, channel.Id, url);
-                        if (success)
-                        {
-                            await ReplyConfirmLocalizedAsync("feed_added").ConfigureAwait(false);
-                            return;
-                        }
+                        await ReplyConfirmLocalizedAsync("feed_added").ConfigureAwait(false);
+                        return;
                     }
                 }
 
