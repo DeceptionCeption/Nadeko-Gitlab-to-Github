@@ -153,7 +153,10 @@ namespace NadekoBot.Core.Services.Impl
                                 content.Headers.Clear();
                                 content.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
 
-                                using (await http.PostAsync(new Uri("https://www.carbonitex.net/discord/data/botdata.php"), content).ConfigureAwait(false)) { }
+                                using (var res = await http.PostAsync(new Uri("https://www.carbonitex.net/discord/data/botdata.php"), content).ConfigureAwait(false))
+                                {
+                                    await res.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                                }
                             }
                         }
                     }
@@ -183,7 +186,10 @@ namespace NadekoBot.Core.Services.Impl
                             content.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                             http.DefaultRequestHeaders.Add("Authorization", _creds.BotListToken);
 
-                            using (await http.PostAsync(new Uri($"https://discordbots.org/api/bots/{client.CurrentUser.Id}/stats"), content).ConfigureAwait(false)) { }
+                            using (var res = await http.PostAsync(new Uri($"https://discordbots.org/api/bots/{client.CurrentUser.Id}/stats"), content).ConfigureAwait(false))
+                            {
+                                await res.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                            }
                         }
                     }
                 }

@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.Core" Version="1.19.0" />
+    <PackageReference Include="CodeHollow.FeedReader" Version="1.2.1" />
+    <PackageReference Include="Grpc.Core" Version="2.28.1" />
     <PackageReference Include="AngleSharp" Version="0.13.0" />
     <PackageReference Include="CommandLineParser" Version="2.6.0" />
     <PackageReference Include="CoreCLR-NCalc" Version="2.2.63" />

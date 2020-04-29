@@ -27,18 +27,14 @@ namespace NadekoBot.Modules.Searches
                 if (success)
                 {
                     channel = channel ?? (ITextChannel)ctx.Channel;
-                    using (var xmlReader = XmlReader.Create(url, new XmlReaderSettings() { Async = true }))
+                    try
                     {
-                        var reader = new RssFeedReader(xmlReader);
-                        try
-                        {
-                            await reader.Read().ConfigureAwait(false);
-                        }
-                        catch (Exception ex)
-                        {
-                            _log.Warn(ex);
-                            success = false;
-                        }
+                        var feeds = await CodeHollow.FeedReader.FeedReader.ReadAsync(url).ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.Warn(ex);
+                        success = false;
                     }
 
                     if (success)
