@@ -1,10 +1,10 @@
 ﻿using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Modules.Music.Common.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NadekoBot.Common;
 
 namespace NadekoBot.Modules.Music.Common
 {

@@ -4,8 +4,7 @@ using Google.Apis.Services;
 using Google.Apis.Urlshortener.v1;
 using Google.Apis.Urlshortener.v1.Data;
 using Google.Apis.YouTube.v3;
-using NadekoBot.Common;
-using NadekoBot.Extensions;
+using Ayu.Common;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -216,7 +215,8 @@ namespace NadekoBot.Core.Services.Impl
             if (string.IsNullOrWhiteSpace(query))
                 throw new ArgumentNullException(nameof(query));
 
-            var req = cs.Cse.List(query);
+            var req = cs.Cse.List();
+            req.Q = query;
             req.Cx = search_engine_id;
             req.Num = 1;
             req.Fields = "items(image(contextLink,thumbnailLink),link)";

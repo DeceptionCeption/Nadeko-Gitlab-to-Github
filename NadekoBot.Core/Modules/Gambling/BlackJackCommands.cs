@@ -7,6 +7,7 @@ using NadekoBot.Core.Modules.Gambling.Common.Blackjack;
 using NadekoBot.Core.Modules.Gambling.Services;
 using NadekoBot.Core.Services;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using System.Linq;
 using System.Threading.Tasks;
 

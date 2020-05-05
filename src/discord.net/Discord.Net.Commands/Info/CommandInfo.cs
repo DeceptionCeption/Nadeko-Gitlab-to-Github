@@ -31,6 +31,7 @@ namespace Discord.Commands
         ///     Gets the module that the command belongs in.
         /// </summary>
         public ModuleInfo Module { get; }
+        public bool IsNew { get; }
         /// <summary>
         ///     Gets the name of the command. If none is set, the first alias is used.
         /// </summary>
@@ -93,6 +94,7 @@ namespace Discord.Commands
             Name = builder.Name;
             Summary = builder.Summary;
             Remarks = builder.Remarks;
+            IsNew = builder.IsNew;
 
             RunMode = (builder.RunMode == RunMode.Default ? service._defaultRunMode : builder.RunMode);
             Priority = builder.Priority;
@@ -175,7 +177,7 @@ namespace Discord.Commands
 
             return await CommandParser.ParseArgsAsync(this, context, _commandService._ignoreExtraArgs, services, input, 0, _commandService._quotationMarkAliasMap).ConfigureAwait(false);
         }
-        
+
         public Task<IResult> ExecuteAsync(ICommandContext context, ParseResult parseResult, IServiceProvider services)
         {
             if (!parseResult.IsSuccess)

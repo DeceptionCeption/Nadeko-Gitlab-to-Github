@@ -9,7 +9,7 @@ namespace NadekoBot.Core.Services
     public interface IDataCache
     {
         ConnectionMultiplexer Redis { get; }
-        IImageCache LocalImages { get; }
+        global::NadekoBot.Core.Services.IImageCache LocalImages { get; }
         ILocalDataCache LocalData { get; }
 
         Task<(bool Success, byte[] Data)> TryGetImageDataAsync(Uri key);

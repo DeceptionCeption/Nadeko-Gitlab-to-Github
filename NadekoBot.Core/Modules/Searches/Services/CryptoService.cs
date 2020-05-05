@@ -1,7 +1,7 @@
-﻿using Discord;
-using NadekoBot.Core.Modules.Searches.Common;
+﻿using NadekoBot.Core.Modules.Searches.Common;
 using NadekoBot.Core.Services;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using Newtonsoft.Json;
 using NLog;
 using System;

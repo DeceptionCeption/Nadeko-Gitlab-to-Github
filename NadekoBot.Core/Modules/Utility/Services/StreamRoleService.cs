@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using Ayu.Common;
+using Discord;
 using Discord.Net;
 using Discord.WebSocket;
 using NadekoBot.Common.TypeReaders;
@@ -181,7 +182,7 @@ namespace NadekoBot.Modules.Utility.Services
         }
 
         /// <summary>
-        /// Sets the role to monitor, and a role to which to add to 
+        /// Sets the role to monitor, and a role to which to add to
         /// the user who starts streaming in the monitored role.
         /// </summary>
         /// <param name="fromRole">Role to monitor</param>

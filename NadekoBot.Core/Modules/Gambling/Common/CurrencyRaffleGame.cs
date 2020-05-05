@@ -1,5 +1,5 @@
-﻿using Discord;
-using NadekoBot.Common;
+﻿using Ayu.Common;
+using Discord;
 using NLog;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +44,7 @@ namespace NadekoBot.Core.Modules.Gambling.Common
 
         public bool AddUser(IUser usr, long amount)
         {
-            // if game type is normal, and someone already joined the game 
+            // if game type is normal, and someone already joined the game
             // (that's the user who created it)
             if (GameType == Type.Normal && _users.Count > 0 &&
                 _users.First().Amount != amount)
@@ -58,7 +58,7 @@ namespace NadekoBot.Core.Modules.Gambling.Common
             {
                 return false;
             }
-            
+
             return true;
         }
 

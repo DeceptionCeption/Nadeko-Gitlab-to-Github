@@ -17,13 +17,15 @@ namespace NadekoBot.Core.Services.Database.Repositories.Impl
             if (num < 1)
                 throw new IndexOutOfRangeException();
 
-            return _set.Skip((num - 1) * 20)
+            return _set
+                .AsQueryable()
+                .Skip((num - 1) * 20)
                 .Take(20)
                 .Include(pl => pl.Songs)
                 .ToList();
         }
 
-        public MusicPlaylist GetWithSongs(int id) => 
+        public MusicPlaylist GetWithSongs(int id) =>
             _set.Include(mpl => mpl.Songs)
                 .FirstOrDefault(mpl => mpl.Id == id);
     }

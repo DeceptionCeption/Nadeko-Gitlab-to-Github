@@ -1,0 +1,2454 @@
+{
+  "help": {
+    "desc": "Either shows a help for a single command, or DMs you help link if no parameters are specified.",
+    "args": [
+      "{Prefix}cmds",
+      ""
+    ]
+  },
+  "modules": {
+    "desc": "Lists all bot modules.",
+    "args": []
+  },
+  "commands": {
+    "desc": "List all of the bot's commands from a certain module. You can either specify the full name or only the first few letters of the module name.",
+    "args": [
+      "Admin",
+      "Admin --view 1"
+    ]
+  },
+  "greetdel": {
+    "desc": "Sets the time it takes (in seconds) for greet messages to be auto-deleted. Set it to 0 to disable automatic deletion.",
+    "args": [
+      "0",
+      "30"
+    ]
+  },
+  "greet": {
+    "desc": "Toggles anouncements on the current channel when someone joins the server.",
+    "args": []
+  },
+  "greetmsg": {
+    "desc": "Sets a new join announcement message which will be shown in the server's channel. Type `%user.mention%` if you want to mention the new member. Using it with no message will show the current greet message. You can use embed json from <https://eb.nadeko.bot/> instead of a regular text, if you want the message to be embedded.",
+    "args": [
+      "Welcome, %user.mention%."
+    ]
+  },
+  "bye": {
+    "desc": "Toggles anouncements on the current channel when someone leaves the server.",
+    "args": []
+  },
+  "byemsg": {
+    "desc": "Sets a new leave announcement message. Supports placeholders, for example `%user.mention%` if you want to show the name the user who left or `%user.id%` to show id. Using this command with no message will show the current bye message. You can use embed json from <https://eb.nadeko.bot/> instead of a regular text, if you want the message to be embedded.",
+    "args": [
+      "%user.mention% has left."
+    ]
+  },
+  "byedel": {
+    "desc": "Sets the time it takes (in seconds) for bye messages to be auto-deleted. Set it to `0` to disable automatic deletion.",
+    "args": [
+      "0",
+      "30"
+    ]
+  },
+  "greetdm": {
+    "desc": "Toggles whether the greet messages will be sent in a DM (This is separate from greet - you can have both, any or neither enabled).",
+    "args": []
+  },
+  "logserver": {
+    "desc": "Enables or Disables ALL log events. If enabled, all log events will log to this channel.",
+    "args": [
+      "enable",
+      "disable"
+    ]
+  },
+  "logignore": {
+    "desc": "Toggles whether the `.logserver` command ignores this channel. Useful if you have hidden admin channel and public log channel.",
+    "args": []
+  },
+  "userpresence": {
+    "desc": "Starts logging to this channel when someone from the server goes online/offline/idle.",
+    "args": []
+  },
+  "voicepresence": {
+    "desc": "Toggles logging to this channel whenever someone joins or leaves a voice channel you are currently in.",
+    "args": []
+  },
+  "repeatinvoke": {
+    "desc": "Immediately shows the repeat message on a certain index and restarts its timer.",
+    "args": [
+      "1"
+    ]
+  },
+  "repeat": {
+    "desc": "Repeat a message every specified number of minutes in the current channel. You can instead specify time of day for the message to be repeated at daily (make sure you've set your server's timezone). You can have up to 5 repeating messages on the server in total.",
+    "args": [
+      "-i 5 -m \"Hello there\" -n",
+      "17:30 -m \"tea time\""
+    ]
+  },
+  "rotatestatus": {
+    "desc": "Toggles rotation of playing status of the dynamic strings you previously specified.",
+    "args": []
+  },
+  "rotatingadd": {
+    "desc": "Adds a specified string to the list of playing strings to rotate. You have to pick either 'Playing', 'Watching' or 'Listening' as the first parameter. Supports placeholders.",
+    "args": [
+      "Playing with you",
+      "Watching you sleep"
+    ]
+  },
+  "rotatinglist": {
+    "desc": "Lists all playing statuses with their corresponding number.",
+    "args": []
+  },
+  "rotatingremove": {
+    "desc": "Removes a playing string on a given number.",
+    "args": []
+  },
+  "vcrolelist": {
+    "desc": "Shows a list of currently set voice channel roles.",
+    "args": []
+  },
+  "vcrole": {
+    "desc": "Sets or resets a role which will be given to users who join the voice channel you're in when you run this command. Provide no role name to disable. You must be in a voice channel to run this command.",
+    "args": [
+      "SomeRole",
+      ""
+    ]
+  },
+  "asar": {
+    "desc": "Adds a role to the list of self-assignable roles. You can also specify a group. If 'Exclusive self-assignable roles' feature is enabled, users will be able to pick one role per group.",
+    "args": [
+      "Gamer",
+      "1 Alliance",
+      "1 Horde"
+    ]
+  },
+  "rsar": {
+    "desc": "Removes a specified role from the list of self-assignable roles.",
+    "args": []
+  },
+  "lsar": {
+    "desc": "Lists self-assignable roles. Shows 20 roles per page.",
+    "args": [
+      "",
+      "2"
+    ]
+  },
+  "sargn": {
+    "desc": "Sets a self assignable role group name. Provide no name to remove.",
+    "args": [
+      "1 Faction",
+      "2"
+    ]
+  },
+  "tesar": {
+    "desc": "Toggles whether the self-assigned roles are exclusive. While enabled, users can only have one self-assignable role per group.",
+    "args": []
+  },
+  "iam": {
+    "desc": "Adds a role to you that you choose. Role must be on a list of self-assignable roles.",
+    "args": [
+      "Gamer"
+    ]
+  },
+  "iamnot": {
+    "desc": "Removes a specified role from you. Role must be on a list of self-assignable roles.",
+    "args": [
+      "Gamer"
+    ]
+  },
+  "expradd": {
+    "desc": "Adds a server expression with a trigger and a response. Running this command in DM adds a new global expression which can be used on all servers. Use quotation marks if you want the trigger to have multiple words. No quotations needed for response. Guide here: <http://nadekobot.readthedocs.io/en/v3/Expressions/>",
+    "args": [
+      "hi hi back",
+      "\"hello there\" Hi there %user.mention%"
+    ]
+  },
+  "exprlist": {
+    "desc": "Lists global or server expressions (20 per page). Running the command in DM will list global expressions, whereas running it in a server will list that server's expressions. Specifying the all parameter instead of an ID will DM you a text file with a list of all expressions.",
+    "args": [
+      "1",
+      "all"
+    ]
+  },
+  "exprlistg": {
+    "desc": "Lists global or server expressions (20 per page) grouped by trigger, and show a number of responses for each. Running the command in DM will list global expressions, while running it in server will list that server's expressions.",
+    "args": [
+      "5"
+    ]
+  },
+  "exprshow": {
+    "desc": "Shows information about an expression with the specified ID.",
+    "args": [
+      "5ab"
+    ]
+  },
+  "exprrm": {
+    "desc": "Deletes an expression with the specified ID.",
+    "args": [
+      "a5c"
+    ]
+  },
+  "exprclear": {
+    "desc": "Deletes all expressions on the server. If ran in DM, deletes all global expressions. You can also specify a trigger to delete only global/server expressions under that trigger.",
+    "args": [
+      "",
+      "owo"
+    ]
+  },
+  "expredit": {
+    "desc": "Edits the response of an expression with the specified ID.",
+    "args": [
+      "1b5c I'm a magical girl"
+    ]
+  },
+  "exprsearch": {
+    "desc": "Prints a random expression which (partially or fully) contains the specified trigger and/or response. Optionally, you can set it to show the expression's information instead of printing it.",
+    "args": [
+      "-t owo -r meow",
+      "-t owo",
+      "-r meow",
+      "-t owo -r meow -n"
+    ]
+  },
+  "exprad": {
+    "desc": "Toggles the 'AutoDelete' feature on the expression with the specified ID which will dictate whether the message triggering the expression will be automatically deleted.",
+    "args": [
+      "2ba"
+    ]
+  },
+  "exprdm": {
+    "desc": "Toggles the 'DirectMessage' feature on the expression with the specified ID which will dictate whether the response message of the expression will be sent as a direct message to the user who ran the expression.",
+    "args": [
+      "4a"
+    ]
+  },
+  "exprca": {
+    "desc": "Toggles the 'ContainsAnywhere' feature on the expression with the specified ID which will dictate whether the expression should trigger if the trigger word is found anywhere in the input message (instead of only starting with it).",
+    "args": [
+      "8b"
+    ]
+  },
+  "fwclear": {
+    "desc": "Deletes all filtered words on this server.",
+    "args": []
+  },
+  "aliasesclear": {
+    "desc": "Deletes all aliases on this server.",
+    "args": []
+  },
+  "streamsclear": {
+    "desc": "Deletes all followed streams on this server.",
+    "args": []
+  },
+  "autoassignrole": {
+    "desc": "Automaticaly assigns specified role to every user who joins the server. You can specify up to 5 roles (separately). Provide no parameters to list all roles which users will receive.",
+    "args": [
+      "",
+      "RoleName"
+    ]
+  },
+  "leave": {
+    "desc": "Makes Nadeko leave the specified server. Either server name or server ID is required.",
+    "args": [
+      "123123123331"
+    ]
+  },
+  "yomama": {
+    "desc": "Gets a random yomama joke from <http://api.yomomma.info/>",
+    "args": []
+  },
+  "chucknorris": {
+    "desc": "Gets a random chucknorris joke from <http://api.icndb.com/jokes/random/>",
+    "args": []
+  },
+  "randomjoke": {
+    "desc": "Gets a random joke from <https://www.goodbadjokes.com/jokes/>",
+    "args": []
+  },
+  "delmsgoncmd": {
+    "desc": "Toggles the automatic deletion of the user's successful command message to prevent chat flood. You can use it either as a server toggle, channel whitelist, or channel blacklist, as channel option has 3 settings: Enable (always do it on this channel), Disable (never do it on this channel), and Inherit (respect server setting). Use `list` parameter to see the current states.",
+    "args": [
+      "",
+      "channel enable",
+      "channel inherit",
+      "list"
+    ]
+  },
+  "setrole": {
+    "desc": "Sets a role for a given user.",
+    "args": [
+      "@User Guest"
+    ]
+  },
+  "removerole": {
+    "desc": "Removes a role from a given user.",
+    "args": [
+      "@User Admin"
+    ]
+  },
+  "renamerole": {
+    "desc": "Renames a role. The role you are renaming must be lower than bot's highest role.",
+    "args": [
+      "\"First role\" SecondRole"
+    ]
+  },
+  "removeallroles": {
+    "desc": "Removes all roles from a mentioned user.",
+    "args": [
+      "@User"
+    ]
+  },
+  "createrole": {
+    "desc": "Creates a role with a given name.",
+    "args": [
+      "Awesome Role"
+    ]
+  },
+  "deleterole": {
+    "desc": "Deletes a role with a given name.",
+    "args": [
+      "Awesome Role"
+    ]
+  },
+  "rolecolor": {
+    "desc": "Set a role's color using its hex value. Provide no color in order to see the hex value of the color of the specified role.",
+    "args": [
+      "Admin",
+      "ffba55 Admin"
+    ]
+  },
+  "ban": {
+    "desc": "Bans a user by ID or name with an optional message. You can specify a time string before the user name to ban the user temporarily.",
+    "args": [
+      "\"@some Guy\" Your behaviour is toxic.",
+      "1d12h @b1nzy Come back when u chill"
+    ]
+  },
+  "softban": {
+    "desc": "Bans and then unbans a user by ID or name with an optional message.",
+    "args": [
+      "\"@some Guy\" Your behaviour is toxic."
+    ]
+  },
+  "kick": {
+    "desc": "Kicks a mentioned user.",
+    "args": [
+      "\"@some Guy\" Your behaviour is toxic."
+    ]
+  },
+  "mute": {
+    "desc": "Mutes a mentioned user both from speaking and chatting. You can also specify time string for how long the user should be muted.",
+    "args": [
+      "@Someone",
+      "1h30m @Someone"
+    ]
+  },
+  "voiceunmute": {
+    "desc": "Gives a previously voice-muted user a permission to speak.",
+    "args": [
+      "@Someguy"
+    ]
+  },
+  "deafen": {
+    "desc": "Deafens mentioned user or users.",
+    "args": [
+      "\"@Someguy\"",
+      "\"@Someguy\" \"@Someguy\""
+    ]
+  },
+  "undeafen": {
+    "desc": "Undeafens mentioned user or users.",
+    "args": [
+      "\"@Someguy\"",
+      "\"@Someguy\" \"@Someguy\""
+    ]
+  },
+  "delvoichanl": {
+    "desc": "Deletes a voice channel with a given name.",
+    "args": [
+      "VoiceChannelName"
+    ]
+  },
+  "creatvoichanl": {
+    "desc": "Creates a new voice channel with a given name.",
+    "args": [
+      "VoiceChannelName"
+    ]
+  },
+  "deltxtchanl": {
+    "desc": "Deletes a text channel with a given name.",
+    "args": [
+      "TextChannelName"
+    ]
+  },
+  "creatxtchanl": {
+    "desc": "Creates a new text channel with a given name.",
+    "args": [
+      "TextChannelName"
+    ]
+  },
+  "settopic": {
+    "desc": "Sets a topic on the current channel.",
+    "args": [
+      "My new topic"
+    ]
+  },
+  "setchanlname": {
+    "desc": "Changes the name of the current channel.",
+    "args": [
+      "NewName"
+    ]
+  },
+  "prune": {
+    "desc": "`{Prefix}prune` removes all Nadeko's messages in the last 100 messages. `{Prefix}prune X` removes last `X` number of messages from the channel (up to 100). `{Prefix}prune @Someone` removes all Someone's messages in the last 100 messages. `{Prefix}prune @Someone X` removes last `X` number of 'Someone's' messages in the channel.",
+    "args": [
+      "",
+      "5",
+      "@Someone",
+      "@Someone X"
+    ]
+  },
+  "die": {
+    "desc": "Shuts the bot down.",
+    "args": []
+  },
+  "setname": {
+    "desc": "Gives the bot a new name.",
+    "args": [
+      "BotName"
+    ]
+  },
+  "setnick": {
+    "desc": "Changes the nickname of the bot on this server. You can also target other users to change their nickname.",
+    "args": [
+      "BotNickname",
+      "@SomeUser New Nickname"
+    ]
+  },
+  "setavatar": {
+    "desc": "Sets a new avatar image for the NadekoBot. Parameter is a direct link to an image.",
+    "args": [
+      "http://i.imgur.com/xTG3a1I.jpg"
+    ]
+  },
+  "setgame": {
+    "desc": "Sets the bots game status to either Playing, Listening, or Watching.",
+    "args": [
+      "Playing with snakes.",
+      "Watching anime.",
+      "Listening music."
+    ]
+  },
+  "send": {
+    "desc": "Sends a message to someone on a different server through the bot.  Separate server and channel/user ids with `|` and prefix the channel id with `c:` and the user id with `u:`",
+    "args": [
+      "serverid|c:channelid message",
+      "serverid|u:userid message"
+    ]
+  },
+  "mentionrole": {
+    "desc": "Mentions a role. If the role is not mentionable, bot will make it mentionable for a moment.",
+    "args": [
+      "RoleName"
+    ]
+  },
+  "savechat": {
+    "desc": "Saves a number of messages to a text file and sends it to you.",
+    "args": [
+      "150"
+    ]
+  },
+  "remind": {
+    "desc": "Sends a message to you or a channel after certain amount of time (max 2 months). First parameter is `me`/`here`/'channelname'. Second parameter is time in a descending order (mo>w>d>h>m) example: 1w5d3h10m. Third parameter is a (multiword) message.",
+    "args": [
+      "me 1d5h Do something",
+      "#general 1m Start now!"
+    ]
+  },
+  "reminddelete": {
+    "desc": "Deletes a reminder on the specified index.",
+    "args": [
+      "3"
+    ]
+  },
+  "remindlist": {
+    "desc": "Lists all reminders you created. Paginated.",
+    "args": [
+      "1"
+    ]
+  },
+  "remindtemplate": {
+    "desc": "Sets message for when the remind is triggered.",
+    "args": [
+      "%user.mention%, do %message%!"
+    ]
+  },
+  "serverinfo": {
+    "desc": "Shows info about the server the bot is on. If no server is supplied, it defaults to current one.",
+    "args": [
+      "Some Server"
+    ]
+  },
+  "channelinfo": {
+    "desc": "Shows info about the channel. If no channel is supplied, it defaults to current one.",
+    "args": [
+      "#some-channel"
+    ]
+  },
+  "userinfo": {
+    "desc": "Shows info about the user. If no user is supplied, it defaults a user running the command.",
+    "args": [
+      "@SomeUser"
+    ]
+  },
+  "whosplaying": {
+    "desc": "Shows a list of users who are playing the specified game.",
+    "args": [
+      "Overwatch"
+    ]
+  },
+  "inrole": {
+    "desc": "Lists every person from the specified role on this server. You can use role id or the role name. 40 per page. You can specify starting page before the role.",
+    "args": [
+      "Some Role",
+      "3 beta-testers"
+    ]
+  },
+  "checkperms": {
+    "desc": "Checks yours or bot's user-specific permissions on this channel. Default is 'me'.",
+    "args": [
+      "",
+      "me",
+      "bot"
+    ]
+  },
+  "stats": {
+    "desc": "Shows some basic stats for Nadeko.",
+    "args": []
+  },
+  "userid": {
+    "desc": "Shows user ID.",
+    "args": [
+      "",
+      "@SomeGuy"
+    ]
+  },
+  "channelid": {
+    "desc": "Shows current channel ID.",
+    "args": []
+  },
+  "serverid": {
+    "desc": "Shows current server ID.",
+    "args": []
+  },
+  "roles": {
+    "desc": "List roles on this server or roles of a user if specified. If you specify the `id` paramter, it will print role IDs too. Paginated, 20 roles per page.",
+    "args": [
+      "2",
+      "@Someone"
+    ]
+  },
+  "channeltopic": {
+    "desc": "Sends current channel's topic as a message.",
+    "args": []
+  },
+  "chnlfilterinv": {
+    "desc": "Toggles automatic deletion of invites posted in the channel. Does not negate the `{Prefix}srvrfilterinv` enabled setting. Does not affect the Bot Owner.",
+    "args": []
+  },
+  "srvrfilterinv": {
+    "desc": "Toggles automatic deletion of invites posted in the server. Does not affect the Bot Owner.",
+    "args": []
+  },
+  "chnlfilterwords": {
+    "desc": "Toggles automatic deletion of messages containing filtered words on the channel. Does not negate the `{Prefix}srvrfilterwords` enabled setting. Does not affect the Bot Owner.",
+    "args": []
+  },
+  "filterword": {
+    "desc": "Adds or removes (if it exists) a word from the list of filtered words. Use`{Prefix}sfw` or `{Prefix}cfw` to toggle filtering.",
+    "args": [
+      "poop"
+    ]
+  },
+  "lstfilterwords": {
+    "desc": "Shows a list of filtered words.",
+    "args": []
+  },
+  "srvrfilterwords": {
+    "desc": "Toggles automatic deletion of messages containing filtered words on the server. Does not affect the Bot Owner.",
+    "args": []
+  },
+  "permrole": {
+    "desc": "Sets a role which can change permissions. Supply no parameters to see the current one. Type 'reset' instead of the role name to reset the currently set permission role. Users with Administrator server permissions can use permission commands regardless of whether they have the specified role. There is no default permission role.",
+    "args": [
+      "Some Role",
+      "reset"
+    ]
+  },
+  "verbose": {
+    "desc": "Sets whether to show when a command/module is blocked.",
+    "args": [
+      "true"
+    ]
+  },
+  "srvrmdl": {
+    "desc": "Sets a module's permission at the server level.",
+    "args": [
+      "ModuleName enable"
+    ]
+  },
+  "srvrcmd": {
+    "desc": "Sets a command's permission at the server level.",
+    "args": [
+      "\"{Prefix}commandName\" disable"
+    ]
+  },
+  "rolemdl": {
+    "desc": "Sets a module's permission at the role level.",
+    "args": [
+      "ModuleName enable MyRole"
+    ]
+  },
+  "rolecmd": {
+    "desc": "Sets a command's permission at the role level.",
+    "args": [
+      "\"{Prefix}commandName\" disable MyRole"
+    ]
+  },
+  "chnlmdl": {
+    "desc": "Sets a module's permission at the channel level.",
+    "args": [
+      "ModuleName enable SomeChannel"
+    ]
+  },
+  "chnlcmd": {
+    "desc": "Sets a command's permission at the channel level.",
+    "args": [
+      "\"{Prefix}commandName\" enable SomeChannel"
+    ]
+  },
+  "usrmdl": {
+    "desc": "Sets a module's permission at the user level.",
+    "args": [
+      "ModuleName enable SomeUsername"
+    ]
+  },
+  "usrcmd": {
+    "desc": "Sets a command's permission at the user level.",
+    "args": [
+      "\"{Prefix}commandName\" enable SomeUsername"
+    ]
+  },
+  "allsrvrmdls": {
+    "desc": "Enable or disable all modules for your server.",
+    "args": [
+      "[enable/disable]"
+    ]
+  },
+  "allchnlmdls": {
+    "desc": "Enable or disable all modules in a specified channel.",
+    "args": [
+      "enable #SomeChannel"
+    ]
+  },
+  "allrolemdls": {
+    "desc": "Enable or disable all modules for a specific role.",
+    "args": [
+      "[enable/disable] MyRole"
+    ]
+  },
+  "userblacklist": {
+    "desc": "Either [add]s or [rem]oves a user specified by a Mention or an ID from a blacklist.",
+    "args": [
+      "add @SomeUser",
+      "rem 12312312313"
+    ]
+  },
+  "channelblacklist": {
+    "desc": "Either [add]s or [rem]oves a channel specified by an ID from a blacklist.",
+    "args": [
+      "rem 12312312312"
+    ]
+  },
+  "serverblacklist": {
+    "desc": "Either [add]s or [rem]oves a server specified by a Name or an ID from a blacklist.",
+    "args": [
+      "add 12312321312",
+      "rem SomeTrashServer"
+    ]
+  },
+  "cmdcooldown": {
+    "desc": "Sets a cooldown per user for a command. Set it to 0 to remove the cooldown.",
+    "args": [
+      "\"{Prefix}commandName\" 5"
+    ]
+  },
+  "cmdcooldowns": {
+    "desc": "Shows a list of all commands and their respective cooldowns.",
+    "args": []
+  },
+  "quoteadd": {
+    "desc": "Adds a new quote with the specified trigger and response.",
+    "args": [
+      "sayhi Hi"
+    ]
+  },
+  "quotelist": {
+    "desc": "Lists all quotes on the server by alphabetical order or by ID. 20 Per page.",
+    "args": [
+      "3",
+      "3 -alph"
+    ]
+  },
+  "quoteshow": {
+    "desc": "Shows information about a quote with the specified ID.",
+    "args": [
+      "abc"
+    ]
+  },
+  "quoteid": {
+    "desc": "Displays the quote with the specified ID number. Quote ID numbers can be found by typing `.liqu [num]` where `[num]` is a number of a page which contains 15 quotes.",
+    "args": [
+      "57a"
+    ]
+  },
+  "quoterm": {
+    "desc": "Deletes all quotes with the specified trigger. If no trigger is specified, deletes all quotes on the server.",
+    "args": [
+      "abc"
+    ]
+  },
+  "quotesclear": {
+    "desc": "Deletes all quotes on the server, or all quotes on the server with the specified trigger.",
+    "args": [
+      "",
+      "kek"
+    ]
+  },
+  "quoteedit": {
+    "desc": "Edits the response of a quote with the specified ID.",
+    "args": [
+      "1b5c I'm a magical girl"
+    ]
+  },
+  "quotesearch": {
+    "desc": "Prints a random quote which (partially or fully) contains the specified trigger and/or response. Optionally, you can set it to show the quote's information instead of printing it.",
+    "args": [
+      "-t owo -r meow",
+      "-t owo",
+      "-r meow",
+      "-t owo -r meow -n"
+    ]
+  },
+  "quoteprint": {
+    "desc": "Prints a random quote with the specified trigger.",
+    "args": [
+      "owo"
+    ]
+  },
+  "quoteprintid": {
+    "desc": "Prints a quote with the specified ID.",
+    "args": [
+      "2b3"
+    ]
+  },
+  "draw": {
+    "desc": "Draws a card from this server's deck. You can draw up to 10 cards by supplying a number of cards to draw.",
+    "args": [
+      "",
+      "5"
+    ]
+  },
+  "drawnew": {
+    "desc": "Draws a card from the NEW deck of cards. You can draw up to 10 cards by supplying a number of cards to draw.",
+    "args": [
+      "",
+      "5"
+    ]
+  },
+  "queueshuffle": {
+    "desc": "Shuffles the current music queue.",
+    "args": []
+  },
+  "flip": {
+    "desc": "Flips coin(s) - heads or tails, and shows an image.",
+    "args": [
+      "",
+      "3"
+    ]
+  },
+  "betflip": {
+    "desc": "Bet to guess will the result be heads or tails. Guessing right awards you 1.95x the currency you've bet (rounded up). Multiplier can be changed by the bot owner.",
+    "args": [
+      "5 heads",
+      "3 t"
+    ]
+  },
+  "roll": {
+    "desc": "Rolls 0-100. If you supply a number `X` it rolls up to 30 normal dice. If you split 2 numbers with letter `d` (`xdy`) it will roll `X` dice from 1 to `y`. You can add `+` and `-` to DnD rolls. `Y` can be a letter 'F' if you want to roll fate dice instead of dnd.",
+    "args": [
+      "",
+      "7",
+      "3d5",
+      "5dF",
+      "3d6+5-3"
+    ]
+  },
+  "rolluo": {
+    "desc": "Rolls `X` normal dice (up to 30) unordered. If you split 2 numbers with letter `d` (`xdy`) it will roll `X` dice from 1 to `y`. You can add `+` and `-` to DnD rolls.",
+    "args": [
+      "",
+      "7",
+      "3d5",
+      "3d6+5-3"
+    ]
+  },
+  "nroll": {
+    "desc": "Rolls in a given range. If you specify just one number instead of the range, it will role from 0 to that number.",
+    "args": [
+      "5",
+      "5-15"
+    ]
+  },
+  "race": {
+    "desc": "Starts a new animal race.",
+    "args": []
+  },
+  "joinrace": {
+    "desc": "Joins a new race. You can specify an amount of currency for betting (optional). You will get YourBet*(participants-1) back if you win.",
+    "args": [
+      "",
+      "5"
+    ]
+  },
+  "nunchi": {
+    "desc": "Creates or joins an existing nunchi game. Users have to count up by 1 from the starting number shown by the bot. If someone makes a mistake (types an incorrect number, or repeats the same number) they are out of the game and a new round starts without them.  Minimum 3 users required.",
+    "args": []
+  },
+  "connect4": {
+    "desc": "Creates or joins an existing connect4 game. 2 players are required for the game. Objective of the game is to get 4 of your pieces next to each other in a vertical, horizontal or diagonal line. You can specify a bet when you create a game and only users who bet the same amount will be able to join your game.",
+    "args": []
+  },
+  "raffle": {
+    "desc": "Prints the name and ID of a random online user from the server, or from the online user in the specified role.",
+    "args": [
+      "",
+      "RoleName"
+    ]
+  },
+  "raffleany": {
+    "desc": "Prints the name and ID of a random user from the server, or from the specified role.",
+    "args": [
+      "",
+      "RoleName"
+    ]
+  },
+  "give": {
+    "desc": "Give someone a certain amount of currency. You can specify the reason after the mention.",
+    "args": [
+      "1 @SomeGuy",
+      "5 @CootGurl Ur so pwetty"
+    ]
+  },
+  "grant": {
+    "desc": "Grants someone a certain amount of currency. You can specify the reason after the Username. You can also specify a role name to grant currency to all users in a role.",
+    "args": [
+      "100 @person",
+      "5 Role Of Gamblers"
+    ]
+  },
+  "seize": {
+    "desc": "Takes a certain amount of currency from someone.",
+    "args": [
+      "1 @SomeGuy"
+    ]
+  },
+  "betroll": {
+    "desc": "Bets a certain amount of currency and rolls a dice. Rolling over 66 yields x2 of your currency, over 90 - x4 and 100 x10.",
+    "args": [
+      "5"
+    ]
+  },
+  "wheeloffortune": {
+    "desc": "Bets a certain amount of currency on the wheel of fortune. Wheel can stop on one of many different multipliers. Won amount is rounded down to the nearest whole number.",
+    "args": [
+      "10"
+    ]
+  },
+  "leaderboard": {
+    "desc": "Displays the bot's currency leaderboard.",
+    "args": []
+  },
+  "trivia": {
+    "desc": "Starts a game of trivia. You can add `nohint` to prevent hints. First player to get to 10 points wins by default. You can specify a different number. 30 seconds per question.",
+    "args": [
+      "",
+      "--timeout 5 -p -w 3 -q 10"
+    ]
+  },
+  "trivialist": {
+    "desc": "Shows a current trivia leaderboard.",
+    "args": []
+  },
+  "triviaquit": {
+    "desc": "Quits current trivia after current question.",
+    "args": []
+  },
+  "typestart": {
+    "desc": "Starts a typing contest.",
+    "args": []
+  },
+  "typestop": {
+    "desc": "Stops a typing contest on the current channel.",
+    "args": []
+  },
+  "typeadd": {
+    "desc": "Adds a new article to the typing contest.",
+    "args": [
+      "wordswords"
+    ]
+  },
+  "pollend": {
+    "desc": "Stops active poll on this server and prints the results in this channel.",
+    "args": []
+  },
+  "pick": {
+    "desc": "Picks the currency planted in this channel. If the plant has a password, you need to specify it.",
+    "args": [
+      "",
+      "passwd"
+    ]
+  },
+  "plant": {
+    "desc": "Spend an amount of currency to plant it in this channel. Default is 1. You can specify the password after the amount. Password has to be alphanumeric and it will be trimmed down to 10 characters if it's longer.",
+    "args": [
+      "5",
+      "10 meow"
+    ]
+  },
+  "gencur": {
+    "desc": "Toggles currency generation on this channel. Every posted message will have chance to spawn currency. Chance is specified by the Bot Owner. (default is 2%)",
+    "args": []
+  },
+  "gclist": {
+    "desc": "Shows the list of server and channel ids where gc is enabled. Paginated with 9 per page.",
+    "args": []
+  },
+  "choose": {
+    "desc": "Chooses a thing from a list of things",
+    "args": [
+      "Get up;Sleep;Sleep more"
+    ]
+  },
+  "rps": {
+    "desc": "Play a game of Rocket-Paperclip-Scissors with Nadeko. You can bet on it. Multiplier is the same as on betflip.",
+    "args": [
+      "r 100",
+      "scissors"
+    ]
+  },
+  "linux": {
+    "desc": "Prints a customizable Linux interjection",
+    "args": [
+      "Spyware Windows"
+    ]
+  },
+  "skip": {
+    "desc": "Goes to the next song in the queue. You have to be in the same voice channel as the bot. You can skip multiple songs, but in that case songs will not be requeued if {Prefix}rcs or {Prefix}rpl is enabled.",
+    "args": [
+      "",
+      "5"
+    ]
+  },
+  "play": {
+    "desc": "Searches for a song and queues it up. Bot will join your voice channel if the music is not already playing. You can use search query, youtube video url, or soundcloud url. Inputting a number will play a song with that index in the music queue.",
+    "args": [
+      "5",
+      "Dream Of Venice"
+    ]
+  },
+  "join": {
+    "desc": "Bot will join your current voice channel.",
+    "args": []
+  },
+  "stop": {
+    "desc": "Stops the music and preserves the current song index. Stays in the channel.",
+    "args": []
+  },
+  "destroy": {
+    "desc": "Completely stops the music and unbinds the bot from the channel.",
+    "args": []
+  },
+  "pause": {
+    "desc": "Pauses or Unpauses the song.",
+    "args": []
+  },
+  "queuenext": {
+    "desc": "Works the same as `{Prefix}queue` command, except it enqueues the new song after the current one.",
+    "args": [
+      "Dream Of Venice"
+    ]
+  },
+  "queuesearch": {
+    "desc": "Search for top 5 youtube song result using keywords, and type the index of the song to play that song. Bot will join your voice channel.",
+    "args": [
+      "Dream Of Venice"
+    ]
+  },
+  "scq": {
+    "desc": "Queue a soundcloud song using keywords or a link. Bot will join your voice channel.",
+    "args": [
+      "Dream Of Venice"
+    ]
+  },
+  "ytq": {
+    "desc": "Queue a youtube song using keywords or a link. Bot will join your voice channel.",
+    "args": [
+      "Dream Of Venice"
+    ]
+  },
+  "listqueue": {
+    "desc": "Shows currently playing song and music queue. 10 per page.",
+    "args": [
+      "",
+      "2"
+    ]
+  },
+  "volume": {
+    "desc": "Sets the music playback volume (0-100%)",
+    "args": [
+      "50"
+    ]
+  },
+  "defvol": {
+    "desc": "Sets the default music volume when music playback is started (0-100). Persists through restarts.",
+    "args": [
+      "80"
+    ]
+  },
+  "queuepl": {
+    "desc": "Queues up to 200 songs from a youtube playlist specified by a link, or keywords.",
+    "args": [
+      "<youtube_playlist_link>"
+    ]
+  },
+  "soundcloudpl": {
+    "desc": "Queue a Soundcloud playlist using a link.",
+    "args": [
+      "soundcloudseturl"
+    ]
+  },
+  "localpl": {
+    "desc": "Queues all songs from a directory.",
+    "args": [
+      "C:/music/classical"
+    ]
+  },
+  "radio": {
+    "desc": "Queues a radio stream from a link. It can be a direct mp3 radio stream, .m3u, .pls .asx or .xspf (Usage Video: <https://streamable.com/al54>)",
+    "args": [
+      "radio link here"
+    ]
+  },
+  "local": {
+    "desc": "Queues a local file by specifying a full path.",
+    "args": [
+      "C:/music/mysong.mp3"
+    ]
+  },
+  "move": {
+    "desc": "Moves the bot to your voice channel. (works only if music is already playing)",
+    "args": []
+  },
+  "songremove": {
+    "desc": "Remove a song by its # in the queue, or 'all' to remove all songs from the queue and reset the song index.",
+    "args": [
+      "5"
+    ]
+  },
+  "movesong": {
+    "desc": "Moves a song from one position to another.",
+    "args": [
+      "5>3"
+    ]
+  },
+  "setmaxqueue": {
+    "desc": "Sets a maximum queue size. Specify no parameters to have no limit.",
+    "args": [
+      "50",
+      ""
+    ]
+  },
+  "repcursong": {
+    "desc": "Toggles repeat of current song.",
+    "args": []
+  },
+  "repeatqueue": {
+    "desc": "Toggles repeat of all songs in the queue (every song that finishes is added to the end of the queue).",
+    "args": []
+  },
+  "streamrole": {
+    "desc": "Sets a role which is monitored for streamers (FromRole), and a role to add if a user from 'FromRole' is streaming (AddRole). When a user from 'FromRole' starts streaming, they will receive an 'AddRole'. Provide no parameters to disable",
+    "args": [
+      "\"Eligible Streamers\" \"Currently Streaming\""
+    ]
+  },
+  "autoplay": {
+    "desc": "Toggles autoplay - When the song is finished, automatically queue a related Youtube song. (Works only for Youtube songs and when queue is empty)",
+    "args": []
+  },
+  "smashcast": {
+    "desc": "Notifies this channel when the specified user starts streaming.",
+    "args": [
+      "SomeStreamer"
+    ]
+  },
+  "twitch": {
+    "desc": "Notifies this channel when the specified user starts streaming.",
+    "args": [
+      "SomeStreamer"
+    ]
+  },
+  "picarto": {
+    "desc": "Notifies this channel when the specified user starts streaming.",
+    "args": [
+      "SomeStreamer"
+    ]
+  },
+  "mixer": {
+    "desc": "Notifies this channel when the specified user starts streaming.",
+    "args": [
+      "SomeStreamer"
+    ]
+  },
+  "streamremove": {
+    "desc": "Removes notifications of a specified stream on the specified platform on this channel. You can also just specify an url.",
+    "args": [
+      "Twitch SomeGuy",
+      "twitch.tv/someguy"
+    ]
+  },
+  "streamadd": {
+    "desc": "Notifies this channel when the user's stream on the specified URL goes online or offline.",
+    "args": [
+      "twitch.tv/someguy"
+    ]
+  },
+  "liststreams": {
+    "desc": "Lists all streams you are following on this server.",
+    "args": []
+  },
+  "convert": {
+    "desc": "Convert quantities. Use `{Prefix}convertlist` to see supported dimensions and currencies.",
+    "args": [
+      "m km 1000"
+    ]
+  },
+  "convertlist": {
+    "desc": "List of the convertible dimensions and currencies.",
+    "args": []
+  },
+  "calculate": {
+    "desc": "Evaluate a mathematical expression.",
+    "args": [
+      "1+1"
+    ]
+  },
+  "pokemon": {
+    "desc": "Searches for a pokemon.",
+    "args": [
+      "Sylveon"
+    ]
+  },
+  "pokemonability": {
+    "desc": "Searches for a pokemon ability.",
+    "args": [
+      "overgrow"
+    ]
+  },
+  "weather": {
+    "desc": "Shows weather data for a specified city. You can also specify a country after a comma.",
+    "args": [
+      "Moscow, RU"
+    ]
+  },
+  "youtube": {
+    "desc": "Searches youtubes and shows the first result",
+    "args": [
+      "query"
+    ]
+  },
+  "anime": {
+    "desc": "Queries anilist for an anime and shows the first result.",
+    "args": [
+      "aquarion evol"
+    ]
+  },
+  "movie": {
+    "desc": "Shows information about a movie or series using omdb api.",
+    "args": [
+      "Batman vs Superman"
+    ]
+  },
+  "manga": {
+    "desc": "Queries anilist for a manga and shows the first result.",
+    "args": [
+      "Shingeki no kyojin"
+    ]
+  },
+  "randomcat": {
+    "desc": "Shows a random cat image.",
+    "args": []
+  },
+  "randomdog": {
+    "desc": "Shows a random dog image.",
+    "args": []
+  },
+  "randomfood": {
+    "desc": "Shows a random food image.",
+    "args": []
+  },
+  "randombird": {
+    "desc": "Shows a random bird image.",
+    "args": []
+  },
+  "image": {
+    "desc": "Pulls a random image using a search parameter.",
+    "args": [
+      "cute kitten"
+    ]
+  },
+  "lmgtfy": {
+    "desc": "Google something for an idiot.",
+    "args": [
+      "query"
+    ]
+  },
+  "google": {
+    "desc": "Get a Google search link for some terms.",
+    "args": [
+      "query"
+    ]
+  },
+  "hearthstone": {
+    "desc": "Searches for a Hearthstone card and shows its image. Takes a while to complete.",
+    "args": [
+      "Ysera"
+    ]
+  },
+  "urbandict": {
+    "desc": "Searches Urban Dictionary for a word.",
+    "args": [
+      "Pineapple"
+    ]
+  },
+  "hashtag": {
+    "desc": "Searches Tagdef.com for a hashtag.",
+    "args": [
+      "ff"
+    ]
+  },
+  "catfact": {
+    "desc": "Shows a random catfact from <http://catfacts-api.appspot.com/api/facts>",
+    "args": []
+  },
+  "revav": {
+    "desc": "Returns a Google reverse image search for someone's avatar.",
+    "args": [
+      "@SomeGuy"
+    ]
+  },
+  "revimg": {
+    "desc": "Returns a Google reverse image search for an image from a link.",
+    "args": [
+      "Image link"
+    ]
+  },
+  "safebooru": {
+    "desc": "Shows a random image from safebooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)",
+    "args": [
+      "yuri+kissing"
+    ]
+  },
+  "wikipedia": {
+    "desc": "Gives you back a wikipedia link",
+    "args": [
+      "query"
+    ]
+  },
+  "color": {
+    "desc": "Shows you pictures of colors which correspond to the inputed hex values. Max 10.",
+    "args": [
+      "00ff00",
+      "f00 0f0 00f"
+    ]
+  },
+  "avatar": {
+    "desc": "Shows a mentioned person's avatar.",
+    "args": [
+      "@SomeGuy"
+    ]
+  },
+  "hentai": {
+    "desc": "Shows a hentai image from a random website (gelbooru, danbooru, konachan or yandere) with a given tag. Tag is optional but preferred. Only 1 tag allowed.",
+    "args": [
+      "yuri"
+    ]
+  },
+  "danbooru": {
+    "desc": "Shows a random hentai image from danbooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)",
+    "args": [
+      "yuri+kissing"
+    ]
+  },
+  "derpibooru": {
+    "desc": "Shows a random image from derpibooru with a given tag. Tag is optional but preferred.",
+    "args": [
+      "yuri+kissing"
+    ]
+  },
+  "gelbooru": {
+    "desc": "Shows a random hentai image from gelbooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)",
+    "args": [
+      "yuri+kissing"
+    ]
+  },
+  "rule34": {
+    "desc": "Shows a random image from rule34.xx with a given tag. Tag is optional but preferred. (multiple tags are appended with +)",
+    "args": [
+      "yuri+kissing"
+    ]
+  },
+  "e621": {
+    "desc": "Shows a random hentai image from e621.net with a given tag. Tag is optional but preferred. (multiple tags are appended with +)",
+    "args": [
+      "yuri+kissing"
+    ]
+  },
+  "boobs": {
+    "desc": "Real adult content.",
+    "args": []
+  },
+  "butts": {
+    "desc": "Real adult content.",
+    "args": [
+      ""
+    ]
+  },
+  "translate": {
+    "desc": "Translates text from the first specified language to the second specified language.",
+    "args": [
+      "en fr Hello"
+    ]
+  },
+  "translangs": {
+    "desc": "Lists the valid languages for translation.",
+    "args": []
+  },
+  "guide": {
+    "desc": "Sends a readme and a guide links to the channel.",
+    "args": [
+      "",
+      ""
+    ]
+  },
+  "greetdmmsg": {
+    "desc": "Sets a new join announcement message which will be sent to the user who joined. Type `%user.mention%` if you want to mention the new member. Using it with no message will show the current DM greet message. You can use embed json from <https://eb.nadeko.bot> instead of a regular text, if you want the message to be embedded.",
+    "args": [
+      "Welcome to the server, %user.mention%"
+    ]
+  },
+  "cash": {
+    "desc": "Check how much currency a person has. (Defaults to yourself)",
+    "args": [
+      "{Prefix}$",
+      "@SomeGuy"
+    ]
+  },
+  "curtrs": {
+    "desc": "Shows your currency transactions on the specified page. Bot owner can see other people's transactions too.",
+    "args": [
+      "2",
+      "@SomeUser 2"
+    ]
+  },
+  "listperms": {
+    "desc": "Lists whole permission chain with their indexes. You can specify an optional page number if there are a lot of permissions.",
+    "args": [
+      "",
+      "3"
+    ]
+  },
+  "allusrmdls": {
+    "desc": "Enable or disable all modules for a specific user.",
+    "args": [
+      "enable @someone"
+    ]
+  },
+  "moveperm": {
+    "desc": "Moves permission from one position to another in the Permissions list.",
+    "args": [
+      "2 4"
+    ]
+  },
+  "removeperm": {
+    "desc": "Removes a permission from a given position in the Permissions list.",
+    "args": [
+      "1"
+    ]
+  },
+  "checkstream": {
+    "desc": "Checks if a user is online on a certain streaming platform.",
+    "args": [
+      "twitch MyFavStreamer"
+    ]
+  },
+  "showemojis": {
+    "desc": "Shows a name and a link to every SPECIAL emoji in the message.",
+    "args": [
+      "A message full of SPECIAL emojis"
+    ]
+  },
+  "deckshuffle": {
+    "desc": "Reshuffles all cards back into the deck.",
+    "args": []
+  },
+  "fwmsgs": {
+    "desc": "Toggles forwarding of non-command messages sent to bot's DM to the bot owners",
+    "args": []
+  },
+  "fwtoall": {
+    "desc": "Toggles whether messages will be forwarded to all bot owners or only to the first one specified in the credentials.json file",
+    "args": []
+  },
+  "resetperms": {
+    "desc": "Resets the bot's permissions module on this server to the default value.",
+    "args": []
+  },
+  "antiraid": {
+    "desc": "Sets an anti-raid protection on the server. Provide no parameters to disable. First parameter is number of people which will trigger the protection. Second parameter is a time interval in which that number of people needs to join in order to trigger the protection, and third parameter is punishment for those people (Kick, Ban, Mute)",
+    "args": [
+      "5 20 Kick",
+      ""
+    ]
+  },
+  "antispam": {
+    "desc": "Stops people from repeating same message X times in a row. Provide no parameters to disable. You can specify to either mute, kick or ban the offenders. If you're using mute, you can add a number of seconds at the end to use a timed mute. Max message count is 10.",
+    "args": [
+      "3 Mute",
+      "4 Kick",
+      ""
+    ]
+  },
+  "chatmute": {
+    "desc": "Prevents a mentioned user from chatting in text channels.",
+    "args": [
+      "@Someone"
+    ]
+  },
+  "voicemute": {
+    "desc": "Prevents a mentioned user from speaking in voice channels. The mentioned user must be connected to a voice channel.",
+    "args": [
+      "@Someone"
+    ]
+  },
+  "konachan": {
+    "desc": "Shows a random hentai image from konachan with a given tag. Tag is optional but preferred.",
+    "args": [
+      "yuri"
+    ]
+  },
+  "setmuterole": {
+    "desc": "Sets a name of the role which will be assigned to people who should be muted. Default is nadeko-mute.",
+    "args": [
+      "Silenced"
+    ]
+  },
+  "adsarm": {
+    "desc": "Toggles the automatic deletion of confirmations for `{Prefix}iam` and `{Prefix}iamn` commands.",
+    "args": []
+  },
+  "setstream": {
+    "desc": "Sets the bots stream. First parameter is the twitch link, second parameter is stream name.",
+    "args": [
+      "TWITCHLINK Hello"
+    ]
+  },
+  "chatunmute": {
+    "desc": "Removes a mute role previously set on a mentioned user with `{Prefix}chatmute` which prevented him from chatting in text channels.",
+    "args": [
+      "@Someone"
+    ]
+  },
+  "unmute": {
+    "desc": "Unmutes a mentioned user previously muted with `{Prefix}mute` command.",
+    "args": [
+      "@Someone"
+    ]
+  },
+  "xkcd": {
+    "desc": "Shows a XKCD comic. Specify no parameters to retrieve a random one. Number parameter will retrieve a specific comic, and \"latest\" will get the latest one.",
+    "args": [
+      "",
+      "1400",
+      "latest"
+    ]
+  },
+  "togethertube": {
+    "desc": "Creates a new room on <https://togethertube.com> and shows the link in the chat.",
+    "args": []
+  },
+  "poll": {
+    "desc": "Creates a public poll which requires users to type a number of the voting option in the channel command is ran in.",
+    "args": [
+      "Question?;Answer1;Answ 2;A_3"
+    ]
+  },
+  "autotranslang": {
+    "desc": "Sets your source and target language to be used with `{Prefix}at`. Specify no parameters to remove previously set value.",
+    "args": [
+      "en>fr"
+    ]
+  },
+  "autotranslate": {
+    "desc": "Starts automatic translation of all messages by users who set their `{Prefix}atl` in this channel. You can set \"del\" parameter to automatically delete all translated user messages.",
+    "args": [
+      "",
+      "del"
+    ]
+  },
+  "typedel": {
+    "desc": "Deletes a typing article given the ID.",
+    "args": [
+      "3"
+    ]
+  },
+  "typelist": {
+    "desc": "Lists added typing articles with their IDs. 15 per page.",
+    "args": [
+      "",
+      "3"
+    ]
+  },
+  "serverlist": {
+    "desc": "Lists servers the bot is on with some basic info. 10 per page.",
+    "args": [
+      "3"
+    ]
+  },
+  "hentaibomb": {
+    "desc": "Shows a total 5 images (from gelbooru, danbooru, konachan, yandere and atfbooru). Tag is optional but preferred.",
+    "args": [
+      "yuri"
+    ]
+  },
+  "cleverbot": {
+    "desc": "Toggles cleverbot session. When enabled, the bot will reply to messages starting with bot mention in the server. Expressions starting with %mention% won't work if cleverbot is enabled.",
+    "args": []
+  },
+  "shorten": {
+    "desc": "Attempts to shorten an URL, if it fails, returns the input URL.",
+    "args": [
+      "https://google.com"
+    ]
+  },
+  "gamepedia": {
+    "desc": "Gives you back a gamepedia link.",
+    "args": [
+      "mtg Vigilance",
+      "mlp Dashy"
+    ]
+  },
+  "yandere": {
+    "desc": "Shows a random image from yandere with a given tag. Tag is optional but preferred. (multiple tags are appended with +)",
+    "args": [
+      "tag1+tag2"
+    ]
+  },
+  "mtg": {
+    "desc": "Searches for a Magic The Gathering card.",
+    "args": [
+      "about face"
+    ]
+  },
+  "hangmanlist": {
+    "desc": "Shows a list of hangman term types.",
+    "args": []
+  },
+  "hangman": {
+    "desc": "Starts a game of hangman in the channel. Use `{Prefix}hangmanlist` to see a list of available term types. Defaults to 'all'.",
+    "args": [
+      "",
+      "movies"
+    ]
+  },
+  "hangmanstop": {
+    "desc": "Stops the active hangman game on this channel if it exists.",
+    "args": []
+  },
+  "acro": {
+    "desc": "Starts an Acrophobia game.",
+    "args": [
+      "",
+      "-s 30"
+    ]
+  },
+  "logevents": {
+    "desc": "Shows a list of all events you can subscribe to with `{Prefix}log`",
+    "args": []
+  },
+  "log": {
+    "desc": "Toggles logging event. Disables it if it is active anywhere on the server. Enables if it isn't active. Use `{Prefix}logevents` to see a list of all events you can subscribe to.",
+    "args": [
+      "userpresence",
+      "userbanned"
+    ]
+  },
+  "fairplay": {
+    "desc": "Toggles fairplay. While enabled, the bot will prioritize songs from users who didn't have their song recently played instead of the song's position in the queue.",
+    "args": []
+  },
+  "songautodelete": {
+    "desc": "Toggles whether the song should be automatically removed from the music queue when it finishes playing.",
+    "args": []
+  },
+  "define": {
+    "desc": "Finds a definition of a word.",
+    "args": [
+      "heresy"
+    ]
+  },
+  "setmaxplaytime": {
+    "desc": "Sets a maximum number of seconds (>14) a song can run before being skipped automatically. Set 0 to have no limit.",
+    "args": [
+      "0",
+      "270"
+    ]
+  },
+  "activity": {
+    "desc": "Checks for spammers.",
+    "args": []
+  },
+  "autohentai": {
+    "desc": "Posts a hentai every X seconds with a random tag from the provided tags. Use `|` to separate tag groups. Random group will be chosen every time the image is sent. Use `+` for multiple tags (max 2 per group). 20 seconds minimum. Provide no parameters to disable.",
+    "args": [
+      "30 yuri+kissing|tail+long_hair",
+      ""
+    ]
+  },
+  "setstatus": {
+    "desc": "Sets the bot's status. (Online/Idle/Dnd/Invisible)",
+    "args": [
+      "Idle"
+    ]
+  },
+  "rotaterolecolor": {
+    "desc": "Rotates a roles color on an interval with a list of supplied colors. First parameter is interval in seconds (Minimum 60). Second parameter is a role, followed by a space-separated list of colors in hex. Provide a rolename with a 0 interval to disable.",
+    "args": [
+      "60 MyLsdRole #ff0000 #00ff00 #0000ff",
+      "0 MyLsdRole"
+    ]
+  },
+  "invitecreate": {
+    "desc": "Creates a new invite which has infinite max uses and never expires.",
+    "args": []
+  },
+  "invitelist": {
+    "desc": "Lists all invites for this channel. Paginated with 9 per page.",
+    "args": [
+      "",
+      "3"
+    ]
+  },
+  "inviteremove": {
+    "desc": "Deletes an invite on the specified index. Use `{Prefix}invitelist` to see the list of invites.",
+    "args": [
+      "2"
+    ]
+  },
+  "pollstats": {
+    "desc": "Shows the poll results without stopping the poll on this server.",
+    "args": []
+  },
+  "repeatlist": {
+    "desc": "Shows currently repeating messages and their indexes.",
+    "args": []
+  },
+  "repeatremove": {
+    "desc": "Removes a repeating message on a specified index. Use `{Prefix}repeatlist` to see indexes.",
+    "args": [
+      "2"
+    ]
+  },
+  "antilist": {
+    "desc": "Shows currently enabled protection features.",
+    "args": []
+  },
+  "antispamignore": {
+    "desc": "Toggles whether antispam ignores current channel. Antispam must be enabled.",
+    "args": []
+  },
+  "eventstart": {
+    "desc": "Starts one of the events seen on public nadeko. Events: `reaction`, `gamestatus`",
+    "args": [
+      "reaction",
+      "reaction -d 1 -a 50 --pot-size 1500"
+    ]
+  },
+  "slot": {
+    "desc": "Play Nadeko slots. Max bet is 9999. 1.5 second cooldown per user.",
+    "args": [
+      "5"
+    ]
+  },
+  "crush": {
+    "desc": "Sets your crush. It will reduce their `{Prefix}claim` on you by 20%. Provide no parameters to remove it. 30 minutes cooldown.",
+    "args": [
+      "@MyHubby",
+      ""
+    ]
+  },
+  "waifuclaim": {
+    "desc": "Claim a waifu for yourself by spending currency. You must spend at least 10% more than her current value unless has a `{Prefix}crush` on you.",
+    "args": [
+      "50 @Himesama"
+    ]
+  },
+  "waifureset": {
+    "desc": "Resets your waifu stats, except current waifus.",
+    "args": []
+  },
+  "waifutransfer": {
+    "desc": "Transfer the ownership of one of your waifus to another user. You must pay 10% of your waifu's value.",
+    "args": [
+      "@ExWaifu @NewOwner"
+    ]
+  },
+  "waifugift": {
+    "desc": "Gift an item to someone. This will increase their waifu value by 50% of the gifted item's value if you are not their waifu, or 95% if you are. Provide no parameters to see a list of items that you can gift.",
+    "args": [
+      "",
+      "Rose @Cootie",
+      "1001 Rose @Himesama"
+    ]
+  },
+  "waifulb": {
+    "desc": "Shows top 9 waifus. You can specify another page to show other waifus.",
+    "args": [
+      "",
+      "3"
+    ]
+  },
+  "divorce": {
+    "desc": "Releases your claim on a specific waifu. You will get some of the money you've spent back unless that waifu has a crush on you. 6 hours cooldown.",
+    "args": [
+      "@CheatingSloot"
+    ]
+  },
+  "waifuinfo": {
+    "desc": "Shows waifu stats for a target person. Defaults to you if no user is provided.",
+    "args": [
+      "@MyCrush",
+      ""
+    ]
+  },
+  "mal": {
+    "desc": "Shows basic info from a MyAnimeList profile.",
+    "args": [
+      "straysocks"
+    ]
+  },
+  "setmusicchannel": {
+    "desc": "Sets the current channel as the default music output channel. This will output playing, finished, paused and removed songs to that channel instead of the channel where the first song was queued in.",
+    "args": []
+  },
+  "unsetmusicchannel": {
+    "desc": "Bot will output playing, finished, paused and removed songs to the channel where the first song was queued in.",
+    "args": []
+  },
+  "shardstats": {
+    "desc": "Stats for shards. Paginated with 25 shards per page.",
+    "args": [
+      "",
+      "2"
+    ]
+  },
+  "tictactoe": {
+    "desc": "Starts a game of tic tac toe. Another user must run the command in the same channel in order to accept the challenge. Use numbers 1-9 to play.",
+    "args": []
+  },
+  "timezones": {
+    "desc": "Lists all timezones available on the system to be used with `{Prefix}timezone`.",
+    "args": []
+  },
+  "timezone": {
+    "desc": "Sets this server's timezone. This affects bot's time output in this server (logs, etc..)",
+    "args": [
+      "",
+      "GMT Standard Time"
+    ]
+  },
+  "langdefault": {
+    "desc": "Shows currently set default language.",
+    "args": [
+      "en-US",
+      "default"
+    ]
+  },
+  "langsetdefault": {
+    "desc": "Sets the bot's default response language. All servers which use a default locale will use this one. Setting to `default` will use the host's current culture.",
+    "args": [
+      "en-US",
+      "default"
+    ]
+  },
+  "langset": {
+    "desc": "Sets this server's response language. If bot's response strings have been translated to that language, bot will use that language in this server. Reset by using `default` as the locale name. Provide no parameters to see currently set language.",
+    "args": [
+      "de-DE",
+      "default"
+    ]
+  },
+  "lang": {
+    "desc": "Shows the currently set bot language on this server.",
+    "args": []
+  },
+  "langlist": {
+    "desc": "List of languages for which translation (or part of it) exist atm.",
+    "args": []
+  },
+  "aliaslist": {
+    "desc": "Shows the list of currently set aliases. Paginated.",
+    "args": [
+      "",
+      "3"
+    ]
+  },
+  "alias": {
+    "desc": "Create a custom alias for a certain Nadeko command. Provide no alias to remove the existing one.",
+    "args": [
+      "{Prefix}daily {Prefix}timely",
+      "\"plastic surgery\" {Prefix}waifureset"
+    ]
+  },
+  "warnlog": {
+    "desc": "See a list of warnings of a certain user.",
+    "args": [
+      "@b1nzy"
+    ]
+  },
+  "warnlogall": {
+    "desc": "See a list of all warnings on the server. 15 users per page.",
+    "args": [
+      "",
+      "2"
+    ]
+  },
+  "warn": {
+    "desc": "Warns a user.",
+    "args": [
+      "@b1nzy Very rude person"
+    ]
+  },
+  "unban": {
+    "desc": "Unbans a user with the provided user#discrim or id.",
+    "args": [
+      "kwoth#1234",
+      "123123123"
+    ]
+  },
+  "warnclear": {
+    "desc": "Clears all warnings from a certain user. You can specify a number to clear a specific one.",
+    "args": [
+      "@PoorDude 3",
+      "@PoorDude"
+    ]
+  },
+  "warnpunishlist": {
+    "desc": "Lists punishments for warnings.",
+    "args": []
+  },
+  "warnpunish": {
+    "desc": "Sets a punishment for a certain number of warnings. You can specify a time string after 'Ban' or 'Mute' punishment to make it a temporary mute/ban. Provide no punishment to remove.",
+    "args": [
+      "5 Ban",
+      "3",
+      "5 Mute 2d12h"
+    ]
+  },
+  "clparew": {
+    "desc": "Claim patreon rewards. If you're subscribed to bot owner's patreon you can use this command to claim your rewards - assuming bot owner did setup their patreon key.",
+    "args": []
+  },
+  "ping": {
+    "desc": "Ping the bot to see if there are latency issues.",
+    "args": []
+  },
+  "time": {
+    "desc": "Shows the current time and timezone in the specified location.",
+    "args": [
+      "London, UK"
+    ]
+  },
+  "relparew": {
+    "desc": "Forces the update of the list of patrons who are eligible for the reward.",
+    "args": []
+  },
+  "shopadd": {
+    "desc": "Adds an item to the shop by specifying type price and name. Available types are role and list. 90% of currency from each purchase will be received by the user who added the item to the shop.",
+    "args": [
+      "role 1000 Rich"
+    ]
+  },
+  "shoprm": {
+    "desc": "Removes an item from the shop by its ID.",
+    "args": [
+      "1"
+    ]
+  },
+  "shop": {
+    "desc": "Lists this server's administrators' shop. Paginated.",
+    "args": [
+      "",
+      "2"
+    ]
+  },
+  "rolehoist": {
+    "desc": "Toggles whether this role is displayed in the sidebar or not.",
+    "args": [
+      "Guests",
+      "\"Space Wizards\""
+    ]
+  },
+  "buy": {
+    "desc": "Buys an item from the shop on a given index. If buying items, make sure that the bot can DM you.",
+    "args": [
+      "2"
+    ]
+  },
+  "gamevoicechannel": {
+    "desc": "Toggles game voice channel feature in the voice channel you're currently in. Users who join the game voice channel will automatically get redirected to the voice channel with the name of their current game, if it exists. Can't move users to channels that the bot has no connect permission for. One per server.",
+    "args": []
+  },
+  "shoplistadd": {
+    "desc": "Adds an item to the list of items for sale in the shop entry given the index. You usually want to run this command in a secret channel, so that the unique items are not leaked.",
+    "args": [
+      "1 Uni-que-Steam-Key"
+    ]
+  },
+  "globalcommand": {
+    "desc": "Toggles whether a command can be used on any server.",
+    "args": [
+      ".stats"
+    ]
+  },
+  "globalmodule": {
+    "desc": "Toggles whether a module can be used on any server.",
+    "args": [
+      "nsfw"
+    ]
+  },
+  "globalpermslist": {
+    "desc": "Lists global permissions set by the bot owner.",
+    "args": []
+  },
+  "resetglobalperms": {
+    "desc": "Resets global permissions set by bot owner.",
+    "args": []
+  },
+  "prefix": {
+    "desc": "Sets this server's prefix for all bot commands. Provide no parameters to see the current server prefix.",
+    "args": [
+      "+"
+    ]
+  },
+  "defprefix": {
+    "desc": "Sets bot's default prefix for all bot commands. Provide no parameters to see the current default prefix. This will not change this server's current prefix.",
+    "args": [
+      "+"
+    ]
+  },
+  "verboseerror": {
+    "desc": "Toggles whether the bot should print command errors when a command is incorrectly used.",
+    "args": []
+  },
+  "streamrolekeyword": {
+    "desc": "Sets keyword which is required in the stream's title in order for the streamrole to apply. Provide no keyword in order to reset.",
+    "args": [
+      "",
+      "PUBG"
+    ]
+  },
+  "streamroleblacklist": {
+    "desc": "Adds or removes a blacklisted user. Blacklisted users will never receive the stream role.",
+    "args": [
+      "add @b1nzy#1234",
+      "rem @b1nzy#1234"
+    ]
+  },
+  "streamrolewhitelist": {
+    "desc": "Adds or removes a whitelisted user. Whitelisted users will receive the stream role even if they don't have the specified keyword in their stream title.",
+    "args": [
+      "add @b1nzy#1234",
+      "rem @b1nzy#1234"
+    ]
+  },
+  "nsfwtagbl": {
+    "desc": "Toggles whether the tag is blacklisted or not in nsfw searches. Provide no parameters to see the list of blacklisted tags.",
+    "args": [
+      "poop"
+    ]
+  },
+  "experience": {
+    "desc": "Shows your xp stats. Specify the user to show that user's stats instead.",
+    "args": [
+      "",
+      "@someguy"
+    ]
+  },
+  "xpexclusionlist": {
+    "desc": "Shows the roles and channels excluded from the XP system on this server, as well as whether the whole server is excluded.",
+    "args": []
+  },
+  "xpexclude": {
+    "desc": "Exclude a channel, role or current server from the xp system.",
+    "args": [
+      "Channel #channel-name",
+      "Role Excluded-Role",
+      "Server"
+    ]
+  },
+  "xpnotify": {
+    "desc": "Sets how the bot should notify **you** when **you** get a `server` or `global` level. You can set `dm` (for the bot to send a direct message), `channel` (to get notified in the channel you sent the last message in) or `none` to disable.",
+    "args": [
+      "global dm",
+      "server channel"
+    ]
+  },
+  "xplvluprewards": {
+    "desc": "Shows currently set level up rewards.",
+    "args": []
+  },
+  "xprolereward": {
+    "desc": "Sets role which will be added or removed when a user reaches the specified level. To remove previously added role reward, use the opposite action with the same role and level.",
+    "args": [
+      "add 5 Social",
+      "rm 2 Novice"
+    ]
+  },
+  "xpcurreward": {
+    "desc": "Specify a level followed by an amount of currency that a user will receive when reaching that level.",
+    "args": [
+      "3 5000"
+    ]
+  },
+  "xpleaderboard": {
+    "desc": "Shows current server's xp leaderboard.",
+    "args": []
+  },
+  "xpgleaderboard": {
+    "desc": "Shows the global xp leaderboard.",
+    "args": []
+  },
+  "xpadd": {
+    "desc": "Adds xp to a user on the server. This does not affect their global ranking. You can use negative values.",
+    "args": [
+      "100 @b1nzy"
+    ]
+  },
+  "clubcreate": {
+    "desc": "Creates a club. You must be at least level 5 and not be in the club already.",
+    "args": [
+      "b1nzy's friends"
+    ]
+  },
+  "clubtransfer": {
+    "desc": "Transfers the ownership of the club to another member of the club.",
+    "args": [
+      "@b1nzy"
+    ]
+  },
+  "clubinfo": {
+    "desc": "Shows information about the club.",
+    "args": [
+      "b1nzy's friends"
+    ]
+  },
+  "clubapply": {
+    "desc": "Apply to join a club. You must meet that club's minimum level requirement, and not be on its ban list.",
+    "args": [
+      "b1nzy's friends"
+    ]
+  },
+  "clubaccept": {
+    "desc": "Accept a user who applied to your club.",
+    "args": [
+      "b1nzy#1337"
+    ]
+  },
+  "clubleave": {
+    "desc": "Leaves the club you're currently in.",
+    "args": []
+  },
+  "clubdisband": {
+    "desc": "Disbands the club you're the owner of. This action is irreversible.",
+    "args": []
+  },
+  "clubkick": {
+    "desc": "Kicks the specified user from the club. You must be the club owner or club admin. The user will be able to apply again.",
+    "args": [
+      "b1nzy#1337"
+    ]
+  },
+  "clubban": {
+    "desc": "Bans the specified user from the club. You must be the club owner or club admin. The user will not be able to apply again.",
+    "args": [
+      "b1nzy#1337"
+    ]
+  },
+  "clubunban": {
+    "desc": "Unbans a previously banned user from the club. You must be the club owner or club admin.",
+    "args": [
+      "b1nzy#1337"
+    ]
+  },
+  "clublevelreq": {
+    "desc": "Sets the club required level to apply to join the club. You must be club owner. You can't set this number below 5.",
+    "args": [
+      "7"
+    ]
+  },
+  "clubdescribe": {
+    "desc": "Sets the club description. Maximum 250 characters. Club owner only.",
+    "args": [
+      "This is the best club please join."
+    ]
+  },
+  "clubicon": {
+    "desc": "Sets the club icon.",
+    "args": [
+      "https://i.imgur.com/htfDMfU.png"
+    ]
+  },
+  "clubapps": {
+    "desc": "Shows the list of users who have applied to your club. Paginated. You must be club owner to use this command.",
+    "args": [
+      "2"
+    ]
+  },
+  "clubbans": {
+    "desc": "Shows the list of users who were banned from your club. Paginated. You must be club owner to use this command.",
+    "args": [
+      "2"
+    ]
+  },
+  "clubleaderboard": {
+    "desc": "Shows club rankings on the specified page.",
+    "args": [
+      "2"
+    ]
+  },
+  "nsfwcc": {
+    "desc": "Clears nsfw cache.",
+    "args": []
+  },
+  "clubadmin": {
+    "desc": "Assigns (or unassigns) staff role to the member of the club. Admins can ban, kick and accept applications.",
+    "args": []
+  },
+  "autoboobs": {
+    "desc": "Posts a boobs every X seconds. 20 seconds minimum. Provide no parameters to disable.",
+    "args": [
+      "30",
+      ""
+    ]
+  },
+  "autobutts": {
+    "desc": "Posts a butt every X seconds. 20 seconds minimum. Provide no parameters to disable.",
+    "args": [
+      "30",
+      ""
+    ]
+  },
+  "eightball": {
+    "desc": "Ask the 8ball a yes/no question.",
+    "args": [
+      "Is b1nzy a nice guy?"
+    ]
+  },
+  "feed": {
+    "desc": "Subscribes to a feed. Bot will post an update up to once every 10 seconds. You can have up to 10 feeds on one server. All feeds must have unique URLs.",
+    "args": [
+      "https://www.rt.com/rss/"
+    ]
+  },
+  "feedremove": {
+    "desc": "Stops tracking a feed on the given index. Use `{Prefix}feeds` command to see a list of feeds and their indexes.",
+    "args": [
+      "3"
+    ]
+  },
+  "feedlist": {
+    "desc": "Shows the list of feeds you've subscribed to on this server.",
+    "args": []
+  },
+  "say": {
+    "desc": "Bot will send the message you typed in the specified channel. If you omit the channel name, it will send the mesasge in the current channel. Supports embeds.",
+    "args": [
+      "#chat hi",
+      "hi"
+    ]
+  },
+  "sqlexec": {
+    "desc": "Executes a SQL query and returns the number of affected rows. Dangerous.",
+    "args": [
+      "UPDATE DiscordUser SET CurrencyAmount=CurrencyAmount+1234"
+    ]
+  },
+  "sqlselect": {
+    "desc": "Executes a SQL query and returns the result. Dangerous.",
+    "args": [
+      "SELECT * FROM DiscordUser LIMIT 5"
+    ]
+  },
+  "deletewaifus": {
+    "desc": "Deletes everything from WaifuUpdates, WaifuItem and WaifuInfo tables. This action is irreversible.",
+    "args": []
+  },
+  "deletewaifu": {
+    "desc": "Deletes everything from WaifuUpdates, WaifuItem and WaifuInfo tables for the specified user. Also makes specified user's waifus free. This action is irreversible.",
+    "args": [
+      "@Username"
+    ]
+  },
+  "deletecurrency": {
+    "desc": "Deletes everything from Currency and CurrencyTransactions. This action is irreversible.",
+    "args": []
+  },
+  "deletexp": {
+    "desc": "Deletes everything from UserXpStats and sets users' TotalXP to 0. This action is irreversible.",
+    "args": []
+  },
+  "deleteclubs": {
+    "desc": "Deletes all clubs and related data. This action is irreversible.",
+    "args": []
+  },
+  "rafflecur": {
+    "desc": "Starts or joins a currency raffle with a specified amount. Users who join the raffle will lose the amount of currency specified and add it to the pot. After 30 seconds, random winner will be selected who will receive the whole pot. There is also a `mixed` mode in which the users will be able to join the game with any amount of currency, and have their chances be proportional to the amount they've bet.",
+    "args": [
+      "20",
+      "mixed 15"
+    ]
+  },
+  "autodisconnect": {
+    "desc": "Toggles whether the bot should disconnect from the voice channel once it's done playing all of the songs.",
+    "args": []
+  },
+  "timelyset": {
+    "desc": "Sets the 'timely' currency allowance amount for users. Second parameter is period in hours, default is 24 hours.",
+    "args": [
+      "100",
+      "50 12"
+    ]
+  },
+  "timely": {
+    "desc": "Use to claim your 'timely' currency. Bot owner has to specify the amount and the period on how often you can claim your currency.",
+    "args": []
+  },
+  "timelyreset": {
+    "desc": "Resets all user timeouts on `{Prefix}timely` command.",
+    "args": []
+  },
+  "novel": {
+    "desc": "Searches for a novel on `http://novelupdates.com/`. You have to provide an exact name.",
+    "args": [
+      "the nine cauldrons"
+    ]
+  },
+  "crypto": {
+    "desc": "Shows basic stats about a cryptocurrency from coinmarketcap.com. You can use either a name or an abbreviation of the currency.",
+    "args": [
+      "btc",
+      "bitcoin"
+    ]
+  },
+  "rolelevelreq": {
+    "desc": "Set a level requirement on a self-assignable role.",
+    "args": [
+      "5 SomeRole"
+    ]
+  },
+  "masskill": {
+    "desc": "Specify a new-line separated list of `userid reason`. Specified users will be banned from the current server, blacklisted from the bot, and have all of their flowers taken away.",
+    "args": [
+      "BadPerson#1234 Spamming in chat"
+    ]
+  },
+  "rollduel": {
+    "desc": "Challenge someone to a roll duel by specifying the amount and the user you wish to challenge as the parameters. To accept the challenge, just specify the name of the user who challenged you, without the amount.",
+    "args": [
+      "50 @SomeGuy",
+      "@Challenger"
+    ]
+  },
+  "reactionroles": {
+    "desc": "Specify role names and server emojis with which they're represented, the bot will then add those emojis to the previous message in the channel, and users will be able to get the roles by clicking on the emoji. You can set 'excl' as the first parameter to make them exclusive. You can have up to 5 of these enabled on one server at a time.",
+    "args": [
+      "Role1 :emoji1: Role2 :emoji2: Role3 :emoji3:",
+      "excl Horde :HordeEmoji: Alliance :AllianceEmoji:"
+    ]
+  },
+  "reactionroleslist": {
+    "desc": "Lists all ReactionRole messages on this channel and their indexes.",
+    "args": []
+  },
+  "reactionrolesremove": {
+    "desc": "Removes a ReactionRole message on the specified index.",
+    "args": [
+      "1"
+    ]
+  },
+  "blackjack": {
+    "desc": "Start or join a blackjack game. You must specify the amount you're betting. Use `.hit`, `.stand` and `.double` commands to play. Game is played with 4 decks. Dealer hits on soft 17 and wins draws.",
+    "args": [
+      "50"
+    ]
+  },
+  "hit": {
+    "desc": "In the blackjack game, ask the dealer for an extra card.",
+    "args": []
+  },
+  "stand": {
+    "desc": "Finish your turn in the blackjack game.",
+    "args": []
+  },
+  "double": {
+    "desc": "In the blackjack game, double your bet in order to receive exactly one more card, and your turn ends.",
+    "args": []
+  },
+  "xpreset": {
+    "desc": "Resets XP of specified user in your server. Provide no parameters to reset the XP of all users in the server.",
+    "args": [
+      "@b1nzy",
+      ""
+    ]
+  },
+  "bible": {
+    "desc": "Shows bible verse. You need to supply book name and chapter:verse",
+    "args": [
+      "genesis 3:19"
+    ]
+  },
+  "edit": {
+    "desc": "Edits bot's message, you have to specify message ID and new text. Supports embeds.",
+    "args": [
+      "7479498384 Hi :^)"
+    ]
+  },
+  "roleid": {
+    "desc": "Shows the id of the specified role.",
+    "args": [
+      "Some Role"
+    ]
+  },
+  "streamoffline": {
+    "desc": "Toggles whether the bot will notify about streams going offline.",
+    "args": []
+  },
+  "streammessage": {
+    "desc": "Specify an url of a stream you're already following, and a message in order to set a stream notification message which will show up every time stream comes online.",
+    "args": [
+      "https://www.twitch.tv/trolhamonas/ Hello world"
+    ]
+  },
+  "updatescheck": {
+    "desc": "Select which kind of updates you want to be notified of every 8 hours. You can specify 'release' to check only for new windows releases, 'commit' to be notified of new commits, or 'none' to not get notified.",
+    "args": [
+      "commit",
+      "release"
+    ]
+  },
+  "rip": {
+    "desc": "Shows the inevitable fate of someone.",
+    "args": [
+      "@Username"
+    ]
+  },
+  "getconfigs": {
+    "desc": "Lists the configuration files available to customize your bot.",
+    "args": []
+  },
+  "setconfig": {
+    "desc": "Updates the specified configuration file with the configuration file attached to the command message. Sensitive data can only be set in DM with the bot.",
+    "args": [
+      "xp",
+      "gambling"
+    ]
+  },
+  "getconfig": {
+    "desc": "Sends the specified configuration file as an attachment. Sensitive data can only be fetched in DM with the bot.",
+    "args": [
+      "xp",
+      "gambling"
+    ]
+  },
+  "owners": {
+    "desc": "Specify an action (`add` or `rm`) and a list of users to/from which you want to add/remove bot ownership privileges.",
+    "args": [
+      "add 123123123123 345345345345",
+      "rm 345345345345 123123123123"
+    ]
+  },
+  "plsave": {
+    "desc": "Saves the current music queue as a playlist under the specified name. Playlist name can contain alphanumeric characters and underscores and must be no longer than 20 characters. Playlists are stored in the config/playlists folder.",
+    "args": [
+      "classical 1"
+    ]
+  },
+  "pload": {
+    "desc": "Loads a saved playlist with the specified id.",
+    "args": [
+      "2",
+      "c5"
+    ]
+  },
+  "plrm": {
+    "desc": "Deletes a saved playlist with the specified id.",
+    "args": [
+      "c",
+      "25"
+    ]
+  },
+  "ploadstop": {
+    "desc": "Stops the loading of the playlist if there is one in progress.",
+    "args": []
+  },
+  "plist": {
+    "desc": "Lists all saved playlists. Paginated, 20 per page.",
+    "args": [
+      "1"
+    ]
+  },
+  "plshow": {
+    "desc": "Lists all songs in a playlist specified by its id. Paginated, 20 per page.",
+    "args": [
+      "3b"
+    ]
+  },
+  "deleteplaylist": {
+    "desc": "Deletes a saved playlist using its id. Works only if you made it or if you are the bot owner.",
+    "args": [
+      "5"
+    ]
+  },
+  "gencmdlist": {
+    "desc": "Generated the command list and sends it in the chat. If proper env vars are set, it will also upload it to DigitalOcean Spaces. You can specify spaces path at which it will be uploaded.",
+    "args": [
+      "",
+      "other/cmds.json"
+    ]
+  }
+}

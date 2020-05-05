@@ -2,6 +2,7 @@
 using Discord;
 using Discord.Commands;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Modules.Searches.Services;
 using System;
 using System.Linq;

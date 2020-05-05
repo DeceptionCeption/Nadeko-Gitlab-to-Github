@@ -1,9 +1,9 @@
 using Discord;
 using Discord.Commands;
-using NadekoBot.Common;
 using NadekoBot.Common.Attributes;
 using NadekoBot.Core.Services;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
@@ -24,7 +24,7 @@ namespace NadekoBot.Modules.Gambling
             private static readonly Regex fudgeRegex = new Regex(@"^(?<n1>\d+)d(?:F|f)$", RegexOptions.Compiled);
 
             private static readonly char[] _fateRolls = { '-', ' ', '+' };
-            private readonly IImageCache _images;
+            private readonly global::NadekoBot.Core.Services.IImageCache _images;
 
             public DiceRollCommands(IDataCache data)
             {

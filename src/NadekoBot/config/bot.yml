@@ -1,0 +1,59 @@
+# DO NOT CHANGE
+version: 1
+# Most commands, when executed, have a small colored line# next to the response. The color depends whether the command# is completed, errored or in progress (pending)# Color settings below are for the color of those lines.
+color:
+  ok: 71cd40
+  error: ee281f
+  pending: 
+# Default bot language. It has to be in the list of supported languages (.langli)
+defaultLocale: en-US
+# Style in which executed commands will show up in the console.# Allowed values: Simple, Normal, None
+consoleOutputType: Simple
+# For what kind of updates will the bot check.# Allowed values: Release, Commit, None
+checkForUpdates: Release
+# How often will the bot check for updates, in hours
+checkUpdateInterval: 3
+# Do you want any messages sent by users in Bot's DM to be forwarded to the owner(s)?
+forwardMessages: false
+# Do you want the message to be forwarded only to the first owner specified in the list of owners (in creds.yml),# or all owners? (this might cause the bot to lag if there's a lot of owners specified)
+forwardToAllOwners: false
+# When a user DMs the bot with a message which is not a command# he will receive this message. Leave empty for no response.
+dmHelpText: Type `.h` for help.
+# This is the response for the .h command
+helpText: >-
+  {
+    "title": "To invite me to your server, use this link",
+    "description": "https://invite.nadeko.bot/",
+    "color": 53380,
+    "thumbnail": "https://i.imgur.com/nKYyqMK.png",
+    "fields": [
+      {
+        "name": "Useful help commands",
+        "value": "`.modules`\tLists all bot modules.\n`.h CommandName`\t Shows some help about a specific command.\n`.commands ModuleName`\t Lists all commands in a module.\n",
+        "inline": false
+      },
+      {
+        "name": "List of all Commands",
+        "value": "https://nadeko.bot/commands",
+        "inline": false
+      },
+      {
+        "name": "Nadeko Support Server",
+        "value": "https://discord.nadeko.bot/ ",
+        "inline": true
+      }
+    ]
+  }
+# List of modules and commands completely blocked on the bot
+blocked:
+  commands: []
+  modules:
+  - nsfw
+# Which string will be used to recognize the commands
+prefix: .
+# Whether the prefix will be a suffix, or prefix.# For example, if your prefix is ! you will run a command called 'cash' by typing either# '!cash @Someone' if your prefixIsSuffix: false or # 'cash @Someone!' if your prefixIsSuffix: true
+prefixIsSuffix: false
+# Whether the bot will rotate through all specified statuses. This setting can be changed via .rots command. See RotatingStatuses submodule in Administration.
+rotateStatuses: false
+# Amount of currency user will receive for every CENT pledged on patreon.
+patreonCurrencyPerCent: 10

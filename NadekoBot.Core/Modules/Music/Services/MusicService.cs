@@ -3,12 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Core.Services.Database.Models;
 using NLog;
 using System.IO;
 using Discord.Commands;
 using Discord.WebSocket;
-using NadekoBot.Common;
 using NadekoBot.Core.Services.Impl;
 using NadekoBot.Core.Services;
 using NadekoBot.Modules.Music.Common;
@@ -25,7 +25,7 @@ namespace NadekoBot.Modules.Music.Services
 
         private readonly IGoogleApiService _google;
         private readonly NadekoStrings _strings;
-        private readonly ILocalization _localization;
+        private readonly Core.Services.ILocalization _localization;
         private readonly DbService _db;
         private readonly Logger _log;
         private readonly ConcurrentDictionary<ulong, MusicSettings> _musicSettings;
@@ -40,7 +40,7 @@ namespace NadekoBot.Modules.Music.Services
         public ConcurrentDictionary<ulong, MusicPlayer> MusicPlayers { get; } = new ConcurrentDictionary<ulong, MusicPlayer>();
 
         public MusicService(DiscordSocketClient client, IGoogleApiService google,
-            NadekoStrings strings, ILocalization localization, DbService db,
+            NadekoStrings strings, Core.Services.ILocalization localization, DbService db,
             SoundCloudApiService sc, IBotCredentials creds, NadekoBot bot)
         {
             _client = client;
@@ -102,7 +102,7 @@ namespace NadekoBot.Modules.Music.Services
         {
             string GetText(string text, params object[] replacements) =>
                 _strings.GetText(text, _localization.GetCultureInfo(textCh.Guild), "Music".ToLowerInvariant(), replacements);
-            
+
             if (voiceCh == null || voiceCh.Guild != textCh.Guild)
             {
                 if (textCh != null)

@@ -4,7 +4,7 @@ using NadekoBot.Core.Services.Database.Models;
 using Discord;
 using NadekoBot.Modules.Xp.Common;
 using System.Linq;
-using NadekoBot.Extensions;
+using Ayu.Common;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -48,7 +48,7 @@ namespace NadekoBot.Modules.Xp.Services
                     return false;
 
                 uow._context.Set<ClubApplicants>()
-                    .RemoveRange(uow._context.Set<ClubApplicants>().Where(x => x.UserId == du.Id));
+                    .RemoveRange(uow._context.Set<ClubApplicants>().AsQueryable().Where(x => x.UserId == du.Id));
                 club = du.Club;
                 uow.SaveChanges();
             }
@@ -113,7 +113,7 @@ namespace NadekoBot.Modules.Xp.Services
                 using (var http = _httpFactory.CreateClient())
                 using (var temp = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
                 {
-                    if (!temp.IsImage() || temp.GetImageSize() > 11)
+                    if (!temp.IsImage() || temp.GetImageSize() > 11_000_000)
                         return false;
                 }
             }
@@ -204,7 +204,7 @@ namespace NadekoBot.Modules.Xp.Services
 
                 //remove that user's all other applications
                 uow._context.Set<ClubApplicants>()
-                    .RemoveRange(uow._context.Set<ClubApplicants>().Where(x => x.UserId == applicant.User.Id));
+                    .RemoveRange(uow._context.Set<ClubApplicants>().AsQueryable().Where(x => x.UserId == applicant.User.Id));
 
                 discordUser = applicant.User;
                 uow.SaveChanges();

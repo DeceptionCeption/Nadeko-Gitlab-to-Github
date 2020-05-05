@@ -23,7 +23,5 @@ namespace NadekoBot.Extensions
         public static ulong GB(this ulong value) => value.MB() * 1000;
 
         public static bool IsInteger(this decimal number) => number == Math.Truncate(number);
-
-        public static DateTime ToUnixTimestamp(this double number) => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(number);
     }
 }

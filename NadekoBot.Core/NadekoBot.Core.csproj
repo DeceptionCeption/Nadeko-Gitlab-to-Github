@@ -5,6 +5,7 @@
     <LangVersion>preview</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ApplicationIcon>nadeko_icon.ico</ApplicationIcon>
+    <NoWarn>CS8632</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,40 +13,46 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.Core" Version="2.27.0" />
-    <PackageReference Include="AngleSharp" Version="0.13.0" />
-    <PackageReference Include="CommandLineParser" Version="2.6.0" />
-    <PackageReference Include="CoreCLR-NCalc" Version="2.2.63" />
+    <PackageReference Include="Ayu.Common" Version="1.0.1" />
+    <PackageReference Include="CodeHollow.FeedReader" Version="1.2.1" />
+    <PackageReference Include="Grpc.Core" Version="2.28.1" />
+    <PackageReference Include="AngleSharp" Version="0.14.0" />
+    <PackageReference Include="CodeHollow.FeedReader" Version="1.2.1" />
+    <PackageReference Include="CommandLineParser" Version="2.7.82" />
+    <PackageReference Include="CoreCLR-NCalc" Version="2.2.70" />
     <PackageReference Include="Google.Apis.Urlshortener.v1" Version="1.41.1.138" />
-    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.41.1.1699" />
-    <PackageReference Include="Google.Apis.Customsearch.v1" Version="1.41.1.1369" />
-    <PackageReference Include="Html2Markdown" Version="3.2.1.341" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.45.0.1929" />
+    <PackageReference Include="Google.Apis.Customsearch.v1" Version="1.45.0.1924" />
+    <PackageReference Include="Html2Markdown" Version="3.3.1.407" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.3" />
     <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="NLog" Version="4.6.7" />
-    <PackageReference Include="Serilog" Version="2.8.0" />
+    <PackageReference Include="Nadeko.Common" Version="1.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="NLog" Version="4.7.0" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0004" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0004" />
-    <PackageReference Include="StackExchange.Redis" Version="1.2.7-alpha-00002" />
-    <PackageReference Include="System.Linq.Async" Version="4.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
+    <PackageReference Include="StackExchange.Redis" Version="2.1.30" />
+    <PackageReference Include="System.Linq.Async" Version="4.1.1" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <PackageReference Include="YoutubeExplode" Version="4.7.6" />
+    <PackageReference Include="YoutubeExplode" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="discord.net\" />
+    <Folder Include="Common\_new\SmartText\" />
     <Folder Include="Modules\Gambling\Common\CurrencyEvents\" />
   </ItemGroup>
 
@@ -55,26 +62,10 @@
     <ProjectReference Include="..\src\discord.net\Discord.Net.Providers.WS4Net\Discord.Net.Providers.WS4Net.csproj" />
     <ProjectReference Include="..\src\discord.net\Discord.Net.Rest\Discord.Net.Rest.csproj" />
     <ProjectReference Include="..\src\discord.net\Discord.Net.WebSocket\Discord.Net.WebSocket.csproj" />
-    <ProjectReference Include="..\src\Services\SearchImages\searchimages\SearchImages.csproj" />
-    <ProjectReference Include="..\..\Ayu\services\expressions\base\Expressions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Discord.Net.Commands">
-      <HintPath>discord.net\Discord.Net.Commands.dll</HintPath>
-    </Reference>
-    <Reference Include="Discord.Net.Core">
-      <HintPath>discord.net\Discord.Net.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Discord.Net.Providers.WS4Net">
-      <HintPath>discord.net\Discord.Net.Providers.WS4Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Discord.Net.Rest">
-      <HintPath>discord.net\Discord.Net.Rest.dll</HintPath>
-    </Reference>
-    <Reference Include="Discord.Net.WebSocket">
-      <HintPath>discord.net\Discord.Net.WebSocket.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\src\services\expressions\base\Expressions.csproj" />
+    <ProjectReference Include="..\src\services\expressions\service\ExpressionsService.csproj" />
+    <ProjectReference Include="..\src\services\searchimages\base\SearchImages.csproj" />
+    <ProjectReference Include="..\src\services\searchimages\service\SearchImagesService.csproj" />
   </ItemGroup>
   
   <PropertyGroup Condition=" '$(Configuration)' == 'GlobalNadeko' ">

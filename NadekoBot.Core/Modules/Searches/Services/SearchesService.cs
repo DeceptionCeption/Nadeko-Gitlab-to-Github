@@ -1,7 +1,7 @@
 ﻿using AngleSharp;
+using Ayu.Common;
 using Discord;
 using Discord.WebSocket;
-using NadekoBot.Common;
 using NadekoBot.Core.Modules.Searches.Common;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Impl;
@@ -14,9 +14,6 @@ using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Drawing;
-using SixLabors.ImageSharp.Processing.Text;
-using SixLabors.ImageSharp.Processing.Transforms;
 using SixLabors.Primitives;
 using System;
 using System.Collections.Concurrent;
@@ -37,7 +34,7 @@ namespace NadekoBot.Modules.Searches.Services
         private readonly IGoogleApiService _google;
         private readonly DbService _db;
         private readonly Logger _log;
-        private readonly IImageCache _imgs;
+        private readonly Core.Services.IImageCache _imgs;
         private readonly IDataCache _cache;
         private readonly FontProvider _fonts;
         private readonly IBotCredentials _creds;
@@ -164,9 +161,10 @@ namespace NadekoBot.Modules.Searches.Services
                     {
                         avatar.Mutate(x => x.Resize(85, 85));
                         bg.Mutate(x => x
-                            .DrawImage(GraphicsOptions.Default,
+                            .DrawImage(
                                 avatar,
-                                new Point(82, 139)));
+                                new Point(82, 139),
+                                GraphicsOptions.Default));
                     }
                 }
                 //text 63, 241
@@ -184,9 +182,10 @@ namespace NadekoBot.Modules.Searches.Services
                 //flowa
                 using (var flowers = Image.Load(_imgs.RipOverlay.ToArray()))
                 {
-                    bg.Mutate(x => x.DrawImage(GraphicsOptions.Default,
+                    bg.Mutate(x => x.DrawImage(
                         flowers,
-                        new Point(0, 0)));
+                        new Point(0, 0),
+                        GraphicsOptions.Default));
                 }
 
                 return bg.ToStream().ToArray();

@@ -51,7 +51,7 @@ namespace NadekoBot.Modules.Administration
             [Priority(0)]
             public async Task LanguageSet()
             {
-                var cul = Localization.GetCultureInfo(ctx.Guild);
+                var cul = OldLocalization.GetCultureInfo(ctx.Guild);
                 await ReplyConfirmLocalizedAsync("lang_set_show", Format.Bold(cul.ToString()), Format.Bold(cul.NativeName))
                     .ConfigureAwait(false);
             }
@@ -67,13 +67,13 @@ namespace NadekoBot.Modules.Administration
                     CultureInfo ci;
                     if (name.Trim().ToLowerInvariant() == "default")
                     {
-                        Localization.RemoveGuildCulture(ctx.Guild);
-                        ci = Localization.DefaultCultureInfo;
+                        OldLocalization.RemoveGuildCulture(ctx.Guild);
+                        ci = OldLocalization.DefaultCultureInfo;
                     }
                     else
                     {
                         ci = new CultureInfo(name);
-                        Localization.SetGuildCulture(ctx.Guild, ci);
+                        OldLocalization.SetGuildCulture(ctx.Guild, ci);
                     }
 
                     await ReplyConfirmLocalizedAsync("lang_set", Format.Bold(ci.ToString()), Format.Bold(ci.NativeName)).ConfigureAwait(false);
@@ -87,7 +87,7 @@ namespace NadekoBot.Modules.Administration
             [OldNadekoCommand, Usage, Description, Aliases]
             public async Task LanguageSetDefault()
             {
-                var cul = Localization.DefaultCultureInfo;
+                var cul = OldLocalization.DefaultCultureInfo;
                 await ReplyConfirmLocalizedAsync("lang_set_bot_show", cul, cul.NativeName).ConfigureAwait(false);
             }
 
@@ -100,13 +100,13 @@ namespace NadekoBot.Modules.Administration
                     CultureInfo ci;
                     if (name.Trim().ToLowerInvariant() == "default")
                     {
-                        Localization.ResetDefaultCulture();
-                        ci = Localization.DefaultCultureInfo;
+                        OldLocalization.ResetDefaultCulture();
+                        ci = OldLocalization.DefaultCultureInfo;
                     }
                     else
                     {
                         ci = new CultureInfo(name);
-                        Localization.SetDefaultCulture(ci);
+                        OldLocalization.SetDefaultCulture(ci);
                     }
                     await ReplyConfirmLocalizedAsync("lang_set_bot", Format.Bold(ci.ToString()), Format.Bold(ci.NativeName)).ConfigureAwait(false);
                 }

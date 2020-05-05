@@ -1,20 +1,17 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
-using NadekoBot.Common;
 using NadekoBot.Common.Collections;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
 using NadekoBot.Core.Services.Database.Repositories;
 using NadekoBot.Core.Services.Impl;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NLog;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Drawing;
-using SixLabors.ImageSharp.Processing.Drawing.Brushes;
-using SixLabors.ImageSharp.Processing.Text;
 using SixLabors.Primitives;
 using System;
 using System.Collections.Concurrent;
@@ -31,7 +28,7 @@ namespace NadekoBot.Modules.Gambling.Services
     {
         private readonly DbService _db;
         private readonly NadekoStrings _strings;
-        private readonly IImageCache _images;
+        private readonly global::NadekoBot.Core.Services.IImageCache _images;
         private readonly FontProvider _fonts;
         private readonly IBotConfigProvider _bc;
         private readonly Logger _log;
@@ -147,7 +144,7 @@ namespace NadekoBot.Modules.Gambling.Services
         {
             // draw lower, it looks better
             pass = pass.TrimTo(10, true).ToLowerInvariant();
-            using (var img = Image.Load(curImg, out var format))
+            using (var img = Image.Load<Rgba32>(curImg, out var format))
             {
                 // choose font size based on the image height, so that it's visible
                 var font = _fonts.NotoSans.CreateFont(img.Height / 12, FontStyle.Bold);
@@ -259,7 +256,7 @@ namespace NadekoBot.Modules.Gambling.Services
                 ulong[] ids;
                 using (var uow = _db.GetDbContext())
                 {
-                    // this method will sum all plants with that password, 
+                    // this method will sum all plants with that password,
                     // remove them, and get messageids of the removed plants
 
                     (amount, ids) = uow.PlantedCurrency.RemoveSumAndGetMessageIdsFor(ch.Id, pass);
@@ -324,7 +321,7 @@ namespace NadekoBot.Modules.Gambling.Services
 
         public async Task<bool> PlantAsync(ulong gid, IMessageChannel ch, ulong uid, string user, long amount, string pass)
         {
-            // normalize it - no more than 10 chars, uppercase 
+            // normalize it - no more than 10 chars, uppercase
             pass = pass?.Trim().TrimTo(10, hideDots: true).ToUpperInvariant();
             // has to be either null or alphanumeric
             if (!string.IsNullOrWhiteSpace(pass) && !pass.IsAlphaNumeric())

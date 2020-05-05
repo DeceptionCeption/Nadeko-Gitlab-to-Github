@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using NadekoBot.Common.Collections;
-using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Core.Services;
 using NLog;
 

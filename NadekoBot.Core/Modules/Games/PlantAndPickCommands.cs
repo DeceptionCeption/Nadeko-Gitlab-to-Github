@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using NadekoBot.Common.Attributes;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Modules.Gambling.Services;
 using System.Linq;
 using System.Threading.Tasks;

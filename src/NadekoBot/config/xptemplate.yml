@@ -1,0 +1,123 @@
+outputSize:
+  x: 450
+  y: 220
+user:
+  name:
+    color: ffffffff
+    show: true
+    fontSize: 50
+    pos:
+      x: 130
+      y: 17
+  icon:
+    show: true
+    pos:
+      x: 32
+      y: 10
+    size:
+      x: 69
+      y: 70
+  globalLevel:
+    color: ffffffff
+    show: true
+    fontSize: 45
+    pos:
+      x: 47
+      y: 149
+  guildLevel:
+    color: ffffffff
+    show: true
+    fontSize: 45
+    pos:
+      x: 47
+      y: 297
+  globalRank:
+    color: ffffffff
+    show: true
+    fontSize: 30
+    pos:
+      x: 148
+      y: 179
+  guildRank:
+    color: ffffffff
+    show: true
+    fontSize: 30
+    pos:
+      x: 148
+      y: 326
+  timeOnLevel:
+    format: '{0}d{1}h{2}m'
+    global:
+      color: ffffffff
+      show: true
+      fontSize: 20
+      pos:
+        x: 50
+        y: 204
+    guild:
+      color: ffffffff
+      show: true
+      fontSize: 20
+      pos:
+        x: 50
+        y: 351
+  xp:
+    bar:
+      show: true
+      global:
+        color: 00000066
+        pointA:
+          x: 321
+          y: 104
+        pointB:
+          x: 286
+          y: 235
+        length: 450
+        direction: Right
+      guild:
+        color: 00000066
+        pointA:
+          x: 282
+          y: 248
+        pointB:
+          x: 247
+          y: 379
+        length: 450
+        direction: Right
+    global:
+      color: ffffffff
+      show: true
+      fontSize: 50
+      pos:
+        x: 430
+        y: 142
+    guild:
+      color: ffffffff
+      show: true
+      fontSize: 50
+      pos:
+        x: 400
+        y: 282
+    awarded:
+      color: ffffffff
+      show: true
+      fontSize: 25
+      pos:
+        x: 445
+        y: 347
+club:
+  icon:
+    show: true
+    pos:
+      x: 722
+      y: 25
+    size:
+      x: 45
+      y: 45
+  name:
+    color: ffffffff
+    show: true
+    fontSize: 35
+    pos:
+      x: 650
+      y: 49

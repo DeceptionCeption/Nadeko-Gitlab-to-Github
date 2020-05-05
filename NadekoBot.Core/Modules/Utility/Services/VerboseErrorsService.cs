@@ -78,7 +78,7 @@ namespace NadekoBot.Modules.Utility.Services
             else
                 guildsEnabled.TryRemove(guildId);
 
-            return enabled;            
+            return enabled;
         }
     }
 }

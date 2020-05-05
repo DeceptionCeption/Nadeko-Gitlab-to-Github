@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using NadekoBot.Core.Services.Database.Models;
 using NadekoBot.Core.Services.Impl;
 using NLog;
-using YoutubeExplode;
 
 namespace NadekoBot.Modules.Music.Common.SongResolver.Strategies
 {
@@ -20,63 +18,63 @@ namespace NadekoBot.Modules.Music.Common.SongResolver.Strategies
 
         public async Task<SongInfo> ResolveSong(string query)
         {
-            try
-            {
-                SongInfo s = await ResolveWithYtExplode(query).ConfigureAwait(false);
-                if (s != null)
-                    return s;
-            }
-            catch { }
+            //try
+            //{
+            //    SongInfo s = await ResolveWithYtExplode(query).ConfigureAwait(false);
+            //    if (s != null)
+            //        return s;
+            //}
+            //catch { }
             return await ResolveWithYtDl(query).ConfigureAwait(false);
         }
 
-        private async Task<SongInfo> ResolveWithYtExplode(string query)
-        {
-            YoutubeExplode.Models.Video video;
-            var client = new YoutubeClient();
-            if (!YoutubeClient.TryParseVideoId(query, out var id))
-            {
-                _log.Info("Searching for video");
-                var videos = await client.SearchVideosAsync(query, 1).ConfigureAwait(false);
+        //private async Task<SongInfo> ResolveWithYtExplode(string query)
+        //{
+        //    YoutubeExplode.Models.Video video;
+        //    var client = new YoutubeClient();
+        //    if (!YoutubeClient.TryParseVideoId(query, out var id))
+        //    {
+        //        _log.Info("Searching for video");
+        //        var videos = await client.SearchVideosAsync(query, 1).ConfigureAwait(false);
 
-                video = videos.FirstOrDefault();
-            }
-            else
-            {
-                _log.Info("Getting video with id");
-                video = await client.GetVideoAsync(id).ConfigureAwait(false);
-            }
+        //        video = videos.FirstOrDefault();
+        //    }
+        //    else
+        //    {
+        //        _log.Info("Getting video with id");
+        //        video = await client.GetVideoAsync(id).ConfigureAwait(false);
+        //    }
 
-            if (video == null)
-                return null;
+        //    if (video == null)
+        //        return null;
 
-            _log.Info("Video found");
-            var streamInfo = await client.GetVideoMediaStreamInfosAsync(video.Id).ConfigureAwait(false);
-            var stream = streamInfo.Audio
-                .OrderByDescending(x => x.Bitrate)
-                .FirstOrDefault();
+        //    _log.Info("Video found");
+        //    var streamInfo = await client.GetVideoMediaStreamInfosAsync(video.Id).ConfigureAwait(false);
+        //    var stream = streamInfo.Audio
+        //        .OrderByDescending(x => x.Bitrate)
+        //        .FirstOrDefault();
 
-            _log.Info("Got stream info");
+        //    _log.Info("Got stream info");
 
-            if (stream == null)
-                return null;
+        //    if (stream == null)
+        //        return null;
 
-            return new SongInfo
-            {
-                Provider = "YouTube",
-                ProviderType = MusicType.YouTube,
-                Query = "https://youtube.com/watch?v=" + video.Id,
-                Thumbnail = video.Thumbnails.MediumResUrl,
-                TotalTime = video.Duration,
-                Uri = async () =>
-                {
-                    await Task.Yield();
-                    return stream.Url;
-                },
-                VideoId = video.Id,
-                Title = video.Title,
-            };
-        }
+        //    return new SongInfo
+        //    {
+        //        Provider = "YouTube",
+        //        ProviderType = MusicType.YouTube,
+        //        Query = "https://youtube.com/watch?v=" + video.Id,
+        //        Thumbnail = video.Thumbnails.MediumResUrl,
+        //        TotalTime = video.Duration,
+        //        Uri = async () =>
+        //        {
+        //            await Task.Yield();
+        //            return stream.Url;
+        //        },
+        //        VideoId = video.Id,
+        //        Title = video.Title,
+        //    };
+        //}
 
         private async Task<SongInfo> ResolveWithYtDl(string query)
         {

@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq;

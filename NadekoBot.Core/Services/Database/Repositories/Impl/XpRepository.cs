@@ -1,7 +1,6 @@
 ﻿using NadekoBot.Core.Services.Database.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace NadekoBot.Core.Services.Database.Repositories.Impl
 {
@@ -31,7 +30,7 @@ namespace NadekoBot.Core.Services.Database.Repositories.Impl
 
         public UserXpStats[] GetUsersFor(ulong guildId, int page)
         {
-            return _set.Where(x => x.GuildId == guildId)
+            return _set.AsQueryable().Where(x => x.GuildId == guildId)
                 .OrderByDescending(x => x.Xp + x.AwardedXp)
                 .Skip(page * 9)
                 .Take(9)
@@ -47,9 +46,9 @@ namespace NadekoBot.Core.Services.Database.Repositories.Impl
             //	WHERE UserId = @p2 AND GuildId = @p1
             //	LIMIT 1));";
 
-            return _set
+            return _set.AsQueryable()
                 .Where(x => x.GuildId == guildId && ((x.Xp + x.AwardedXp) >
-                    (_set
+                    (_set.AsQueryable()
                         .Where(y => y.UserId == userId && y.GuildId == guildId)
                         .Select(y => y.Xp + y.AwardedXp)
                         .FirstOrDefault())
@@ -59,12 +58,12 @@ namespace NadekoBot.Core.Services.Database.Repositories.Impl
 
         public void ResetGuildUserXp(ulong userId, ulong guildId)
         {
-            _context.Database.ExecuteSqlCommand($"DELETE FROM UserXpStats WHERE UserId={userId} AND GuildId={guildId};");
+            _context.Database.ExecuteSqlInterpolated($"DELETE FROM UserXpStats WHERE UserId={userId} AND GuildId={guildId};");
         }
 
         public void ResetGuildXp(ulong guildId)
         {
-            _context.Database.ExecuteSqlCommand($"DELETE FROM UserXpStats WHERE GuildId={guildId};");
+            _context.Database.ExecuteSqlInterpolated($"DELETE FROM UserXpStats WHERE GuildId={guildId};");
         }
     }
 }

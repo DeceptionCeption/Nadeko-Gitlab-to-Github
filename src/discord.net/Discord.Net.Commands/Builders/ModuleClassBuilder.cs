@@ -80,11 +80,11 @@ namespace Discord.Commands
             {
                 if (!IsValidModuleDefinition(typeInfo))
                     continue;
-                
+
                 if (builtTypes.Contains(typeInfo))
                     continue;
-                
-                builder.AddModule((module) => 
+
+                builder.AddModule((module) =>
                 {
                     BuildModule(module, typeInfo, service, services);
                     BuildSubTypes(module, typeInfo.DeclaredNestedTypes, builtTypes, service, services);
@@ -139,7 +139,7 @@ namespace Discord.Commands
 
             foreach (var method in validCommands)
             {
-                builder.AddCommand((command) => 
+                builder.AddCommand((command) =>
                 {
                     BuildCommand(command, typeInfo, method, service, services);
                 });
@@ -149,16 +149,29 @@ namespace Discord.Commands
         private static void BuildCommand(CommandBuilder builder, TypeInfo typeInfo, MethodInfo method, CommandService service, IServiceProvider serviceprovider)
         {
             var attributes = method.GetCustomAttributes();
-            
+
             foreach (var attribute in attributes)
             {
                 switch (attribute)
                 {
                     case CommandAttribute command:
-                        builder.AddAliases(command.Text);
-                        builder.RunMode = command.RunMode;
-                        builder.Name = builder.Name ?? command.Text;
-                        builder.IgnoreExtraArgs = command.IgnoreExtraArgs ?? service._ignoreExtraArgs;
+                        if (command.IsNew)
+                        {
+                            builder.Priority = command.Priority;
+                            builder.Name = method.Name.ToLowerInvariant();
+                            builder.RunMode = command.RunMode;
+                            builder.IgnoreExtraArgs = command.IgnoreExtraArgs ?? service._ignoreExtraArgs;
+                            builder.IsNew = command.IsNew;
+                            if (!(command.Aliases is null) && command.Aliases.Length > 0)
+                                builder.AddAliases(command.Aliases);
+                        }
+                        else
+                        {
+                            builder.AddAliases(command.Text);
+                            builder.RunMode = command.RunMode;
+                            builder.Name = builder.Name ?? command.Text;
+                            builder.IgnoreExtraArgs = command.IgnoreExtraArgs ?? service._ignoreExtraArgs;
+                        }
                         break;
                     case NameAttribute name:
                         builder.Name = name.Text;
@@ -191,7 +204,7 @@ namespace Discord.Commands
             int pos = 0, count = parameters.Length;
             foreach (var paramInfo in parameters)
             {
-                builder.AddParameter((parameter) => 
+                builder.AddParameter((parameter) =>
                 {
                     BuildParameter(parameter, paramInfo, pos++, count, service, serviceprovider);
                 });

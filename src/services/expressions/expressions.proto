@@ -1,0 +1,152 @@
+syntax = "proto3";
+
+package nadeko.microservices;
+
+service Expressions {
+	rpc AddExpression(AddExpresionRequest) returns (AddExpressionReply) {}
+	rpc ListExpressions(ListExpressionsRequest) returns (ListExpressionsReply) {}
+	rpc DeleteExpression(DeleteExpressionRequest) returns (DeleteExpressionReply) {}
+	rpc DeleteAllExpressions(DeleteAllExpressionsRequest) returns (DeleteAllExpressionsReply) {}
+	rpc EditExpression(EditExpressionRequest) returns (EditExpressionReply) {}
+	rpc GetExpression(GetExpressionRequest) returns (GetExpressionReply) {}
+	rpc FindExpression(FindExpressionRequest) returns (FindExpressionReply) {}
+	rpc GetRandomExpression(GetRandomExpressionRequest) returns (GetRandomExpressionReply) {}
+	rpc SetExpresssionBehavior(ExpressionBehaviorRequest) returns (ExpressionBehaviorReply) {}
+	rpc QueryForExpression(QueryForExpressionRequest) returns (QueryForExpressionReply) {}
+}
+
+message QueryForExpressionRequest {
+	uint64 guildId = 1;
+	string content = 2;
+	uint64 botId = 3;
+}
+
+message QueryForExpressionReply {
+	oneof Res {
+		ExprData data = 1;
+		bool fail = 2;
+	}
+}
+
+enum ExprBehavior {
+	AutoDelete = 0;
+	DirectMessage = 1;
+	ContainsAnywhere = 2;
+}
+
+message ExprData {
+	string trigger = 1;
+	int32 id  = 2;
+	bool autoDelete = 3;
+	bool dmResponse = 4;
+	string response = 5;
+	uint64 authorId = 6;
+	string authorName = 7;
+	bool containsAnywhere = 8;
+}
+
+message ExpressionBehaviorRequest {
+	ExprBehavior behavior = 1;
+	int32 id = 2;
+	uint64 guildId = 3;
+}
+
+message ExpressionBehaviorReply {
+	bool success = 1;
+	bool isEnabled = 2;
+}
+
+message GetExpressionRequest {
+	uint64 guildId = 1;
+	int32 id = 2;
+	bool isQuote = 3;
+}
+
+message GetExpressionReply {
+	bool success = 1;
+	ExprData exprData = 2;
+}
+
+message GetRandomExpressionRequest {
+	uint64 guildId = 1;
+	string trigger = 2;
+	bool isQuote = 3;
+}
+
+message GetRandomExpressionReply {
+	bool success = 1;
+	ExprData exprData = 2;
+}
+
+message EditExpressionRequest {
+	string response = 1;
+	int32 id = 2;
+	uint64 guildId = 3;
+	bool isQuote = 4;
+	bool isAdmin = 5;
+	uint64 userId = 6;
+}
+
+message EditExpressionReply {
+	bool success = 1;
+	string trigger = 2;
+	string response = 3;
+}
+
+message AddExpresionRequest {
+	string trigger = 1;
+	string response = 2;
+	uint64 authorId = 3;
+	string authorName = 4;
+	uint64 guildId = 5;
+	bool isQuote = 6;
+}
+
+message AddExpressionReply {
+	int32 exprId = 1;
+}
+
+message ListExpressionsRequest {
+	uint64 guildId = 1;
+	int32 page = 2;
+	bool isQuote = 3;
+	bool alphabetical = 4;
+}
+
+message ListExpressionsReply {
+	repeated ExprData data = 1;
+}
+
+message DeleteExpressionRequest {
+	int32 id = 1;
+	uint64 guildId = 2;
+	bool isQuote = 3;
+	bool isAdmin = 4;
+	uint64 userId = 5;
+}
+
+message DeleteExpressionReply {
+	bool success = 1;
+	ExprData exprData = 2;
+}
+
+message DeleteAllExpressionsRequest {
+	uint64 guildId = 1;
+	bool isQuote = 2;
+}
+
+message DeleteAllExpressionsReply {
+	int32 count = 1;
+}
+
+message FindExpressionRequest {
+	uint64 guildId = 1;
+	bool isQuote = 2;
+	string trigger = 3;
+	string response = 4;
+}
+
+message FindExpressionReply {
+	bool success = 1;
+	ExprData exprData = 2;
+}

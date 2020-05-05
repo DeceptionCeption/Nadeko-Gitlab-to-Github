@@ -70,7 +70,7 @@ namespace NadekoBot.Modules.Games.Common.Trivia
         {
             while (!ShouldStopGame)
             {
-                // reset the cancellation source    
+                // reset the cancellation source
                 _triviaCancelSource = new CancellationTokenSource();
 
                 // load question

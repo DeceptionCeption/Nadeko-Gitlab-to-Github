@@ -1,0 +1,209 @@
+# Currency settings
+currency:
+# What is the emoji/character which represents the currency
+  sign: "\U0001F338"
+  # What is the name of the currency
+  name: Nadeko Flower
+# Minimum amount people can bet. >=0
+minBet: 0
+# Maximum amount people can bet. Set 0 for unlimited.
+maxBet: 0
+# Multipliers for gambling.
+multipliers:
+  betFlip: 1.9500000476837158
+# Automatic currency generation settings.
+generation:
+# when currency is generated, should it also have a random password
+# associated with it which users have to type after the .pick command
+# in order to get it
+  hasPassword: true
+  # Every message sent has a certain % chance to generate the currency
+# specify the percentage here (1 being 100%, 0 being 0% - for example
+# default is 0.02, which is 2%
+  chance: 0.019999999552965164
+  # cooldown setting disables any chance a message can spawn currency
+# for a specified number of seconds after currency is generated
+  genCooldown: 10
+  # Amount of currency that spawns is a random number between Min and Max value specified here.
+# Set them to the same number to always generate a constant number
+  amountMin: 1
+  amountMax: 1
+# Settings for timely command. (letting people claim X amount of currency every Y hours)
+timely:
+# How much currency will the users get every time they run .timely command
+# setting to 0 or less will disable this feature
+  amount: 0
+  # How often (in hours) can users claim currency with .timely command
+# setting to 0 or less will disable this feature
+  cooldown: 24
+# How much will each user's owned currency decay over time.
+decay:
+# Percentage of user's current currency which will be deducted every 24h. 0 - 1 (1 is 100%, 0.5 50%, 0 disabled)
+  percent: 0
+  # Maximum amount user's currency can decay. 0 for unlimited.
+  maxDecay: 0
+  # Only users who have more than this amount will have decay.
+  minThreshold: 100
+# Settings for Wheel Of Fortune command.
+wheelOfFortune:
+# Self-Explanatory. Has to have 8 values, otherwise the command won't work.
+  multipliers:
+  - 1.7000000476837158
+  - 1.5
+  - 0.20000000298023224
+  - 0.10000000149011612
+  - 0.30000001192092896
+  - 0.5
+  - 1.2000000476837158
+  - 2.4000000953674316
+# Settings for BetRoll command.
+betRoll:
+# When betroll is played, user will roll a number 0-100.
+# This setting will describe which multiplier is used for when the roll is higher than the given number.
+# Doesn't have to be ordered.
+  pairs:
+  - whenAbove: 99
+    multiplyBy: 10
+  - whenAbove: 90
+    multiplyBy: 4
+  - whenAbove: 66
+    multiplyBy: 2
+# Settings related to waifus
+waifu:
+  multipliers:
+  # Multiplier for waifureset. Default 150.
+# Formula (at the time of writing this): 
+# price = (waifu_price * 1.25f) + ((number_of_divorces + changes_of_heart + 2) * WaifuReset) rounded up
+    waifuReset: 150
+    # The minimum amount of currency that you have to pay 
+# in order to buy a waifu that does have a crush on you.
+# Default is 1.1
+# Example: If a waifu is worth 100, you will have to pay at least 100 * NormalClaim currency to claim her.
+# (100 * 1.1 = 110)
+    normalClaim: 1.1000000000000001
+    # The minimum amount of currency that you have to pay 
+# in order to buy a waifu that has a crush on you.
+# Default is 0.88
+# Example: If a waifu is worth 100, you will have to pay at least 100 * CrushClaim currency to claim her.
+# (100 * 0.88 = 88)
+    crushClaim: 0.88
+    # When divorcing a waifu, her new value will be her current value multiplied by this number.
+# Default 0.75 (meaning will lose 25% of her value)
+    divorceNewValue: 0.75
+    # All gift prices will be multiplied by this number.
+# Default 1 (meaning no effect)
+    allGiftPrices: 1
+    # What percentage of the value of the gift will a waifu gain when she's gifted.
+# Default 0.95 (meaning 95%)
+# Example: if a waifu is worth 1000, and she receives a gift worth 100, her new value will be 1095)
+    giftEffect: 0.94999999999999996
+  # List of items available for gifting.
+  items:
+  - itemEmoji: "\U0001F954"
+    price: 5
+    name: Potato
+  - itemEmoji: "\U0001F36A"
+    price: 10
+    name: Cookie
+  - itemEmoji: "\U0001F956"
+    price: 20
+    name: Bread
+  - itemEmoji: "\U0001F36D"
+    price: 30
+    name: Lollipop
+  - itemEmoji: "\U0001F339"
+    price: 50
+    name: Rose
+  - itemEmoji: "\U0001F37A"
+    price: 70
+    name: Beer
+  - itemEmoji: "\U0001F32E"
+    price: 85
+    name: Taco
+  - itemEmoji: "\U0001F48C"
+    price: 100
+    name: LoveLetter
+  - itemEmoji: "\U0001F95B"
+    price: 125
+    name: Milk
+  - itemEmoji: "\U0001F355"
+    price: 150
+    name: Pizza
+  - itemEmoji: "\U0001F36B"
+    price: 200
+    name: Chocolate
+  - itemEmoji: "\U0001F366"
+    price: 250
+    name: Icecream
+  - itemEmoji: "\U0001F363"
+    price: 300
+    name: Sushi
+  - itemEmoji: "\U0001F35A"
+    price: 400
+    name: Rice
+  - itemEmoji: "\U0001F349"
+    price: 500
+    name: Watermelon
+  - itemEmoji: "\U0001F371"
+    price: 600
+    name: Bento
+  - itemEmoji: "\U0001F39F"
+    price: 800
+    name: MovieTicket
+  - itemEmoji: "\U0001F370"
+    price: 1000
+    name: Cake
+  - itemEmoji: "\U0001F4D4"
+    price: 1500
+    name: Book
+  - itemEmoji: "\U0001F431"
+    price: 2000
+    name: Cat
+  - itemEmoji: "\U0001F436"
+    price: 2001
+    name: Dog
+  - itemEmoji: "\U0001F43C"
+    price: 2500
+    name: Panda
+  - itemEmoji: "\U0001F484"
+    price: 3000
+    name: Lipstick
+  - itemEmoji: "\U0001F45B"
+    price: 3500
+    name: Purse
+  - itemEmoji: "\U0001F4F1"
+    price: 4000
+    name: iPhone
+  - itemEmoji: "\U0001F457"
+    price: 4500
+    name: Dress
+  - itemEmoji: "\U0001F4BB"
+    price: 5000
+    name: Laptop
+  - itemEmoji: "\U0001F3BB"
+    price: 7500
+    name: Violin
+  - itemEmoji: "\U0001F3B9"
+    price: 8000
+    name: Piano
+  - itemEmoji: "\U0001F697"
+    price: 9000
+    name: Car
+  - itemEmoji: "\U0001F48D"
+    price: 10000
+    name: Ring
+  - itemEmoji: "\U0001F6F3"
+    price: 12000
+    name: Ship
+  - itemEmoji: "\U0001F3E0"
+    price: 15000
+    name: House
+  - itemEmoji: "\U0001F681"
+    price: 20000
+    name: Helicopter
+  - itemEmoji: "\U0001F680"
+    price: 30000
+    name: Spaceship
+  - itemEmoji: "\U0001F315"
+    price: 50000
+    name: Moon

@@ -2,6 +2,8 @@
 
 patreon_rewards.json
 command_errors*.txt
+creds.yml
+searches.yml
 
 src/NadekoBot/Command Errors*.txt
 

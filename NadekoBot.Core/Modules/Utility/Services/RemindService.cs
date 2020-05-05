@@ -5,6 +5,7 @@ using System.Threading;
 using Discord;
 using Discord.WebSocket;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
 using NadekoBot.Core.Services.Impl;
@@ -102,7 +103,7 @@ namespace NadekoBot.Modules.Utility.Services
             {
                 using (var uow = _db.GetDbContext())
                 {
-                    uow._context.Database.ExecuteSqlCommand($"DELETE FROM Reminders WHERE Id={r.Id};");
+                    uow._context.Database.ExecuteSqlInterpolated($"DELETE FROM Reminders WHERE Id={r.Id};");
                     uow.SaveChanges();
                 }
                 RemoveReminder(r.Id);

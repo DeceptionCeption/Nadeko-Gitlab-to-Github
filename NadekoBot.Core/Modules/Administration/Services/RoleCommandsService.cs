@@ -1,10 +1,10 @@
-﻿using Discord;
+﻿using Ayu.Common;
+using Discord;
 using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
 using NadekoBot.Common.Collections;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
-using NadekoBot.Extensions;
 using NLog;
 using System.Collections.Concurrent;
 using System.Linq;
@@ -71,7 +71,7 @@ namespace NadekoBot.Modules.Administration.Services
                             {
                                 try
                                 {
-                                    //if the role is exclusive, 
+                                    //if the role is exclusive,
                                     // remove all other reactions user added to the message
                                     var dl = await msg.GetOrDownloadAsync().ConfigureAwait(false);
                                     foreach (var r in dl.Reactions)
@@ -80,7 +80,7 @@ namespace NadekoBot.Modules.Administration.Services
                                             continue;
                                         try { await dl.RemoveReactionAsync(r.Key, gusr).ConfigureAwait(false); } catch { }
                                         await Task.Delay(100).ConfigureAwait(false);
-                                    }                                        
+                                    }
                                 }
                                 catch { }
                             });
@@ -163,8 +163,8 @@ namespace NadekoBot.Modules.Administration.Services
                 if (gc.ReactionRoleMessages.Count >= 5)
                     return false;
                 gc.ReactionRoleMessages.Add(rrm);
-                _models.AddOrUpdate(id, 
-                    gc.ReactionRoleMessages, 
+                _models.AddOrUpdate(id,
+                    gc.ReactionRoleMessages,
                     delegate { return gc.ReactionRoleMessages; });
                 uow.SaveChanges();
             }
@@ -175,7 +175,7 @@ namespace NadekoBot.Modules.Administration.Services
         {
             using (var uow = _db.GetDbContext())
             {
-                var gc = uow.GuildConfigs.ForId(id, 
+                var gc = uow.GuildConfigs.ForId(id,
                     set => set.Include(x => x.ReactionRoleMessages)
                         .ThenInclude(x => x.ReactionRoles));
                 uow._context.Set<ReactionRole>()

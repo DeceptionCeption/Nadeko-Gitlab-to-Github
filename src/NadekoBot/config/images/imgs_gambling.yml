@@ -1,0 +1,31 @@
+dice:
+- https://cdn.nadeko.bot/other/dice/0.png
+- https://cdn.nadeko.bot/other/dice/1.png
+- https://cdn.nadeko.bot/other/dice/2.png
+- https://cdn.nadeko.bot/other/dice/3.png
+- https://cdn.nadeko.bot/other/dice/4.png
+- https://cdn.nadeko.bot/other/dice/5.png
+- https://cdn.nadeko.bot/other/dice/6.png
+- https://cdn.nadeko.bot/other/dice/7.png
+- https://cdn.nadeko.bot/other/dice/8.png
+- https://cdn.nadeko.bot/other/dice/9.png
+currency:
+- https://cdn.nadeko.bot/other/currency/0.png
+- https://cdn.nadeko.bot/other/currency/1.png
+- https://cdn.nadeko.bot/other/currency/2.png
+- https://cdn.nadeko.bot/other/currency/3.png
+coins:
+  heads:
+  - https://cdn.nadeko.bot/coins/heads3.png
+  tails:
+  - https://cdn.nadeko.bot/coins/tails3.png
+slots:
+  digits: []
+  emojis:
+  - https://cdn.nadeko.bot/other/slots/emojis/0.png
+  - https://cdn.nadeko.bot/other/slots/emojis/1.png
+  - https://cdn.nadeko.bot/other/slots/emojis/2.png
+  - https://cdn.nadeko.bot/other/slots/emojis/3.png
+  - https://cdn.nadeko.bot/other/slots/emojis/4.png
+  - https://cdn.nadeko.bot/other/slots/emojis/5.png
+  background: https://cdn.nadeko.bot/slots/slots_bg.png

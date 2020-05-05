@@ -1,7 +1,11 @@
-﻿using Discord;
+﻿using Ayu.Common;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using Nadeko.Common;
+using Nadeko.Common.Localization;
+using Nadeko.Microservices;
 using NadekoBot.Common;
 using NadekoBot.Common.ShardCom;
 using NadekoBot.Core.Common;
@@ -22,6 +26,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using ILocalization = Ayu.Common.ILocalization;
 
 namespace NadekoBot
 {
@@ -51,10 +56,14 @@ namespace NadekoBot
         public IServiceProvider Services { get; private set; }
 
         private readonly BotConfig _botConfig;
-        public IDataCache Cache { get; private set; }
+        private readonly CredsService _newCreds;
+
+        public ConnectionMultiplexer Redis { get; }
+        public IDataCache OldCache { get; private set; }
+        public Ayu.Common.RedisCache RedisCache { get; private set; }
 
         public int GuildCount =>
-            Cache.Redis.GetDatabase()
+            OldCache.Redis.GetDatabase()
                 .ListRange(Credentials.RedisKey() + "_shardstats")
                 .Select(x => JsonConvert.DeserializeObject<ShardComMessage>(x))
                 .Sum(x => x.Guilds);
@@ -71,12 +80,25 @@ namespace NadekoBot
             TerribleElevatedPermissionCheck();
 
             Credentials = new BotCredentials();
-            Cache = new RedisCache(Credentials, shardId);
+
+
+            if (!File.Exists(CredsService.CredsFileName))
+                File.Create(CredsService.CredsFileName);
+            _newCreds = new CredsService(false);
+
+            var conf = ConfigurationOptions.Parse(Credentials.RedisOptions);
+
+            Redis = ConnectionMultiplexer.Connect(conf);
+            OldCache = new global::NadekoBot.Core.Services.Impl.RedisCache(Credentials, Redis, shardId);
+            RedisCache = new Ayu.Common.RedisCache(Redis, new ProtoBufSerializer());
+
             _db = new DbService(Credentials);
 
             if (shardId == 0)
             {
                 _db.Setup();
+                SearchImagesService.Program.StartService(_newCreds);
+                ExpressionsService.Program.StartService(_newCreds);
             }
 
             Client = new DiscordSocketClient(new DiscordSocketConfig
@@ -129,7 +151,7 @@ namespace NadekoBot
                         Time = DateTime.UtcNow,
                     };
 
-                    var sub = Cache.Redis.GetSubscriber();
+                    var sub = OldCache.Redis.GetSubscriber();
                     var msg = JsonConvert.SerializeObject(data);
 
                     await sub.PublishAsync(Credentials.RedisKey() + "_shardcoord_send", msg).ConfigureAwait(false);
@@ -166,22 +188,32 @@ namespace NadekoBot
 
                 AllGuildConfigs = uow.GuildConfigs.GetAllGuildConfigs(startingGuildIdList).ToImmutableArray();
 
-                IBotConfigProvider botConfigProvider = new BotConfigProvider(_db, _botConfig, Cache);
+                IBotConfigProvider botConfigProvider = new BotConfigProvider(_db, _botConfig, OldCache);
 
                 // new stuff
-                var searchImagesMicroservice = RemoteService.CreateClient<Nadeko.Microservices.SearchImages.SearchImagesClient>(Credentials.ServicesIp, 25158);
+                var si = RemoteService.CreateClient<SearchImages.SearchImagesClient>("localhost", 25158);
+                var expr = RemoteService.CreateClient<Expressions.ExpressionsClient>("localhost", 25159);
 
+                IEventRegistryHandler eventRegistyHandler = new RedisEventRegistryHandler(Redis, new ProtoBufSerializer());
+                IEventRegistryPusher eventRegistryPusher = new RedisEventRegistryPusher(Redis, new ProtoBufSerializer());
 
                 var s = new ServiceCollection()
                     .AddSingleton<IBotCredentials>(Credentials)
                     .AddSingleton(_db)
+                    .AddSingleton(_newCreds)
                     .AddSingleton(Client)
                     .AddSingleton(CommandService)
                     .AddSingleton(botConfigProvider)
                     .AddSingleton(this)
                     .AddSingleton(uow)
-                    .AddSingleton(searchImagesMicroservice)
-                    .AddSingleton(Cache)
+                    .AddSingleton(si)
+                    .AddSingleton(expr)
+                    .AddSingleton(OldCache)
+                    .AddSingleton(Redis)
+                    .AddSingleton(RedisCache)
+                    .AddSingleton(eventRegistryPusher)
+                    .AddSingleton(eventRegistyHandler)
+                    .AddSingleton<ILocalization, LocalizedStrings>()
                     .AddMemoryCache();
 
                 s.AddHttpClient();
@@ -341,11 +373,11 @@ namespace NadekoBot
             //unload modules which are not available on the public bot
 
             if (isPublicNadeko)
-                CommandService
+                await Task.WhenAll(CommandService
                     .Modules
                     .ToArray()
                     .Where(x => x.Preconditions.Any(y => y.GetType() == typeof(NoPublicBotAttribute)))
-                    .ForEach(x => CommandService.RemoveModuleAsync(x));
+                    .Select(x => CommandService.RemoveModuleAsync(x)));
 
             HandleStatusChanges();
             StartSendingData();
@@ -372,7 +404,7 @@ namespace NadekoBot
         {
             try
             {
-                var rng = new NadekoRandom().Next(100000, 1000000);
+                var rng = new Ayu.Common.NadekoRandom().Next();
                 var str = rng.ToString();
                 File.WriteAllText(str, str);
                 File.Delete(str);

@@ -1,4 +1,4 @@
-﻿using NadekoBot.Common;
+﻿using Ayu.Common;
 using Newtonsoft.Json;
 using NLog;
 using System;

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Net;
 using Discord.WebSocket;
-using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Core.Services.Database.Models;
 using NLog;
 using System.Linq;

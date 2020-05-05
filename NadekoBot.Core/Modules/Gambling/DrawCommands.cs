@@ -22,7 +22,7 @@ namespace NadekoBot.Modules.Gambling
         public class DrawCommands : NadekoSubmodule
         {
             private static readonly ConcurrentDictionary<IGuild, Deck> _allDecks = new ConcurrentDictionary<IGuild, Deck>();
-            private readonly IImageCache _images;
+            private readonly global::NadekoBot.Core.Services.IImageCache _images;
 
             public DrawCommands(IDataCache data)
             {

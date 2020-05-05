@@ -4,6 +4,7 @@ using NadekoBot.Common.Collections;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Modules.Gambling.Common;
 using NLog;
 using System;

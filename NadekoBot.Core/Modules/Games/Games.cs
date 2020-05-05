@@ -1,9 +1,9 @@
 ﻿using Discord;
 using Discord.Commands;
-using NadekoBot.Common;
 using NadekoBot.Common.Attributes;
 using NadekoBot.Core.Services;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Modules.Games.Common;
 using NadekoBot.Modules.Games.Services;
 using System;
@@ -18,7 +18,7 @@ namespace NadekoBot.Modules.Games
     */
     public partial class Games : NadekoTopLevelModule<GamesService>
     {
-        private readonly IImageCache _images;
+        private readonly global::NadekoBot.Core.Services.IImageCache _images;
         private readonly IHttpClientFactory _httpFactory;
         private readonly Random _rng = new Random();
 

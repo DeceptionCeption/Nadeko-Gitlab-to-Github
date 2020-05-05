@@ -1,4 +1,4 @@
-﻿using NadekoBot.Common;
+﻿using Ayu.Common;
 using NadekoBot.Core.Services;
 using System;
 using System.Collections.Generic;
@@ -31,11 +31,11 @@ namespace NadekoBot.Core.Modules.Gambling.Common
             NoFunds,
             Timeout,
         }
-        
+
         private readonly Timer _timeoutTimer;
         private readonly NadekoRandom _rng = new NadekoRandom();
         private readonly SemaphoreSlim _locker = new SemaphoreSlim(1, 1);
-        
+
         public event Func<RollDuelGame, Task> OnGameTick;
         public event Func<RollDuelGame, Reason, Task> OnEnded;
 
@@ -108,7 +108,7 @@ namespace NadekoBot.Core.Modules.Gambling.Common
                 {
                     if (n1 > n2)
                     {
-                        Winner = P1;                                                                                                                                                                                                                                                                                                
+                        Winner = P1;
                     }
                     else
                     {

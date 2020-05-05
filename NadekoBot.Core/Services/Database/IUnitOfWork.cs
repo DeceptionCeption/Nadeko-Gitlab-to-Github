@@ -8,7 +8,7 @@ namespace NadekoBot.Core.Services.Database
     {
         NadekoContext _context { get; }
 
-        IQuoteRepository Quotes { get; }
+        //IQuoteRepository Quotes { get; }
         IGuildConfigRepository GuildConfigs { get; }
         IReminderRepository Reminders { get; }
         ISelfAssignedRolesRepository SelfAssignedRoles { get; }

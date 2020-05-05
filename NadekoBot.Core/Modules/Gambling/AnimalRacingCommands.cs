@@ -10,6 +10,7 @@ using NadekoBot.Core.Modules.Gambling.Common;
 using NadekoBot.Core.Modules.Gambling.Common.AnimalRacing;
 using NadekoBot.Core.Services;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Modules.Gambling.Common.AnimalRacing;
 using NadekoBot.Modules.Gambling.Common.AnimalRacing.Exceptions;
 using NadekoBot.Modules.Gambling.Services;

@@ -1,20 +1,20 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+﻿//using System;
+//using System.Runtime.CompilerServices;
+//using System.Threading.Tasks;
 
-namespace NadekoBot.Common
-{
-    public class AsyncLazy<T> : Lazy<Task<T>>
-    {
-        public AsyncLazy(Func<T> valueFactory) :
-            base(() => Task.Run(valueFactory))
-        { }
+//namespace NadekoBot.Common
+//{
+//    public class AsyncLazy<T> : Lazy<Task<T>>
+//    {
+//        public AsyncLazy(Func<T> valueFactory) :
+//            base(() => Task.Run(valueFactory))
+//        { }
 
-        public AsyncLazy(Func<Task<T>> taskFactory) :
-            base(() => Task.Run(taskFactory))
-        { }
+//        public AsyncLazy(Func<Task<T>> taskFactory) :
+//            base(() => Task.Run(taskFactory))
+//        { }
 
-        public TaskAwaiter<T> GetAwaiter() { return Value.GetAwaiter(); }
-    }
+//        public TaskAwaiter<T> GetAwaiter() { return Value.GetAwaiter(); }
+//    }
 
-}
+//}

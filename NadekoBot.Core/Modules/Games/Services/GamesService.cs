@@ -1,8 +1,8 @@
 ﻿using Discord;
-using NadekoBot.Common;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Impl;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Modules.Games.Common;
 using NadekoBot.Modules.Games.Common.Acrophobia;
 using NadekoBot.Modules.Games.Common.Hangman;
@@ -33,7 +33,7 @@ namespace NadekoBot.Modules.Games.Services
         private readonly Timer _t;
         private readonly CommandHandler _cmd;
         private readonly NadekoStrings _strings;
-        private readonly IImageCache _images;
+        private readonly global::NadekoBot.Core.Services.IImageCache _images;
         private readonly Logger _log;
         private readonly NadekoRandom _rng;
         private readonly ICurrencyService _cs;

@@ -1,4 +1,4 @@
-﻿using NadekoBot.Extensions;
+﻿using Ayu.Common;
 using System.Collections.Generic;
 
 namespace NadekoBot.Core.Services.Database.Models

@@ -1,11 +1,11 @@
-﻿using NadekoBot.Common;
-using NadekoBot.Modules.Games.Common.Hangman.Exceptions;
+﻿using NadekoBot.Modules.Games.Common.Hangman.Exceptions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using Ayu.Common;
 
 namespace NadekoBot.Modules.Games.Common.Hangman
 {

@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using Discord.WebSocket;
-using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
 using System.Threading.Tasks;

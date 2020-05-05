@@ -1,4 +1,4 @@
-﻿using NadekoBot.Extensions;
+﻿using Ayu.Common;
 
 namespace NadekoBot.Modules.Games.Common.Hangman
 {

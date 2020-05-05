@@ -198,7 +198,7 @@ namespace NadekoBot.Modules.Administration.Services
                             catch
                             {
                                 await gu.Guild.RemoveBanAsync(gu).ConfigureAwait(false);
-                                // try it twice, really don't want to ban user if 
+                                // try it twice, really don't want to ban user if
                                 // only kick has been specified as the punishement
                             }
                         }

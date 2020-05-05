@@ -1,8 +1,8 @@
 ﻿using AngleSharp;
-using AngleSharp.Browser;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using Ayu.Common;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -21,7 +21,6 @@ using Newtonsoft.Json.Linq;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Drawing;
 using SixLabors.Primitives;
 using System;
 using System.Collections.Concurrent;
@@ -40,7 +39,7 @@ namespace NadekoBot.Modules.Searches
         private readonly IHttpClientFactory _httpFactory;
         private readonly IMemoryCache _cache;
         private static readonly NadekoRandom _rng = new NadekoRandom();
-        private new readonly SearchImages.SearchImagesClient _searchImagesService;
+        private readonly SearchImages.SearchImagesClient _searchImagesService;
 
         public Searches(IBotCredentials creds, IGoogleApiService google, IHttpClientFactory factory,
             SearchImages.SearchImagesClient service, IMemoryCache cache)
@@ -295,7 +294,7 @@ namespace NadekoBot.Modules.Searches
                     if (!elems.Any())
                         return;
 
-                    var img = (elems.ElementAtOrDefault(new NadekoRandom().Next(0, elems.Count))?.Children?.FirstOrDefault() as IHtmlImageElement);
+                    var img = (elems.ElementAtOrDefault(_rng.Next(0, elems.Count))?.Children?.FirstOrDefault() as IHtmlImageElement);
 
                     if (img?.Source == null)
                         return;

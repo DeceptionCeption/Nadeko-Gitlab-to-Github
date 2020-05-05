@@ -1,9 +1,9 @@
 ﻿using Discord.Commands;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Modules.Searches.Services;
 using System.Linq;
 using System.Threading.Tasks;
-using NadekoBot.Common;
 using NadekoBot.Common.Attributes;
 
 namespace NadekoBot.Modules.Searches

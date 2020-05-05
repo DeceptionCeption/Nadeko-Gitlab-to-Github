@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using NadekoBot.Extensions;
+using Ayu.Common;
 
 namespace NadekoBot.Modules.Games.Common.Hangman
 {

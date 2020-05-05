@@ -1,8 +1,8 @@
-﻿using Discord.WebSocket;
+﻿using Ayu.Common;
+using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
-using NadekoBot.Extensions;
 using NadekoBot.Modules.Utility.Common;
 using NLog;
 using System;
@@ -89,7 +89,7 @@ namespace NadekoBot.Modules.Utility.Services
         {
             using (var uow = _db.GetDbContext())
             {
-                uow._context.Database.ExecuteSqlCommand($@"UPDATE GuildRepeater SET 
+                uow._context.Database.ExecuteSqlInterpolated($@"UPDATE GuildRepeater SET
                     LastMessageId={lastMsgId} WHERE Id={repeaterId}");
             }
         }

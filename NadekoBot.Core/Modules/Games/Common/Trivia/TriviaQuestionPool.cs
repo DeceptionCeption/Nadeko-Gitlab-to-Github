@@ -1,6 +1,5 @@
-﻿using NadekoBot.Common;
-using NadekoBot.Core.Services;
-using NadekoBot.Extensions;
+﻿using NadekoBot.Core.Services;
+using Ayu.Common;
 using System.Collections.Generic;
 
 namespace NadekoBot.Modules.Games.Common.Trivia

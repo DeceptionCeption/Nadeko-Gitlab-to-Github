@@ -2,6 +2,7 @@
 using NadekoBot.Common.ShardCom;
 using NadekoBot.Core.Services.Impl;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using Newtonsoft.Json;
 using NLog;
 using StackExchange.Redis;
@@ -352,7 +353,7 @@ namespace NadekoBot.Core.Services
             return Process.Start(new ProcessStartInfo()
             {
                 FileName = _creds.ShardRunCommand,
-                Arguments = string.Format(_creds.ShardRunArguments, shardId, _curProcessId, "")
+                Arguments = string.Format(_creds.ShardRunArguments, shardId, _curProcessId, ""),
             });
             // last "" in format is for backwards compatibility
             // because current startup commands have {2} in them probably

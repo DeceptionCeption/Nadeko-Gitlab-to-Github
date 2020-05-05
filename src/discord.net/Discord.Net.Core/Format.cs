@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 
 namespace Discord
@@ -30,6 +31,36 @@ namespace Discord
                 return $"```{language ?? ""}\n{text}\n```";
             else
                 return $"`{text}`";
+        }
+        public static string Escape(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return input;
+
+            Span<char> charArr = stackalloc char[input.Length * 2];
+
+            var arrIndex = 0;
+            for (int i = 0; i < input.Length; i++)
+            {
+                var cur = input[i];
+                if (cur == '_' || cur == '*' || cur == '~' || cur == '`')
+                {
+                    // these are chars that need to be escaped
+
+                    // if they're on pos 0, or anywhere else not preceeded by
+                    // a \, add \
+
+                    if (i == 0 || input[i - 1] != '\\')
+                    {
+                        charArr[arrIndex++] = '\\';
+                    }
+                }
+
+                charArr[arrIndex++] = input[i];
+            }
+
+            // i refuse to spend a second more on this half working function.
+            return new string(charArr.Slice(0, arrIndex));
         }
 
         /// <summary> Sanitizes the string, safely escaping any Markdown sequences. </summary>
@@ -77,7 +108,7 @@ namespace Discord
 
             return result.ToString();
         }
-        
+
         /// <summary>
         ///     Formats a string as a block quote.
         /// </summary>

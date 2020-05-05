@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace NadekoBot.Core.Services.Impl
 {
-    public sealed class RedisImagesCache : IImageCache
+    public sealed class RedisImagesCache : global::NadekoBot.Core.Services.IImageCache
     {
         private readonly ConnectionMultiplexer _con;
         private readonly IBotCredentials _creds;

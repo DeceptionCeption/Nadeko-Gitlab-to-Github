@@ -31,7 +31,7 @@ namespace NadekoBot.Core.Services.Database
         public DbSet<BotConfig> BotConfig { get; set; }
         public DbSet<GuildConfig> GuildConfigs { get; set; }
 
-        public DbSet<Quote> Quotes { get; set; }
+        //public DbSet<Quote> Quotes { get; set; }
         public DbSet<Reminder> Reminders { get; set; }
         public DbSet<SelfAssignedRole> SelfAssignableRoles { get; set; }
         public DbSet<MusicPlaylist> MusicPlaylists { get; set; }
@@ -112,9 +112,9 @@ namespace NadekoBot.Core.Services.Database
         {
             #region QUOTES
 
-            var quoteEntity = modelBuilder.Entity<Quote>();
-            quoteEntity.HasIndex(x => x.GuildId);
-            quoteEntity.HasIndex(x => x.Keyword);
+            //var quoteEntity = modelBuilder.Entity<Quote>();
+            //quoteEntity.HasIndex(x => x.GuildId);
+            //quoteEntity.HasIndex(x => x.Keyword);
 
             #endregion
 

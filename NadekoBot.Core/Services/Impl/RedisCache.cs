@@ -17,28 +17,24 @@ namespace NadekoBot.Core.Services.Impl
 
         public ConnectionMultiplexer Redis { get; }
 
-        public IImageCache LocalImages { get; }
+        public global::NadekoBot.Core.Services.IImageCache LocalImages { get; }
         public ILocalDataCache LocalData { get; }
 
         private readonly string _redisKey;
         private readonly EndPoint _redisEndpoint;
 
-        public RedisCache(IBotCredentials creds, int shardId)
+        public RedisCache(IBotCredentials creds, ConnectionMultiplexer redis, int shardId)
         {
             _log = LogManager.GetCurrentClassLogger();
-
-            var conf = ConfigurationOptions.Parse(creds.RedisOptions);
-
-            Redis = ConnectionMultiplexer.Connect(conf);
+            Redis = redis;
             _redisEndpoint = Redis.GetEndPoints().First();
-            Redis.PreserveAsyncOrder = false;
             LocalImages = new RedisImagesCache(Redis, creds);
             LocalData = new RedisLocalDataCache(Redis, creds, shardId);
             _redisKey = creds.RedisKey();
         }
 
         // things here so far don't need the bot id
-        // because it's a good thing if different bots 
+        // because it's a good thing if different bots
         // which are hosted on the same PC
         // can re-use the same image/anime data
         public async Task<(bool Success, byte[] Data)> TryGetImageDataAsync(Uri key)

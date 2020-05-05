@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Threading.Tasks;
-using NadekoBot.Common;
+using Ayu.Common;
 using NadekoBot.Core.Services;
 
 namespace NadekoBot.Modules.Gambling.Common.WheelOfFortune

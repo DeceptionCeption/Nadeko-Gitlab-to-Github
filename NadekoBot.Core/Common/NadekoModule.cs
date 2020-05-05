@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Grpc.Core;
+using Nadeko.Common.Localization;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Impl;
 using NadekoBot.Extensions;
@@ -24,11 +25,14 @@ namespace NadekoBot.Modules
         public NadekoStrings Strings { get; set; }
         public IBotConfigProvider Bc { get; set; }
         public CommandHandler CmdHandler { get; set; }
-        public ILocalization Localization { get; set; }
+        public ILocalization OldLocalization { get; set; }
+        public Ayu.Common.ILocalization Localization { get; set; }
+        protected Ayu.Common.ILocale Locale { get; set; }
 
         public string Prefix => CmdHandler.GetPrefix(ctx.Guild);
 
         protected ICommandContext ctx => Context;
+        protected bool _isNew = false;
 
         protected NadekoTopLevelModule(bool isTopLevelModule = true)
         {
@@ -40,7 +44,8 @@ namespace NadekoBot.Modules
 
         protected override void BeforeExecute(CommandInfo cmd)
         {
-            _cultureInfo = Localization.GetCultureInfo(ctx.Guild?.Id);
+            _cultureInfo = OldLocalization.GetCultureInfo(ctx.Guild?.Id);
+            Locale = new Locale(Localization, _cultureInfo);
         }
 
         //public Task<IUserMessage> ReplyConfirmLocalized(string titleKey, string textKey, string url = null, string footer = null)
@@ -64,10 +69,14 @@ namespace NadekoBot.Modules
         //}
 
         protected string GetText(string key) =>
-            Strings.GetText(key, _cultureInfo, LowerModuleTypeName);
+            _isNew
+                ? Locale.GetText(key)
+                : Strings.GetText(key, _cultureInfo, LowerModuleTypeName);
 
         protected string GetText(string key, params object[] replacements) =>
-            Strings.GetText(key, _cultureInfo, LowerModuleTypeName, replacements);
+            _isNew
+                ? Locale.GetText(key, replacements)
+                : Strings.GetText(key, _cultureInfo, LowerModuleTypeName, replacements);
 
         public Task<IUserMessage> ErrorLocalizedAsync(string textKey, params object[] replacements)
         {

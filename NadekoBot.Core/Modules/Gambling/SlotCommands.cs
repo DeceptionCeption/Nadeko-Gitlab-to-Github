@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Core.Services;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using NadekoBot.Common;
 using NadekoBot.Common.Attributes;
 using SixLabors.Primitives;
 using NadekoBot.Modules.Gambling.Services;
@@ -17,7 +17,6 @@ using NadekoBot.Core.Common;
 using Image = SixLabors.ImageSharp.Image;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing.Drawing;
 
 namespace NadekoBot.Modules.Gambling
 {
@@ -35,7 +34,7 @@ namespace NadekoBot.Modules.Gambling
             //https://lh6.googleusercontent.com/-i1hjAJy_kN4/UswKxmhrbPI/AAAAAAAAB1U/82wq_4ZZc-Y/DE6B0895-6FC1-48BE-AC4F-14D1B91AB75B.jpg
             //thanks to judge for helping me with this
 
-            private readonly IImageCache _images;
+            private readonly global::NadekoBot.Core.Services.IImageCache _images;
             private readonly ICurrencyService _cs;
 
             public SlotCommands(IDataCache data, ICurrencyService cs)
@@ -171,7 +170,7 @@ namespace NadekoBot.Modules.Gambling
                         {
                             using (var randomImage = Image.Load(_images.SlotEmojis[numbers[i]]))
                             {
-                                bgImage.Mutate(x => x.DrawImage(GraphicsOptions.Default, randomImage, new Point(95 + 142 * i, 330)));
+                                bgImage.Mutate(x => x.DrawImage(randomImage, new Point(95 + 142 * i, 330), GraphicsOptions.Default));
                             }
                         }
 
@@ -183,7 +182,7 @@ namespace NadekoBot.Modules.Gambling
                             var digit = (int)(printWon % 10);
                             using (var img = Image.Load(_images.SlotNumbers[digit]))
                             {
-                                bgImage.Mutate(x => x.DrawImage(GraphicsOptions.Default, img, new Point(230 - n * 16, 462)));
+                                bgImage.Mutate(x => x.DrawImage(img, new Point(230 - n * 16, 462), GraphicsOptions.Default));
                             }
                             n++;
                         } while ((printWon /= 10) != 0);
@@ -195,7 +194,7 @@ namespace NadekoBot.Modules.Gambling
                             var digit = (int)(printAmount % 10);
                             using (var img = Image.Load(_images.SlotNumbers[digit]))
                             {
-                                bgImage.Mutate(x => x.DrawImage(GraphicsOptions.Default, img, new Point(395 - n * 16, 462)));
+                                bgImage.Mutate(x => x.DrawImage(img, new Point(395 - n * 16, 462), GraphicsOptions.Default));
                             }
                             n++;
                         } while ((printAmount /= 10) != 0);

@@ -5,6 +5,7 @@ using Discord;
 using Discord.WebSocket;
 using NadekoBot.Common.ModuleBehaviors;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Impl;
 using NLog;
@@ -32,7 +33,7 @@ namespace NadekoBot.Modules.Administration.Services
         private readonly CommandHandler _cmdHandler;
         private readonly DbService _db;
         private readonly Logger _log;
-        private readonly ILocalization _localization;
+        private readonly Core.Services.ILocalization _localization;
         private readonly NadekoStrings _strings;
         private readonly DiscordSocketClient _client;
 
@@ -41,12 +42,12 @@ namespace NadekoBot.Modules.Administration.Services
         private ConcurrentDictionary<ulong?, ConcurrentDictionary<int, Timer>> _autoCommands = new ConcurrentDictionary<ulong?, ConcurrentDictionary<int, Timer>>();
         private readonly IBotConfigProvider _bc;
         private readonly IDataCache _cache;
-        private readonly IImageCache _imgs;
+        private readonly Core.Services.IImageCache _imgs;
         private readonly IHttpClientFactory _httpFactory;
         //private readonly Timer _updateTimer;
 
         public SelfService(DiscordSocketClient client, NadekoBot bot, CommandHandler cmdHandler, DbService db,
-            IBotConfigProvider bc, ILocalization localization, NadekoStrings strings, IBotCredentials creds,
+            IBotConfigProvider bc, Core.Services.ILocalization localization, NadekoStrings strings, IBotCredentials creds,
             IDataCache cache, IHttpClientFactory factory)
         {
             _redis = cache.Redis;

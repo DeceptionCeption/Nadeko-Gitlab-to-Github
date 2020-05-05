@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using NadekoBot.Common;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using Newtonsoft.Json;
 
 namespace NadekoBot.Modules.Games.Common.ChatterBot

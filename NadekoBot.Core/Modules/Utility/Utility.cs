@@ -1,9 +1,8 @@
+using Ayu.Common;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using NadekoBot.Common;
 using NadekoBot.Common.Attributes;
-using NadekoBot.Core.Common.Attributes;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Impl;
 using NadekoBot.Extensions;
@@ -27,6 +26,7 @@ namespace NadekoBot.Modules.Utility
         private readonly NadekoBot _bot;
         private readonly DbService _db;
         private readonly IHttpClientFactory _httpFactory;
+        private readonly NadekoRandom _rng;
 
         public Utility(NadekoBot nadeko, DiscordSocketClient client,
             IStatsService stats, IBotCredentials creds,
@@ -38,6 +38,7 @@ namespace NadekoBot.Modules.Utility
             _bot = nadeko;
             _db = db;
             _httpFactory = factory;
+            _rng = new NadekoRandom();
         }
 
         [OldNadekoCommand, Usage, Description, Aliases]
@@ -70,11 +71,10 @@ namespace NadekoBot.Modules.Utility
                 _log.Warn("Can't cast guild to socket guild.");
                 return;
             }
-            var rng = new NadekoRandom();
             var arr = await Task.Run(() => socketGuild.Users
                     .Where(u => u.Activity?.Name?.ToUpperInvariant() == game)
                     .Select(u => u.Username)
-                    .OrderBy(x => rng.Next())
+                    .OrderBy(x => _rng.Next())
                     .Take(60)
                     .ToArray()).ConfigureAwait(false);
 
@@ -93,7 +93,6 @@ namespace NadekoBot.Modules.Utility
         [RequireContext(ContextType.Guild)]
         public async Task InRole([Leftover] IRole role)
         {
-            var rng = new NadekoRandom();
             var usrs = (await ctx.Guild.GetUsersAsync().ConfigureAwait(false)).ToArray();
             var roleUsers = usrs
                 .Where(u => u.RoleIds.Contains(role.Id))

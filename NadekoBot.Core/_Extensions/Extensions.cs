@@ -9,20 +9,18 @@ using Newtonsoft.Json;
 using NLog;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Gif;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Drawing;
 using SixLabors.Primitives;
 using SixLabors.Shapes;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Numerics;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -46,12 +44,14 @@ namespace NadekoBot.Extensions
         public static void ApplyRoundedCorners(this Image<Rgba32> img, float cornerRadius)
         {
             var corners = BuildCorners(img.Width, img.Height, cornerRadius);
-            // now we have our corners time to draw them
-            img.Mutate(x => x.Fill(new GraphicsOptions(true)
+
+            var graphicOptions = new GraphicsOptions()
             {
-                BlenderMode = PixelBlenderMode.Src // enforces that any part of this shape that has color is punched out of the background
-            },
-            Rgba32.Transparent, corners));
+                AlphaCompositionMode = PixelAlphaCompositionMode.DestOut // enforces that any part of this shape that has color is punched out of the background
+            };
+            // mutating in here as we already have a cloned original
+            // use any color (not Transparent), so the corners will be clipped
+            img.Mutate(x => x.Fill(graphicOptions, Rgba32.LimeGreen, corners));
         }
 
         public static IPathCollection BuildCorners(int imageWidth, int imageHeight, float cornerRadius)
@@ -108,14 +108,18 @@ namespace NadekoBot.Extensions
                 throw new ArgumentNullException(nameof(name));
         }
 
-        public static ConcurrentDictionary<TKey, TValue> ToConcurrent<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> dict)
-            => new ConcurrentDictionary<TKey, TValue>(dict);
-
         public static bool IsAuthor(this IMessage msg, IDiscordClient client) =>
             msg.Author?.Id == client.CurrentUser.Id;
 
-        public static string RealSummary(this CommandInfo cmd, string prefix) => string.Format(cmd.Summary, prefix);
-        public static string RealRemarks(this CommandInfo cmd, string prefix) => string.Join(" or ", JsonConvert.DeserializeObject<string[]>(cmd.Remarks).Select(x => Format.Code(string.Format(x, prefix))));
+        // changed for 2.x
+        public static string RealSummary(this CommandInfo cmd, Lazy<Ayu.Common.CmdStrings> newStrings, string prefix)
+            => string.Format(cmd.IsNew ? newStrings.Value.Description : cmd.Summary, prefix).Replace("{Prefix}", prefix);
+        public static string RealRemarks(this CommandInfo cmd, Lazy<Ayu.Common.CmdStrings> newStrings, string prefix)
+            => cmd.IsNew
+                ? newStrings.Value.Usages is null || newStrings.Value.Usages.Length == 0
+                        ? $"{prefix}{cmd.Name}"
+                        : string.Join("\n", newStrings.Value.Usages.Select(x => Format.Code($"{prefix}{cmd.Name} {x}")))
+                : string.Join(" or ", JsonConvert.DeserializeObject<string[]>(cmd.Remarks).Select(x => Format.Code(string.Format(x, prefix).Replace("{Prefix}", prefix))));
 
         public static EmbedBuilder AddPaginatedFooter(this EmbedBuilder embed, int curPage, int? lastPage)
         {
@@ -143,18 +147,18 @@ namespace NadekoBot.Extensions
             return wrap;
         }
 
-        public static HttpClient AddFakeHeaders(this HttpClient http)
-        {
-            AddFakeHeaders(http.DefaultRequestHeaders);
-            return http;
-        }
+        //public static HttpClient AddFakeHeaders(this HttpClient http)
+        //{
+        //    AddFakeHeaders(http.DefaultRequestHeaders);
+        //    return http;
+        //}
 
-        public static void AddFakeHeaders(this HttpHeaders dict)
-        {
-            dict.Clear();
-            dict.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-            dict.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1");
-        }
+        //public static void AddFakeHeaders(this HttpHeaders dict)
+        //{
+        //    dict.Clear();
+        //    dict.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+        //    dict.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1");
+        //}
 
         public static IMessage DeleteAfter(this IUserMessage msg, int seconds)
         {
@@ -215,37 +219,37 @@ namespace NadekoBot.Extensions
             return imageStream;
         }
 
-        /// <summary>
-        /// returns an IEnumerable with randomized element order
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> items)
-        {
-            // Thanks to @Joe4Evr for finding a bug in the old version of the shuffle
-            using (var provider = RandomNumberGenerator.Create())
-            {
-                var list = items.ToList();
-                var n = list.Count;
-                while (n > 1)
-                {
-                    var box = new byte[(n / Byte.MaxValue) + 1];
-                    int boxSum;
-                    do
-                    {
-                        provider.GetBytes(box);
-                        boxSum = box.Sum(b => b);
-                    }
-                    while (!(boxSum < n * ((Byte.MaxValue * box.Length) / n)));
-                    var k = (boxSum % n);
-                    n--;
-                    var value = list[k];
-                    list[k] = list[n];
-                    list[n] = value;
-                }
-                return list;
-            }
-        }
+        ///// <summary>
+        ///// returns an IEnumerable with randomized element order
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="list"></param>
+        //public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> items)
+        //{
+        //    // Thanks to @Joe4Evr for finding a bug in the old version of the shuffle
+        //    using (var provider = RandomNumberGenerator.Create())
+        //    {
+        //        var list = items.ToList();
+        //        var n = list.Count;
+        //        while (n > 1)
+        //        {
+        //            var box = new byte[(n / Byte.MaxValue) + 1];
+        //            int boxSum;
+        //            do
+        //            {
+        //                provider.GetBytes(box);
+        //                boxSum = box.Sum(b => b);
+        //            }
+        //            while (!(boxSum < n * ((Byte.MaxValue * box.Length) / n)));
+        //            var k = (boxSum % n);
+        //            n--;
+        //            var value = list[k];
+        //            list[k] = list[n];
+        //            list[n] = value;
+        //        }
+        //        return list;
+        //    }
+        //}
 
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> elems, Action<T> exec)
         {
@@ -278,21 +282,26 @@ namespace NadekoBot.Extensions
         {
             return images.Merge(out _);
         }
+
         public static Image<Rgba32> Merge(this IEnumerable<Image<Rgba32>> images, out IImageFormat format)
         {
-            format = ImageFormats.Png;
+            format = JpegFormat.Instance;
             void DrawFrame(Image<Rgba32>[] imgArray, Image<Rgba32> imgFrame, int frameNumber)
             {
                 var xOffset = 0;
                 for (int i = 0; i < imgArray.Length; i++)
                 {
                     var frame = imgArray[i].Frames.CloneFrame(frameNumber % imgArray[i].Frames.Count);
-                    imgFrame.Mutate(x => x.DrawImage(GraphicsOptions.Default, frame, new Point(xOffset, 0)));
+                    imgFrame.Mutate(x => x.DrawImage(frame, new Point(xOffset, 0), 1f));
                     xOffset += imgArray[i].Bounds().Width;
                 }
             }
 
             var imgs = images.ToArray();
+
+            if (imgs.Length == 1)
+                return imgs[0];
+
             int frames = images.Max(x => x.Frames.Count);
 
             var width = imgs.Sum(img => img.Width);
@@ -304,17 +313,16 @@ namespace NadekoBot.Extensions
                 return canvas;
             }
 
-            format = ImageFormats.Gif;
+            format = GifFormat.Instance;
             for (int j = 0; j < frames; j++)
             {
-                using (var imgFrame = new Image<Rgba32>(width, height))
-                {
-                    DrawFrame(imgs, imgFrame, j);
+                using var imgFrame = new Image<Rgba32>(width, height);
+                DrawFrame(imgs, imgFrame, j);
 
-                    var frameToAdd = imgFrame.Frames.First();
-                    frameToAdd.MetaData.DisposalMethod = SixLabors.ImageSharp.Formats.Gif.DisposalMethod.RestoreToBackground;
-                    canvas.Frames.AddFrame(frameToAdd);
-                }
+                var frameToAdd = imgFrame.Frames[0];
+                var metaData = frameToAdd.Metadata.GetFormatMetadata(GifFormat.Instance);
+                metaData.DisposalMethod = GifDisposalMethod.RestoreToBackground;
+                canvas.Frames.AddFrame(frameToAdd);
             }
             canvas.Frames.RemoveFrame(0);
             return canvas;
@@ -326,31 +334,15 @@ namespace NadekoBot.Extensions
             sw.Reset();
         }
 
-        public static bool IsImage(this HttpResponseMessage msg) => IsImage(msg, out _);
+        //public static long? GetImageSize(this HttpResponseMessage msg)
+        //{
+        //    if (msg.Content.Headers.ContentLength == null)
+        //    {
+        //        return null;
+        //    }
 
-        public static bool IsImage(this HttpResponseMessage msg, out string mimeType)
-        {
-            mimeType = msg.Content.Headers.ContentType.MediaType;
-            if (mimeType == "image/png"
-                    || mimeType == "image/jpeg"
-                    || mimeType == "image/gif")
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public static long? GetImageSize(this HttpResponseMessage msg)
-        {
-            if (msg.Content.Headers.ContentLength == null)
-            {
-                return null;
-            }
-
-            return msg.Content.Headers.ContentLength / 1.MB();
-        }
-
-
+        //    return msg.Content.Headers.ContentLength / 1.MB();
+        //}
 
         public static IEnumerable<Type> LoadFrom(this IServiceCollection collection, Assembly assembly)
         {

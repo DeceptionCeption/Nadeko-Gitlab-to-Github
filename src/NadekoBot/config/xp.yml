@@ -1,0 +1,7 @@
+# How often can the users receive XP in minutes
+xpMinutesTimeout: 5
+# How much XP will the users receive per message
+xpPerMessage: 3
+# Available XP backgrounds.
+backgrounds:
+- https://cdn.nadeko.bot/other/xp/bg.png

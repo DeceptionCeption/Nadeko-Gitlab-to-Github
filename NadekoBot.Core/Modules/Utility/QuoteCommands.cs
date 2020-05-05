@@ -1,15 +1,18 @@
 ﻿using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using NadekoBot.Extensions;
-using NadekoBot.Core.Services;
-using System;
+using Ayu.Common;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using NadekoBot.Common.Attributes;
 using static Nadeko.Bot.Common.Kwok;
 using NadekoBot.Common.Replacements;
+using Nadeko.Microservices;
+using CommandLine;
+using Ayu.Discord.Common;
+using Nadeko.Bot.Common.Attributes;
+using NadekoBot.Core.Services;
+using NadekoBot.Core.Common;
 
 namespace NadekoBot.Modules.Utility
 {
@@ -20,11 +23,15 @@ namespace NadekoBot.Modules.Utility
         {
             private readonly Nadeko.Microservices.Expressions.ExpressionsClient _expr;
             private readonly ReplacementBuilderService _repService;
+            private readonly IBotCredentials _creds;
 
-            public QuoteCommands(Nadeko.Microservices.Expressions.ExpressionsClient expressions, ReplacementBuilderService repService)
+            public QuoteCommands(Nadeko.Microservices.Expressions.ExpressionsClient expressions,
+                ReplacementBuilderService repService, IBotCredentials creds)
             {
+                _isNew = true;
                 _expr = expressions;
                 _repService = repService;
+                _creds = creds;
             }
 
             [NadekoCommand("qadd", ".")]
@@ -46,7 +53,7 @@ namespace NadekoBot.Modules.Utility
                     IsQuote = true,
                 });
 
-                await ctx.Channel.SendMessageAsync(new EmbedBuilder()
+                await ctx.Channel.SendAsync(new EmbedBuilder()
                     .WithOkColor(ctx)
                     .WithTitle(GetText("new_quote"))
                     .WithDescription($"#{IntToKwok(res.ExprId)}")
@@ -67,13 +74,13 @@ namespace NadekoBot.Modules.Utility
                     GuildId = ctx.Guild?.Id ?? 0,
                     Id = id,
                     IsQuote = true,
-                    IsAdmin = await OwnerOrAdminAttribute.IsAdminAsync(ctx),
+                    IsAdmin = await OwnerOrAdminAttribute.IsAdminOrOwnerAsync(ctx, _creds),
                     UserId = ctx.User.Id,
                 });
 
                 if (!res.Success)
                 {
-                    await ctx.ReplyErrorLocalizedAsync("quote_manipulation_fail");
+                    await ReplyErrorLocalizedAsync("quote_manipulation_fail");
                     return;
                 }
 
@@ -85,12 +92,13 @@ namespace NadekoBot.Modules.Utility
                     .AddField(efb => efb.WithName(GetText("response")).WithValue(res.ExprData.Response.TrimTo(1024)))).ConfigureAwait(false);
             }
 
+            // todo commandorcrinfo
             [NadekoCommand("qclear", "qclr", "quoteclear")]
             [OwnerOrAdmin]
             [RequireContext(ContextType.Guild)]
-            public async Task QuotesClear(GuildContext ctx)
+            public async Task QuotesClear()
             {
-                if (!await ctx.PromptUserConfirmAsync(new EmbedBuilder()
+                if (!await PromptUserConfirmAsync(new EmbedBuilder()
                     .WithPendingColor(ctx)
                     .WithDescription(GetText("quote_delete_all_confirm"))))
                 {
@@ -103,7 +111,7 @@ namespace NadekoBot.Modules.Utility
                     IsQuote = true,
                 });
 
-                await ctx.ReplyConfirmLocalizedAsync("quote_deleted_all", Format.Bold(res.Count.ToString()));
+                await ReplyConfirmLocalizedAsync("quote_deleted_all", Format.Bold(res.Count.ToString()));
             }
 
             [OldNadekoCommand("qedit")]
@@ -119,13 +127,13 @@ namespace NadekoBot.Modules.Utility
                     Response = response,
                     GuildId = Context.Guild?.Id ?? 0,
                     IsQuote = true,
-                    IsAdmin = await OwnerOrAdminAttribute.IsAdminAsync(ctx),
+                    IsAdmin = await OwnerOrAdminAttribute.IsAdminOrOwnerAsync(ctx, _creds),
                     UserId = ctx.User.Id,
                 });
 
                 if (!res.Success)
                 {
-                    await ctx.ReplyErrorLocalizedAsync("quote_manipulation_fail");
+                    await ReplyErrorLocalizedAsync("quote_manipulation_fail");
                     return;
                 }
 
@@ -138,26 +146,29 @@ namespace NadekoBot.Modules.Utility
                     ).ConfigureAwait(false);
             }
 
-            public class ListOptions : CommandOptions
+            public class ListOptions : INadekoCommandOptions
             {
                 [Option('a', "alphabetic", Default = false, HelpText = "Sort in alphabetic order.", Required = true)]
                 public bool Alphabetic { get; set; }
 
-                public override void NormalizeOptions()
+                public void NormalizeOptions()
                 {
                 }
             }
 
             [NadekoCommand("qlist", "qli")]
             [RequireContext(ContextType.Guild)]
-            public Task QuoteList([Leftover] Options<ListOptions> options = null)
-                => QuoteList(ctx, 1, options);
+            [NadekoOptions(typeof(ListOptions))]
+            public Task QuoteList(params string[] args)
+                => QuoteList(1, args);
 
             [NadekoCommand("qlist", "qli")]
             [RequireContext(ContextType.Guild)]
-            public async Task QuoteList(int page = 1, [Leftover] Options<ListOptions> options = null)
+            [NadekoOptions(typeof(ListOptions))]
+            public async Task QuoteList(int page = 1, params string[] args)
             {
-                var alph = options?.Data.Alphabetic ?? false;
+                var (options, _) = OptionsParser.ParseFrom(new ListOptions(), args);
+                var alph = options?.Alphabetic ?? false;
                 if (--page < 0)
                 {
                     return;
@@ -213,13 +224,13 @@ namespace NadekoBot.Modules.Utility
 
                 if (!res.Success)
                 {
-                    await ctx.ReplyErrorLocalizedAsync("quote_no_found_id");
+                    await ReplyErrorLocalizedAsync("quote_no_found_id");
                     return;
                 }
 
                 var data = res.ExprData;
 
-                await ShowQuoteData(ctx, data);
+                await ShowQuoteData(data);
             }
 
             private async Task ShowQuoteData(ExprData data)
@@ -285,7 +296,7 @@ namespace NadekoBot.Modules.Utility
 
                 await ctx.Channel.SendAsync(await rep.ReplaceAsync(SmartText.CreateFrom(res.ExprData.Response)));
             }
-            public class SearchOptions : CommandOptions
+            public class SearchOptions : INadekoCommandOptions
             {
                 [Option('t', "trigger", Required = false, Default = "",
                     HelpText = "Part of the trigger will have to match this string.")]
@@ -299,7 +310,7 @@ namespace NadekoBot.Modules.Utility
                     HelpText = "Show the raw response, instead of the print version.")]
                 public bool NoPrint { get; set; }
 
-                public override void NormalizeOptions()
+                public void NormalizeOptions()
                 {
 
                 }
@@ -307,10 +318,12 @@ namespace NadekoBot.Modules.Utility
 
             [NadekoCommand("qsrch", "qsearch")]
             [RequireContext(ContextType.Guild)]
-            public async Task QuoteSearch([Leftover] Options<SearchOptions> options)
+            [NadekoOptions(typeof(SearchOptions))]
+            public async Task QuoteSearch([Leftover] params string[] args)
             {
-                if (string.IsNullOrWhiteSpace(options.Data.Trigger) &&
-                    string.IsNullOrWhiteSpace(options.Data.Response))
+                var (options, _) = OptionsParser.ParseFrom(new SearchOptions(), args);
+                if (string.IsNullOrWhiteSpace(options.Trigger) &&
+                    string.IsNullOrWhiteSpace(options.Response))
                 {
                     return;
                 }
@@ -319,8 +332,8 @@ namespace NadekoBot.Modules.Utility
                 {
                     GuildId = Context.Guild?.Id ?? 0,
                     IsQuote = true,
-                    Trigger = options.Data.Trigger,
-                    Response = options.Data.Response,
+                    Trigger = options?.Trigger,
+                    Response = options?.Response,
                 });
 
                 if (!res.Success)
@@ -328,9 +341,9 @@ namespace NadekoBot.Modules.Utility
                     return;
                 }
 
-                if (options.Data.NoPrint)
+                if (options.NoPrint)
                 {
-                    await ShowQuoteData(ctx, res.ExprData);
+                    await ShowQuoteData(res.ExprData);
                 }
                 else
                 {

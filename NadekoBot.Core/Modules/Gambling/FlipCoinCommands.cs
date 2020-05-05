@@ -1,11 +1,11 @@
 using Discord;
 using Discord.Commands;
-using NadekoBot.Common;
 using NadekoBot.Common.Attributes;
 using NadekoBot.Core.Common;
 using NadekoBot.Core.Modules.Gambling.Common;
 using NadekoBot.Core.Services;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Modules.Gambling.Services;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -21,7 +21,7 @@ namespace NadekoBot.Modules.Gambling
         [Group]
         public class FlipCoinCommands : GamblingSubmodule<GamblingService>
         {
-            private readonly IImageCache _images;
+            private readonly global::NadekoBot.Core.Services.IImageCache _images;
             private readonly ICurrencyService _cs;
             private readonly DbService _db;
             private static readonly NadekoRandom rng = new NadekoRandom();

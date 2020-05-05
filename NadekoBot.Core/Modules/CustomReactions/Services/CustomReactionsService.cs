@@ -1,6 +1,6 @@
-﻿using Discord;
+﻿using Ayu.Common;
+using Discord;
 using Discord.WebSocket;
-using NadekoBot.Common;
 using NadekoBot.Common.ModuleBehaviors;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database;
@@ -46,6 +46,7 @@ namespace NadekoBot.Modules.CustomReactions.Services
         private readonly NadekoStrings _strings;
         private readonly IDataCache _cache;
         private readonly GlobalPermissionService _gperm;
+        private readonly NadekoRandom _rng;
 
         public CustomReactionsService(PermissionService perms, DbService db, NadekoStrings strings,
             DiscordSocketClient client, CommandHandler cmd, IBotConfigProvider bc,
@@ -60,6 +61,7 @@ namespace NadekoBot.Modules.CustomReactions.Services
             _strings = strings;
             _cache = cache;
             _gperm = gperm;
+            _rng = new NadekoRandom();
 
             var sub = _cache.Redis.GetSubscriber();
             sub.Subscribe(_client.CurrentUser.Id + "_crs.reload", (ch, msg) =>
@@ -178,7 +180,7 @@ namespace NadekoBot.Modules.CustomReactions.Services
 
                     if (rs.Length != 0)
                     {
-                        var reaction = rs[new NadekoRandom().Next(0, rs.Length)];
+                        var reaction = rs[_rng.Next(0, rs.Length)];
                         if (reaction != null)
                         {
                             if (reaction.Response == "-")
@@ -212,7 +214,7 @@ namespace NadekoBot.Modules.CustomReactions.Services
             }).ToArray();
             if (grs.Length == 0)
                 return null;
-            var greaction = grs[new NadekoRandom().Next(0, grs.Length)];
+            var greaction = grs[_rng.Next(0, grs.Length)];
 
             return greaction;
         }

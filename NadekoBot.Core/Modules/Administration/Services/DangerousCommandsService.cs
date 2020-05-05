@@ -25,10 +25,10 @@ SET ClubId=NULL,
 DELETE FROM ClubApplicants;
 DELETE FROM ClubBans;
 DELETE FROM Clubs;";
-//        public const string DeleteUnusedCustomReactionsAndQuotes = @"DELETE FROM CustomReactions 
+//        public const string DeleteUnusedCustomReactionsAndQuotes = @"DELETE FROM CustomReactions
 //WHERE UseCount=0 AND (DateAdded < date('now', '-7 day') OR DateAdded is null);
 
-//DELETE FROM Quotes 
+//DELETE FROM Quotes
 //WHERE UseCount=0 AND (DateAdded < date('now', '-7 day') OR DateAdded is null);";
 
         private readonly DbService _db;
@@ -43,7 +43,7 @@ DELETE FROM Clubs;";
             int res;
             using (var uow = _db.GetDbContext())
             {
-                res = await uow._context.Database.ExecuteSqlCommandAsync(sql);
+                res = await uow._context.Database.ExecuteSqlRawAsync(sql);
             }
             return res;
         }

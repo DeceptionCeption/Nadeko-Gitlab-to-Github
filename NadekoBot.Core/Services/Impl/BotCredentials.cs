@@ -1,6 +1,6 @@
-﻿using Discord;
+﻿using Ayu.Common;
+using Discord;
 using Microsoft.Extensions.Configuration;
-using NadekoBot.Common;
 using Newtonsoft.Json;
 using NLog;
 using System;

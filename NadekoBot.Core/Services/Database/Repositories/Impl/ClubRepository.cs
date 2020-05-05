@@ -1,7 +1,7 @@
-﻿using NadekoBot.Core.Services.Database.Models;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using NadekoBot.Core.Services.Database.Models;
 using System;
+using System.Linq;
 
 namespace NadekoBot.Core.Services.Database.Repositories.Impl
 {
@@ -53,6 +53,7 @@ namespace NadekoBot.Core.Services.Database.Repositories.Impl
         {
             if (func == null)
                 return _set
+                    .AsQueryable()
                     .Where(x => x.Name == name && x.Discrim == discrim)
                     .Include(x => x.Users)
                     .Include(x => x.Bans)
@@ -65,6 +66,7 @@ namespace NadekoBot.Core.Services.Database.Repositories.Impl
         public int GetNextDiscrim(string clubName)
         {
             return _set
+                .AsQueryable()
                 .Where(x => x.Name.ToUpperInvariant() == clubName.ToUpperInvariant())
                 .Select(x => x.Discrim)
                 .DefaultIfEmpty()
@@ -86,6 +88,7 @@ namespace NadekoBot.Core.Services.Database.Repositories.Impl
         public ClubInfo[] GetClubLeaderboardPage(int page)
         {
             return _set
+                .AsQueryable()
                 .OrderByDescending(x => x.Xp)
                 .Skip(page * 9)
                 .Take(9)

@@ -1,0 +1,8 @@
+rip:
+  overlay: https://cdn.nadeko.bot/other/rip/rip.png
+  background: https://cdn.nadeko.bot/other/rip/overlay.png
+currency:
+- https://cdn.nadeko.bot/other/currency/0.png
+- https://cdn.nadeko.bot/other/currency/1.png
+- https://cdn.nadeko.bot/other/currency/2.png
+- https://cdn.nadeko.bot/other/currency/3.png

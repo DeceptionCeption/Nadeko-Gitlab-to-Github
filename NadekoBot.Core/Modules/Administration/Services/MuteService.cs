@@ -7,7 +7,7 @@ using Discord;
 using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
 using NadekoBot.Common.Collections;
-using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
 using NLog;
@@ -233,7 +233,7 @@ namespace NadekoBot.Modules.Administration.Services
             if (muteRole == null)
             {
 
-                //if it doesn't exist, create it 
+                //if it doesn't exist, create it
                 try { muteRole = await guild.CreateRoleAsync(muteRoleName, GuildPermissions.None, isMentionable: false).ConfigureAwait(false); }
                 catch
                 {

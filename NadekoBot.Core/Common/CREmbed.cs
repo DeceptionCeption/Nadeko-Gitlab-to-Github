@@ -1,5 +1,5 @@
+using Ayu.Common;
 using Discord;
-using NadekoBot.Extensions;
 using Newtonsoft.Json;
 using System;
 

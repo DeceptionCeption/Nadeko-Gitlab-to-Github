@@ -17,12 +17,17 @@ namespace NadekoBot.Common.Attributes
     [AttributeUsage(AttributeTargets.Method)]
     public sealed class NadekoCommandAttribute : CommandAttribute
     {
-        public NadekoCommandAttribute(params string[] aliases) : base(null, aliases)
+        public NadekoCommandAttribute(int priority, params string[] aliases) : base(null, aliases, isNew: true, priority: priority)
         {
 
         }
 
-        public NadekoCommandAttribute() : base(null, null)
+        public NadekoCommandAttribute(params string[] aliases) : base(null, aliases, isNew: true)
+        {
+
+        }
+
+        public NadekoCommandAttribute() : base(null, null, isNew: true)
         {
 
         }

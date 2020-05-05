@@ -4,6 +4,7 @@ using Discord.WebSocket;
 using System;
 using Discord.Commands;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using System.Linq;
 using NadekoBot.Common.Attributes;
 using NadekoBot.Common.ModuleBehaviors;
@@ -21,13 +22,17 @@ namespace NadekoBot.Modules.Help.Services
         private readonly CommandHandler _ch;
         private readonly NadekoStrings _strings;
         private readonly Logger _log;
+        private readonly Ayu.Common.ILocalization _loc;
+        private readonly Core.Services.ILocalization _oldLoc;
 
-        public HelpService(IBotConfigProvider bc, CommandHandler ch, NadekoStrings strings)
+        public HelpService(IBotConfigProvider bc, CommandHandler ch, NadekoStrings strings, Ayu.Common.ILocalization loc, Core.Services.ILocalization oldLoc)
         {
             _bc = bc;
             _ch = ch;
             _strings = strings;
             _log = LogManager.GetCurrentClassLogger();
+            _loc = loc;
+            _oldLoc = oldLoc;
         }
 
         public Task LateExecute(DiscordSocketClient client, IGuild guild, IUserMessage msg)
@@ -51,15 +56,20 @@ namespace NadekoBot.Modules.Help.Services
 
         public EmbedBuilder GetCommandHelp(CommandInfo com, IGuild guild)
         {
+            var cultureInfo = _oldLoc.GetCultureInfo(guild?.Id);
+            var locale = new Nadeko.Common.Localization.Locale(_loc, cultureInfo);
             var prefix = _ch.GetPrefix(guild);
-            
+
             var str = string.Format("**`{0}`**", prefix + com.Aliases.First());
             var alias = com.Aliases.Skip(1).FirstOrDefault();
             if (alias != null)
                 str += string.Format(" **/ `{0}`**", prefix + alias);
+
+            var newCmdStrings = new Lazy<Ayu.Common.CmdStrings>(() => locale.GetCommand(com.Name));
+
             var em = new EmbedBuilder()
                 .AddField(fb => fb.WithName(str)
-                    .WithValue($"{com.RealSummary(prefix)}")
+                    .WithValue($"{com.RealSummary(newCmdStrings, prefix)}")
                     .WithIsInline(true));
 
             var reqs = GetCommandRequirements(com);
@@ -71,7 +81,7 @@ namespace NadekoBot.Modules.Help.Services
 
             em
                 .AddField(fb => fb.WithName(GetText("usage", guild))
-                    .WithValue(com.RealRemarks(prefix))
+                    .WithValue(com.RealRemarks(newCmdStrings, prefix))
                     .WithIsInline(false))
                 .WithFooter(efb => efb.WithText(GetText("module", guild, com.Module.GetTopLevelModule().Name)))
                 .WithColor(NadekoBot.OkColor);

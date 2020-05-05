@@ -1,0 +1,41 @@
+version: '3'
+services:
+  redis:
+    image: redis:5.0-rc-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    logging:
+      driver: "none"
+  # logging stuff
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.1
+    container_name: elasticsearch
+    restart: always
+    logging:
+      driver: "none"
+  # database
+  db:
+    image: postgres:11-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: supersecretpassword
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  searchimages-service:
+    stdin_open: true
+    tty: true
+    build: 
+      context: SearchImages/
+    ports:
+      - "25158:2452"
+    volumes:
+      - "./SearchImages:/app/"
+    depends_on:
+      - db

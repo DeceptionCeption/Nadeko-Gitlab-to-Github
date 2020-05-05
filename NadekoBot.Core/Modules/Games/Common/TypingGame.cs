@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using NadekoBot.Common;
 using NadekoBot.Extensions;
+using Ayu.Common;
 using NadekoBot.Modules.Games.Services;
 using NLog;
 using CommandLine;
@@ -41,7 +41,7 @@ namespace NadekoBot.Modules.Games.Common
 
         private Logger _log { get; }
 
-        public TypingGame(GamesService games, DiscordSocketClient client, ITextChannel channel, 
+        public TypingGame(GamesService games, DiscordSocketClient client, ITextChannel channel,
             string prefix, Options options) //kek@prefix
         {
             _log = LogManager.GetCurrentClassLogger();
