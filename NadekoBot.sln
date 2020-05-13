@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{4C
 		src\services\generate_protos.bat = src\services\generate_protos.bat
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SearchImages", "SearchImages", "{68924A89-4A99-4B10-8601-17BCA437580D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "searchimages", "searchimages", "{68924A89-4A99-4B10-8601-17BCA437580D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "discord.net", "discord.net", "{C15D1651-E780-40CB-BB3B-BF614560513B}"
 EndProject

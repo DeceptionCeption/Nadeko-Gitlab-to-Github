@@ -97,8 +97,8 @@ namespace NadekoBot
             if (shardId == 0)
             {
                 _db.Setup();
-                SearchImagesService.Program.StartService(_newCreds);
-                ExpressionsService.Program.StartService(_newCreds);
+                //SearchImagesService.Program.StartService(_newCreds);
+                //ExpressionsService.Program.StartService(_newCreds);
             }
 
             Client = new DiscordSocketClient(new DiscordSocketConfig

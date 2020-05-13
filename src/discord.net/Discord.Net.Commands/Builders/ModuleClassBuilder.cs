@@ -164,6 +164,8 @@ namespace Discord.Commands
                             builder.IsNew = command.IsNew;
                             if (!(command.Aliases is null) && command.Aliases.Length > 0)
                                 builder.AddAliases(command.Aliases);
+                            else
+                                builder.AddAliases(method.Name.ToLowerInvariant());
                         }
                         else
                         {

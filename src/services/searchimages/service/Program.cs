@@ -25,7 +25,7 @@ namespace SearchImagesService
             Server server = new Server
             {
                 Services = { SearchImages.BindService(new SearchImagesService(db)) },
-                Ports = { new ServerPort(ServiceConsts.Host, 25158, ServerCredentials.Insecure) }
+                Ports = { new ServerPort(ServiceConsts.Host, 2452, ServerCredentials.Insecure) }
             };
             server.Start();
 

@@ -41,7 +41,7 @@ namespace NadekoBot.Common.TypeReaders
         {
             input = input.ToUpperInvariant();
             var module = _cmds.Modules.GroupBy(m => m.GetTopLevelModule()).FirstOrDefault(m => m.Key.Name.ToUpperInvariant() == input)?.Key;
-            if (module == null && input != "ACTUALCUSTOMREACTIONS")
+            if (module == null && input != Nadeko.Bot.Modules.Expressions.Expressions.ActualExpressionModuleName)
                 return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "No such module found."));
 
             return Task.FromResult(TypeReaderResult.FromSuccess(new ModuleOrCrInfo

@@ -63,9 +63,7 @@
     <ProjectReference Include="..\src\discord.net\Discord.Net.Rest\Discord.Net.Rest.csproj" />
     <ProjectReference Include="..\src\discord.net\Discord.Net.WebSocket\Discord.Net.WebSocket.csproj" />
     <ProjectReference Include="..\src\services\expressions\base\Expressions.csproj" />
-    <ProjectReference Include="..\src\services\expressions\service\ExpressionsService.csproj" />
     <ProjectReference Include="..\src\services\searchimages\base\SearchImages.csproj" />
-    <ProjectReference Include="..\src\services\searchimages\service\SearchImagesService.csproj" />
   </ItemGroup>
   
   <PropertyGroup Condition=" '$(Configuration)' == 'GlobalNadeko' ">

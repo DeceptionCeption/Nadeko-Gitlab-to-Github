@@ -30,8 +30,8 @@ namespace NadekoBot.Core.Services.Database
         private IMusicPlaylistRepository _musicPlaylists;
         public IMusicPlaylistRepository MusicPlaylists => _musicPlaylists ?? (_musicPlaylists = new MusicPlaylistRepository(_context));
 
-        private ICustomReactionRepository _customReactions;
-        public ICustomReactionRepository CustomReactions => _customReactions ?? (_customReactions = new CustomReactionsRepository(_context));
+        //private ICustomReactionRepository _customReactions;
+        //public ICustomReactionRepository CustomReactions => _customReactions ?? (_customReactions = new CustomReactionsRepository(_context));
 
         private IWaifuRepository _waifus;
         public IWaifuRepository Waifus => _waifus ?? (_waifus = new WaifuRepository(_context));

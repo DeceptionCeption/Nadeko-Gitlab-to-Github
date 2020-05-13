@@ -27,19 +27,20 @@ namespace ExpressionsService
             _exprDb = exprDb;
             _rng = new NadekoRandom();
             // todo gotta check some other way whether the migration is already done
-            if (File.Exists("data/NadekoBot.db"))
-            {
-                var conn = new SqliteConnection($"Data Source=data/NadekoBot.db;Mode=readonly");
-                conn.Open();
-                try
-                {
-                    MigrateExpressions(conn);
-                }
-                finally
-                {
-                    conn.Close();
-                }
-            }
+            //if (File.Exists("data/NadekoBot.db") && !File.Exists("data/expressions_migrated.nodelete"))
+            //{
+            //    var conn = new SqliteConnection($"Data Source=data/NadekoBot.db;Mode=readonly");
+            //    conn.Open();
+            //    try
+            //    {
+            //        MigrateExpressions(conn);
+            //        File.Create("data/expressions_migrated.nodelete");
+            //    }
+            //    finally
+            //    {
+            //        conn.Close();
+            //    }
+            //}
             var ctx = _exprDb.GetDbContext();
 
             _expressions = ctx
@@ -187,8 +188,6 @@ WHERE IsRegex = 0 AND
                     .Replace(PH_AFTER, after)
                     .Replace(PH_TARGET, after);
 
-            if (guildId != 236275461590745088)
-                return default;
             lock (exprLock)
             {
                 if (_expressions.TryGetValue(guildId, out var exprs))

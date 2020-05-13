@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
 using NadekoBot.Core.Services;
-using NadekoBot.Modules.CustomReactions.Services;
 using NadekoBot.Core.Common.TypeReaders;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +39,7 @@ namespace NadekoBot.Common.TypeReaders
     {
         private readonly DiscordSocketClient _client;
         private readonly CommandService _cmds;
+
         public CommandOrCrTypeReader(DiscordSocketClient client, CommandService cmds) : base(client, cmds)
         {
             _client = client;
@@ -49,12 +49,17 @@ namespace NadekoBot.Common.TypeReaders
         public override async Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
         {
             input = input.ToUpperInvariant();
+            var exprs = services.GetRequiredService<Nadeko.Microservices.Expressions.ExpressionsClient>();
 
-            var _crs = services.GetService<CustomReactionsService>();
-
-            if (_crs.ReactionExists(context.Guild?.Id, input))
+            var expr = await exprs.QueryForExpressionAsync(new Nadeko.Microservices.QueryForExpressionRequest
             {
-                return TypeReaderResult.FromSuccess(new CommandOrCrInfo(input, CommandOrCrInfo.Type.Custom));
+                Content = input,
+                GuildId = context.Guild?.Id ?? 0
+            });
+
+            if (expr.ResCase == Nadeko.Microservices.QueryForExpressionReply.ResOneofCase.Data)
+            {
+                return TypeReaderResult.FromSuccess(new CommandOrCrInfo(expr.Data.Trigger, CommandOrCrInfo.Type.Custom));
             }
 
             var cmd = await new CommandTypeReader(_client, _cmds).ReadAsync(context, input, services).ConfigureAwait(false);

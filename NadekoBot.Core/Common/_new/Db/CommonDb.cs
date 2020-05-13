@@ -15,7 +15,7 @@ namespace Nadeko.Common.Services.Db
     {
         public override string SchemaName => "common";
 
-        public DbSet<GuildConfig> GuildConfigs { get; set; }
+        //public DbSet<GuildConfig> GuildConfigs { get; set; }
         //public DbSet<RotatingStatus> RotatingStatuses { get; set; }
         //public DbSet<RewardedUser> PatreonRewards { get; set; }
 
@@ -27,10 +27,10 @@ namespace Nadeko.Common.Services.Db
         {
             base.OnModelCreating(modelBuilder);
 
-            var gcs = modelBuilder.Entity<GuildConfig>();
+            //var gcs = modelBuilder.Entity<GuildConfig>();
 
-            gcs.HasIndex(x => x.GuildId)
-                .IsUnique();
+            //gcs.HasIndex(x => x.GuildId)
+            //    .IsUnique();
 
             //modelBuilder.Entity<RotatingStatus>()
             //    .HasIndex(x => x.Index)

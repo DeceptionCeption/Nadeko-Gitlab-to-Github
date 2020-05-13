@@ -1,0 +1,78 @@
+version: '3'
+services:
+  redis:
+    image: redis:5.0-alpine
+    #REPLACE 'password' with your own secure password
+    command: redis-server --requirepass bf08bsofubyrsoufsbsdarg8yurbg089345ybg380ybg38ygb4308gyb
+    restart: always
+    sysctls:
+      net.core.somaxconn: '65535'
+    logging:
+      driver: "none"
+    # You can uncomment 2 lines under to be able to access redis server from your or external machine,
+    # but if you do so, make sure your firewall or ufw blocks the incoming connections on that port,
+    # as a malicious user might be able to connect to it from a remote location
+    # ports:
+    #   - "6379:6379"
+    volumes:
+      - redisdata:/var/lib/redis
+  db:
+    image: postgres:12-alpine
+    restart: always
+    command: postgres -N 1000
+    environment:
+      POSTGRES_USER: postgres
+      #REPLACE 'password' with your own secure password
+      POSTGRES_PASSWORD: password
+    # Read the comment in redis entry if you wish to uncomment the ports here
+    # ports:
+    #   - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  bot:
+    hostname: bot
+    build:
+      context: .
+    environment:
+      - COORDINATOR_TYPE=bot
+      - IS_GLOBAL=1
+    restart: always
+    depends_on:
+      - db
+      - redis
+    command: bash -c "/wait-for-it.sh currency:2452 -t 0 -- /app/NadekoBot --type Bot"
+    volumes:
+      - ./data/:/app/data/
+      - ./config/:/app/config/
+      - ./credentials.json:/app/credentials.json
+  searchimages:
+    stdin_open: true
+    tty: true
+    restart: always
+    image: searchimages-service:latest
+    volumes:
+      - ./data/:/app/data/
+      - ./config/:/app/config/
+  currency:
+    stdin_open: true
+    tty: true
+    restart: always
+    image: currency-service:latest
+    command: bash -c "/wait-for-it.sh db:5432 -t 0 -- dotnet service.dll"
+    volumes:
+      - ./data/:/app/data/
+      - ./config/:/app/config/
+    depends_on:
+      - db
+  expressions:
+    stdin_open: true
+    tty: true
+    restart: always
+    image: expressions-service:latest
+    command: bash -c "/wait-for-it.sh db:5432 -t 0 -- dotnet service.dll"
+    volumes:
+      - ./data/:/app/data/
+      - ./config/:/app/config/
+volumes:
+  pgdata:
+  redisdata:

@@ -61,34 +61,34 @@ namespace Nadeko.Common.Services
             }
         }
 
-        private GuildConfig? InternalGetGuildConfig(ulong guildId)
-        {
-            using var uow = _db.GetDbContext();
-            return uow.GuildConfigs
-                .AsNoTracking()
-                .FirstOrDefault(x => x.GuildId == guildId);
-        }
+        //private GuildConfig? InternalGetGuildConfig(ulong guildId)
+        //{
+        //    using var uow = _db.GetDbContext();
+        //    return uow.GuildConfigs
+        //        .AsNoTracking()
+        //        .FirstOrDefault(x => x.GuildId == guildId);
+        //}
 
-        public BotConfig GetConfig(ulong? maybeGuildId)
-        {
-            if (!(maybeGuildId is ulong guildId))
-            {
-                return Data;
-            }
+        //public BotConfig GetConfig(ulong? maybeGuildId)
+        //{
+        //    if (!(maybeGuildId is ulong guildId))
+        //    {
+        //        return Data;
+        //    }
 
-            var guildConfig = _cache.GetOrCreate("guild_config:" + guildId, e =>
-            {
-                e.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30);
-                return InternalGetGuildConfig(guildId);
-            });
+        //    var guildConfig = _cache.GetOrCreate("guild_config:" + guildId, e =>
+        //    {
+        //        e.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30);
+        //        return InternalGetGuildConfig(guildId);
+        //    });
 
-            var data = Data;
+        //    var data = Data;
 
-            data.Prefix = guildConfig?.CommandString ?? data.Prefix;
-            data.PrefixIsSuffix = guildConfig?.CommandStringIsSuffix ?? data.PrefixIsSuffix;
+        //    data.Prefix = guildConfig?.CommandString ?? data.Prefix;
+        //    data.PrefixIsSuffix = guildConfig?.CommandStringIsSuffix ?? data.PrefixIsSuffix;
 
-            return data;
-        }
+        //    return data;
+        //}
 
         public async Task<ulong[]> AddOwnersAsync(ulong[] toAdd)
         {
@@ -133,50 +133,50 @@ namespace Nadeko.Common.Services
             }
         }
 
-        public async Task<bool> SetPrefixAsync(ulong guildId, string? cmdString, bool? isSuffix)
-        {
-            cmdString = cmdString?.Trim().ToLowerInvariant();
+        //public async Task<bool> SetPrefixAsync(ulong guildId, string? cmdString, bool? isSuffix)
+        //{
+        //    cmdString = cmdString?.Trim().ToLowerInvariant();
 
-            if (guildId == 0)
-            {
-                // you can't set default commandstring to null
-                if (string.IsNullOrWhiteSpace(cmdString))
-                    return false;
+        //    if (guildId == 0)
+        //    {
+        //        // you can't set default commandstring to null
+        //        if (string.IsNullOrWhiteSpace(cmdString))
+        //            return false;
 
-                var data = Data;
-                data.Prefix = cmdString;
-                if (!(isSuffix is null))
-                {
-                    data.PrefixIsSuffix = isSuffix.Value;
-                }
-                SetCustomConfig(ref data);
-                return true;
-            }
-            else
-            {
-                using var uow = _db.GetDbContext();
-                var config = uow.GuildConfigs.FirstOrDefault(x => x.GuildId == guildId);
-                if (config is null)
-                {
-                    uow.Add(config = new GuildConfig
-                    {
-                        GuildId = guildId,
-                        CommandString = cmdString,
-                        CommandStringIsSuffix = isSuffix,
-                    });
-                }
-                else
-                {
-                    config.CommandString = cmdString;
-                    config.CommandStringIsSuffix = isSuffix;
-                }
+        //        var data = Data;
+        //        data.Prefix = cmdString;
+        //        if (!(isSuffix is null))
+        //        {
+        //            data.PrefixIsSuffix = isSuffix.Value;
+        //        }
+        //        SetCustomConfig(ref data);
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        using var uow = _db.GetDbContext();
+        //        var config = uow.GuildConfigs.FirstOrDefault(x => x.GuildId == guildId);
+        //        if (config is null)
+        //        {
+        //            uow.Add(config = new GuildConfig
+        //            {
+        //                GuildId = guildId,
+        //                CommandString = cmdString,
+        //                CommandStringIsSuffix = isSuffix,
+        //            });
+        //        }
+        //        else
+        //        {
+        //            config.CommandString = cmdString;
+        //            config.CommandStringIsSuffix = isSuffix;
+        //        }
 
-                await uow.SaveChangesAsync();
+        //        await uow.SaveChangesAsync();
 
-                _cache.Set("guild_config:" + guildId, config, TimeSpan.FromSeconds(30));
-                return true;
-            }
-        }
+        //        _cache.Set("guild_config:" + guildId, config, TimeSpan.FromSeconds(30));
+        //        return true;
+        //    }
+        //}
 
         public string GetConfigText()
             => Yaml.Serializer.Serialize(_creds.Data);

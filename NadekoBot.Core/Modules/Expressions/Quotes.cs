@@ -13,19 +13,20 @@ using Ayu.Discord.Common;
 using Nadeko.Bot.Common.Attributes;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Common;
+using NadekoBot.Modules;
 
-namespace NadekoBot.Modules.Utility
+namespace Nadeko.Bot.Modules.Expressions
 {
-    public partial class Utility
+    public partial class Expressions
     {
         [Group]
-        public class QuoteCommands : NadekoSubmodule
+        public class Quotes : NadekoSubmodule
         {
             private readonly Nadeko.Microservices.Expressions.ExpressionsClient _expr;
             private readonly ReplacementBuilderService _repService;
             private readonly IBotCredentials _creds;
 
-            public QuoteCommands(Nadeko.Microservices.Expressions.ExpressionsClient expressions,
+            public Quotes(Nadeko.Microservices.Expressions.ExpressionsClient expressions,
                 ReplacementBuilderService repService, IBotCredentials creds)
             {
                 _isNew = true;

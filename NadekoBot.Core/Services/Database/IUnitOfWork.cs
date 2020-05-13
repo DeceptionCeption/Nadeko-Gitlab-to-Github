@@ -13,7 +13,7 @@ namespace NadekoBot.Core.Services.Database
         IReminderRepository Reminders { get; }
         ISelfAssignedRolesRepository SelfAssignedRoles { get; }
         IBotConfigRepository BotConfig { get; }
-        ICustomReactionRepository CustomReactions { get; }
+        //ICustomReactionRepository CustomReactions { get; }
         ICurrencyTransactionsRepository CurrencyTransactions { get; }
         IMusicPlaylistRepository MusicPlaylists { get; }
         IWaifuRepository Waifus { get; }

@@ -35,7 +35,7 @@ namespace NadekoBot.Core.Services.Database
         public DbSet<Reminder> Reminders { get; set; }
         public DbSet<SelfAssignedRole> SelfAssignableRoles { get; set; }
         public DbSet<MusicPlaylist> MusicPlaylists { get; set; }
-        public DbSet<CustomReaction> CustomReactions { get; set; }
+        //public DbSet<CustomReaction> CustomReactions { get; set; }
         public DbSet<CurrencyTransaction> CurrencyTransactions { get; set; }
         public DbSet<WaifuUpdate> WaifuUpdates { get; set; }
         public DbSet<Warning> Warnings { get; set; }

@@ -35,7 +35,7 @@ namespace Nadeko.Common.Localization
         }
         private readonly CultureInfo _enUsCulture = new CultureInfo("en-US");
 
-        private readonly ConcurrentDictionary<ulong, CultureInfo> _guildLocales = new ConcurrentDictionary<ulong, CultureInfo>();
+        //private readonly ConcurrentDictionary<ulong, CultureInfo> _guildLocales = new ConcurrentDictionary<ulong, CultureInfo>();
 
         private const string _basePath = "config/_strings/";
         private const string responsesPath = _basePath + "responses";
@@ -62,19 +62,19 @@ namespace Nadeko.Common.Localization
         {
             _commonDb = commonDb;
             _erp = erp;
+            // todo uncomment
+            //var localeData = commonDb.GetDbContext().GuildConfigs
+            //    .AsQueryable()
+            //    .Select(x => new { x.GuildId, x.Locale })
+            //    .AsEnumerable();
 
-            var localeData = commonDb.GetDbContext().GuildConfigs
-                .AsQueryable()
-                .Select(x => new { x.GuildId, x.Locale })
-                .AsEnumerable();
-
-            _guildLocales = new ConcurrentDictionary<ulong, CultureInfo>(localeData.ToDictionary(
-                x => x.GuildId,
-                y =>
-                {
-                    try { return new CultureInfo(y.Locale); }
-                    catch { return _enUsCulture; }
-                }));
+            //_guildLocales = new ConcurrentDictionary<ulong, CultureInfo>(localeData.ToDictionary(
+            //    x => x.GuildId,
+            //    y =>
+            //    {
+            //        try { return new CultureInfo(y.Locale); }
+            //        catch { return _enUsCulture; }
+            //    }));
 
             _config = config;
 
@@ -128,28 +128,30 @@ namespace Nadeko.Common.Localization
 
         public CultureInfo? TrySetLocale(ulong guildId, string lang)
         {
-            lang = lang.ToLowerInvariant();
-            if (_alternativeNames.TryGetValue(lang, out var realName))
-                lang = realName;
+            return null;
+            // todo uncomment
+            //lang = lang.ToLowerInvariant();
+            //if (_alternativeNames.TryGetValue(lang, out var realName))
+            //    lang = realName;
 
-            try
-            {
+            //try
+            //{
 
-                var ci = lang == "default"
-                    ? DefaultCulture
-                    : CultureInfo.GetCultureInfo(lang);
+            //    var ci = lang == "default"
+            //        ? DefaultCulture
+            //        : CultureInfo.GetCultureInfo(lang);
 
-                using var uow = _commonDb.GetDbContext();
-                var gc = uow.GuildConfigFor(guildId);
-                gc.Locale = ci.Name;
-                uow.SaveChanges();
+            //    using var uow = _commonDb.GetDbContext();
+            //    var gc = uow.GuildConfigFor(guildId);
+            //    gc.Locale = ci.Name;
+            //    uow.SaveChanges();
 
-                return _guildLocales.AddOrUpdate(guildId, ci, delegate { return ci; });
-            }
-            catch
-            {
-                return null;
-            }
+            //    return _guildLocales.AddOrUpdate(guildId, ci, delegate { return ci; });
+            //}
+            //catch
+            //{
+            //    return null;
+            //}
         }
 
         public string[] GetResponseLanguagesList()
@@ -286,8 +288,8 @@ namespace Nadeko.Common.Localization
 
         public ILocale GetLocale(ulong guildId)
         {
-            if (_guildLocales.TryGetValue(guildId, out var cultureInfo))
-                return new Locale(this, cultureInfo);
+            //if (_guildLocales.TryGetValue(guildId, out var cultureInfo))
+            //    return new Locale(this, cultureInfo);
             return GetDefaultLocale();
         }
 

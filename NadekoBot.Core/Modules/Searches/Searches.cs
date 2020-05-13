@@ -653,16 +653,6 @@ namespace NadekoBot.Modules.Searches
             await ctx.Channel.SendConfirmAsync($"https://images.google.com/searchbyimage?image_url={imageLink}").ConfigureAwait(false);
         }
 
-        [OldNadekoCommand, Usage, Description, Aliases]
-        public async Task Safebooru(params string[] tags)
-        {
-            var payload = NSFW.NSFW.GetTagRequest(Context, tags);
-
-            var data = await Rpc(Context, _searchImagesService.SafeBooruAsync, payload);
-
-            await NSFW.NSFW.NsfwReply(Context, data);
-        }
-
         // done in 3.0
         [OldNadekoCommand, Usage, Description, Aliases]
         public async Task Wiki([Leftover] string query = null)
