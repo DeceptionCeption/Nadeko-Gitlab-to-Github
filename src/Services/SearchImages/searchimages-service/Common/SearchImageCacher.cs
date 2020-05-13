@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
-#nullable enable
+
 namespace SearchImagesService.Common
 {
     public class SearchImageCacher
@@ -19,7 +19,7 @@ namespace SearchImagesService.Common
         private readonly Random _rng;
         private readonly SortedSet<ImageCacherObject> _cache;
 
-        private static readonly List<string> defaultTagBlacklist = new List<string>() {
+        private static readonly IReadOnlyCollection<string> defaultTagBlacklist = new[] {
             "loli",
             "lolicon",
             "shota"
@@ -106,6 +106,28 @@ namespace SearchImagesService.Common
             }
         }
 
+        public class E621Object
+        {
+            public class FileData
+            {
+                public string Url { get; set; }
+            }
+
+            public class TagData
+            {
+                public string[] General { get; set; }
+            }
+
+            public class ScoreData
+            {
+                public string Total { get; set; }
+            }
+
+            public FileData File { get; set; }
+            public TagData Tags { get; set; }
+            public ScoreData Score { get; set; }
+        }
+
         public async Task<ImageCacherObject[]> DownloadImagesAsync(string[] tags, bool isExplicit, DapiSearchType type)
         {
             isExplicit = type == DapiSearchType.Safebooru
@@ -122,7 +144,7 @@ namespace SearchImagesService.Common
                     website = $"https://safebooru.org/index.php?page=dapi&s=post&q=index&limit=1000&tags={tag}&json=1";
                     break;
                 case DapiSearchType.E621:
-                    website = $"https://e621.net/post/index.json?limit=1000&tags={tag}";
+                    website = $"https://e621.net/posts.json?limit=200&tags={tag}";
                     break;
                 case DapiSearchType.Danbooru:
                     website = $"http://danbooru.donmai.us/posts.json?limit=100&tags={tag}";
@@ -140,14 +162,14 @@ namespace SearchImagesService.Common
                     website = $"https://yande.re/post.json?limit=100&tags={tag}";
                     break;
                 case DapiSearchType.Derpibooru:
-                    website = $"https://derpibooru.org/search.json?q={tag?.Replace('+', ',')}&perpage=49";
+                    tag = string.IsNullOrWhiteSpace(tag) ? "safe" : tag;
+                    website = $"https://www.derpibooru.org/api/v1/json/search/images?q={tag?.Replace('+', ',')}&per_page=49";
                     break;
             }
 
             try
             {
-                if (type == DapiSearchType.Konachan || type == DapiSearchType.Yandere ||
-                    type == DapiSearchType.E621 || type == DapiSearchType.Danbooru)
+                if (type == DapiSearchType.Konachan || type == DapiSearchType.Yandere || type == DapiSearchType.Danbooru)
                 {
                     var data = await _http.GetStringAsync(website).ConfigureAwait(false);
                     return JsonConvert.DeserializeObject<DapiImageObject[]>(data)
@@ -156,14 +178,25 @@ namespace SearchImagesService.Common
                         .ToArray();
                 }
 
+                if (type == DapiSearchType.E621)
+                {
+                    var data = await _http.GetStringAsync(website).ConfigureAwait(false);
+                    return JsonConvert.DeserializeAnonymousType(data, new { posts = new List<E621Object>() })
+                        .posts
+                        .Where(x => !string.IsNullOrWhiteSpace(x.File?.Url))
+                        .Select(x => new ImageCacherObject(x.File.Url,
+                            type, string.Join(' ', x.Tags.General), x.Score.Total))
+                        .ToArray();
+                }
+
                 if (type == DapiSearchType.Derpibooru)
                 {
                     var data = await _http.GetStringAsync(website).ConfigureAwait(false);
                     return JsonConvert.DeserializeObject<DerpiContainer>(data)
-                        .Search
-                        .Where(x => !string.IsNullOrWhiteSpace(x.Image))
-                        .Select(x => new ImageCacherObject("https:" + x.Image,
-                            type, x.Tags, x.Score))
+                        .Images
+                        .Where(x => !string.IsNullOrWhiteSpace(x.ViewUrl))
+                        .Select(x => new ImageCacherObject(x.ViewUrl,
+                            type, string.Join("\n", x.Tags), x.Score))
                         .ToArray();
                 }
 

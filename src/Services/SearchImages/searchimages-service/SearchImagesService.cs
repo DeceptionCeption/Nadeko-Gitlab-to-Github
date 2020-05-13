@@ -1,6 +1,5 @@
 ﻿using Grpc.Core;
 using Ayu.Common;
-using Nadeko.Db;
 using Nadeko.Microservices;
 using Newtonsoft.Json.Linq;
 using SearchImagesService.Common;
@@ -12,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Nadeko.Db;
 
 namespace SearchImagesService
 {
@@ -29,13 +29,11 @@ namespace SearchImagesService
             _http = new HttpClient();
             _http.AddFakeHeaders();
             _cache = new SearchImageCacher();
-            _db = new ServiceDb<SearchImageContext>(SearchImageContext.BaseOptions.Build());
 
-            using (var uow = _db.GetDbContext())
-            {
-                _blacklistedTags = new ConcurrentDictionary<ulong, HashSet<string>>(uow.BlacklistedTags
-                    .ToDictionary(x => x.GuildId, x => new HashSet<string>(x.Tags)));
-            }
+            _db = new ServiceDb<SearchImageContext>(SearchImageContext.BaseOptions.Build());
+            using var uow = _db.GetDbContext();
+            _blacklistedTags = new ConcurrentDictionary<ulong, HashSet<string>>(uow.BlacklistedTags
+                .ToDictionary(x => x.GuildId, x => new HashSet<string>(x.Tags)));
         }
 
         private Task<UrlReply> GetNsfwImageAsync(TagRequest request, ServerCallContext context, DapiSearchType dapi)
@@ -139,7 +137,7 @@ namespace SearchImagesService
                 .ToList();
 
             // now try to get an image, if it fails return an error,
-            // keep trying for each provider until one of them is successful, or until 
+            // keep trying for each provider until one of them is successful, or until
             // we run out of providers. If we run out, then return an error
             UrlReply img;
             do
@@ -148,7 +146,7 @@ namespace SearchImagesService
                 var num = _rng.Next(0, listOfProviders.Count);
                 // get the type
                 var type = listOfProviders[num];
-                // remove it 
+                // remove it
                 listOfProviders.RemoveAt(num);
                 // get the image
                 img = await GetNsfwImageAsync(request, context, type).ConfigureAwait(false);

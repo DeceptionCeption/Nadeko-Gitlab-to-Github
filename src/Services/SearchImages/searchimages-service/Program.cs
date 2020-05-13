@@ -1,5 +1,6 @@
 using Grpc.Core;
 using Nadeko.Microservices;
+using SearchImagesService.Common.Db;
 using Serilog;
 using System;
 using System.Threading.Tasks;
