@@ -163,7 +163,7 @@ namespace SearchImagesService.Common
                     break;
                 case DapiSearchType.Derpibooru:
                     tag = string.IsNullOrWhiteSpace(tag) ? "safe" : tag;
-                    website = $"https://derpibooru.org/search.json?q={tag?.Replace('+', ',')}&perpage=49";
+                    website = $"https://www.derpibooru.org/api/v1/json/search/images?q={tag?.Replace('+', ',')}&per_page=49";
                     break;
             }
 
@@ -193,10 +193,10 @@ namespace SearchImagesService.Common
                 {
                     var data = await _http.GetStringAsync(website).ConfigureAwait(false);
                     return JsonConvert.DeserializeObject<DerpiContainer>(data)
-                        .Search
-                        .Where(x => !string.IsNullOrWhiteSpace(x.Image))
-                        .Select(x => new ImageCacherObject("https:" + x.Image,
-                            type, x.Tags, x.Score))
+                        .Images
+                        .Where(x => !string.IsNullOrWhiteSpace(x.ViewUrl))
+                        .Select(x => new ImageCacherObject(x.ViewUrl,
+                            type, string.Join("\n", x.Tags), x.Score))
                         .ToArray();
                 }
 
