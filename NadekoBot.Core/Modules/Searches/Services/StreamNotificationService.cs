@@ -202,13 +202,12 @@ namespace NadekoBot.Modules.Searches.Services
                         var fullUseridData = await http.GetStringAsync(twitchurl);
                         var fullData = JObject.Parse(fullUseridData);
                         var data = fullData["users"].ToArray().FirstOrDefault();
-                        if(data is default(JToken))
+                        type = typeof(TwitchResponse);
+                        if (data is default(JToken))
                         {
                             throw new StreamNotFoundException($"Stream Not Found: {username} [{type.Name}]");
                         }
-
                         url = $"https://api.twitch.tv/kraken/streams/{ data["_id"] }";
-                        type = typeof(TwitchResponse);
                         break;
                     case FollowedStream.FType.Smashcast:
                         url = $"https://api.smashcast.tv/user/{username}";

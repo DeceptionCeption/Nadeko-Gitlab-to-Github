@@ -26,21 +26,20 @@ namespace ExpressionsService
         {
             _exprDb = exprDb;
             _rng = new NadekoRandom();
-            // todo gotta check some other way whether the migration is already done
-            //if (File.Exists("data/NadekoBot.db") && !File.Exists("data/expressions_migrated.nodelete"))
-            //{
-            //    var conn = new SqliteConnection($"Data Source=data/NadekoBot.db;Mode=readonly");
-            //    conn.Open();
-            //    try
-            //    {
-            //        MigrateExpressions(conn);
-            //        File.Create("data/expressions_migrated.nodelete");
-            //    }
-            //    finally
-            //    {
-            //        conn.Close();
-            //    }
-            //}
+            if (File.Exists("data/NadekoBot.db") && !File.Exists("data/expressions_migrated.nodelete"))
+            {
+                var conn = new SqliteConnection($"Data Source=data/NadekoBot.db;Mode=readonly");
+                conn.Open();
+                try
+                {
+                    MigrateExpressions(conn);
+                    File.Create("data/expressions_migrated.nodelete");
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
             var ctx = _exprDb.GetDbContext();
 
             _expressions = ctx
@@ -85,10 +84,9 @@ namespace ExpressionsService
 
 
             Log.Information("Migrating customreactions data...");
-            com.CommandText = $@"SELECT GuildId, Trigger, Response, AutoDeleteTrigger, DmResponse FROM CustomReactions
+            com.CommandText = $@"SELECT GuildId, Trigger, Response, AutoDeleteTrigger, DmResponse, ContainsAnywhere FROM CustomReactions
 WHERE IsRegex = 0 AND
-    OwnerOnly = 0 AND
-    ContainsAnywhere = 0;";
+    OwnerOnly = 0;";
             using (var reader = com.ExecuteReader())
             {
                 while (reader.Read())
@@ -100,6 +98,7 @@ WHERE IsRegex = 0 AND
                     var response = reader.GetString(2);
                     var ad = reader.GetBoolean(3);
                     var dm = reader.GetBoolean(4);
+                    var ca = reader.GetBoolean(5);
 
                     uow.Expressions.Add(new Expression
                     {
@@ -111,6 +110,7 @@ WHERE IsRegex = 0 AND
                         Response = response,
                         AutoDelete = ad,
                         DirectMessage = dm,
+                        ContainsAnywhere = ca,
                     });
                 }
             }

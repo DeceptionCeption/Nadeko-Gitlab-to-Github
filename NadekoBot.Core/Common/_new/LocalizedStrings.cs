@@ -62,7 +62,7 @@ namespace Nadeko.Common.Localization
         {
             _commonDb = commonDb;
             _erp = erp;
-            // todo uncomment
+            // todo + uncomment
             //var localeData = commonDb.GetDbContext().GuildConfigs
             //    .AsQueryable()
             //    .Select(x => new { x.GuildId, x.Locale })
@@ -129,7 +129,7 @@ namespace Nadeko.Common.Localization
         public CultureInfo? TrySetLocale(ulong guildId, string lang)
         {
             return null;
-            // todo uncomment
+            // todo + uncomment
             //lang = lang.ToLowerInvariant();
             //if (_alternativeNames.TryGetValue(lang, out var realName))
             //    lang = realName;

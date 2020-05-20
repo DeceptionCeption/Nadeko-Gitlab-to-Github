@@ -9,7 +9,6 @@
 
 //namespace Nadeko.Common.Local
 //{
-//    // todo test .xp emojis
 //    public class CredsService : ServiceConfig<Creds>
 //    {
 //        // todo 3.1 credentials should be moved for selfhosters from ./ to ./data

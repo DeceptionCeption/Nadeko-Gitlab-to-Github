@@ -26,7 +26,7 @@ namespace ExpressionsService
             Server server = new Server
             {
                 Services = { Expressions.BindService(new ExpressionsService(exprdb)) },
-                Ports = { new ServerPort(ServiceConsts.Host, 2452, ServerCredentials.Insecure) }
+                Ports = { new ServerPort("0.0.0.0", 2452, ServerCredentials.Insecure) }
             };
             server.Start();
 

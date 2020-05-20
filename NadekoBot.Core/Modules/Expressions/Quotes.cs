@@ -157,13 +157,13 @@ namespace Nadeko.Bot.Modules.Expressions
                 }
             }
 
-            [NadekoCommand("qlist", "qli")]
+            [NadekoCommand("qlist", "qli", "liqu")]
             [RequireContext(ContextType.Guild)]
             [NadekoOptions(typeof(ListOptions))]
             public Task QuoteList(params string[] args)
                 => QuoteList(1, args);
 
-            [NadekoCommand("qlist", "qli")]
+            [NadekoCommand("qlist", "qli", "liqu")]
             [RequireContext(ContextType.Guild)]
             [NadekoOptions(typeof(ListOptions))]
             public async Task QuoteList(int page = 1, params string[] args)

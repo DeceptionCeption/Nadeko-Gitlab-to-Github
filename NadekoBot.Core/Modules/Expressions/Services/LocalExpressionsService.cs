@@ -82,7 +82,6 @@ namespace NadekoBot.Modules.CustomReactions.Services
             {
                 if (pc.Verbose)
                 {
-                    // todo migrate localization to v3
                     var locale = new Nadeko.Common.Localization.Locale(_newLocalization, _oldLocalization.GetCultureInfo(guild));
                     var cmd = pc.Permissions[index].GetCommand(_cmd.GetPrefix(channel.Guild), channel.Guild);
                     var returnMsg = locale.GetText("perm_prevent", Format.Bold((index + 1).ToString()), Format.Code(cmd));

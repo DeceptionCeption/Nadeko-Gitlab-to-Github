@@ -67,8 +67,9 @@ namespace NadekoBot.Core.Services.Database.Repositories.Impl
         {
             return _set
                 .AsQueryable()
-                .Where(x => x.Name.ToUpperInvariant() == clubName.ToUpperInvariant())
+                .Where(x => x.Name.ToUpper() == clubName.ToUpper())
                 .Select(x => x.Discrim)
+                .AsEnumerable()
                 .DefaultIfEmpty()
                 .Max() + 1;
         }

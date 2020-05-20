@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Ayu.Common;
+using Microsoft.EntityFrameworkCore;
 using NadekoBot.Core.Services.Database.Models;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,11 @@ namespace NadekoBot.Core.Services.Database.Repositories.Impl
 {
     public class WaifuRepository : Repository<WaifuInfo>, IWaifuRepository
     {
+        private readonly NadekoRandom _rng;
+
         public WaifuRepository(DbContext context) : base(context)
         {
+            _rng = new NadekoRandom();
         }
 
         public WaifuInfo ByWaifuUserId(ulong userId, Func<DbSet<WaifuInfo>, IQueryable<WaifuInfo>> includes = null)
@@ -106,7 +110,7 @@ WHERE UserId = (SELECT Id from DiscordUser WHERE UserId={userId}) AND
 INSERT OR IGNORE INTO WaifuInfo (AffinityId, ClaimerId, Price, WaifuId)
 VALUES ({null}, {null}, {1}, (SELECT Id FROM DiscordUser WHERE UserId={userId}));");
 
-            return _set
+            var toReturn = _set
                 .AsQueryable()
                 .Where(w => w.WaifuId == _context.Set<DiscordUser>()
                     .AsQueryable()
@@ -154,11 +158,9 @@ VALUES ({null}, {null}, {1}, (SELECT Id FROM DiscordUser WHERE UserId={userId}))
                     Price = w.Price,
 
                     Claims30 = _set
-                        .Include(x => x.Waifu)
+                        .AsQueryable()
                         .Where(x => x.ClaimerId == w.WaifuId)
                         .Select(x => x.Waifu.Username + "#" + x.Waifu.Discriminator)
-                        .OrderBy(x => Guid.NewGuid())
-                        .Take(30)
                         .ToList(),
 
                     Items = _context.Set<WaifuItem>()
@@ -167,6 +169,15 @@ VALUES ({null}, {null}, {1}, (SELECT Id FROM DiscordUser WHERE UserId={userId}))
                         .ToList(),
                 })
             .FirstOrDefault();
+
+
+            if (!(toReturn is null) && toReturn.Claims30.Any())
+            {
+                toReturn.Claims30.ShuffleList(_rng);
+                toReturn.Claims30 = toReturn.Claims30.Take(30).ToList();
+            }
+
+            return toReturn;
         }
     }
 }

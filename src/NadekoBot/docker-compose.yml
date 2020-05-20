@@ -12,8 +12,8 @@ services:
     # You can uncomment 2 lines under to be able to access redis server from your or external machine,
     # but if you do so, make sure your firewall or ufw blocks the incoming connections on that port,
     # as a malicious user might be able to connect to it from a remote location
-    # ports:
-    #   - "6379:6379"
+    ports:
+      - "6379:6379"
     volumes:
       - redisdata:/var/lib/redis
   db:
@@ -23,10 +23,10 @@ services:
     environment:
       POSTGRES_USER: postgres
       #REPLACE 'password' with your own secure password
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: bf08bsofubyrsoufsbsdarg8yurbg089345ybg380ybg38ygb4308gyb
     # Read the comment in redis entry if you wish to uncomment the ports here
-    # ports:
-    #   - "5432:5432"
+    ports:
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
   bot:
@@ -40,7 +40,7 @@ services:
     depends_on:
       - db
       - redis
-    command: bash -c "/wait-for-it.sh currency:2452 -t 0 -- /app/NadekoBot --type Bot"
+    command: bash -c "/wait-for-it.sh expressions:2452 -t 0 -- /app/NadekoBot"
     volumes:
       - ./data/:/app/data/
       - ./config/:/app/config/
@@ -50,26 +50,33 @@ services:
     tty: true
     restart: always
     image: searchimages-service:latest
+    ports:
+      - 1002:2452
     volumes:
       - ./data/:/app/data/
       - ./config/:/app/config/
-  currency:
-    stdin_open: true
-    tty: true
-    restart: always
-    image: currency-service:latest
-    command: bash -c "/wait-for-it.sh db:5432 -t 0 -- dotnet service.dll"
-    volumes:
-      - ./data/:/app/data/
-      - ./config/:/app/config/
-    depends_on:
-      - db
+  # currency:
+  #   stdin_open: true
+  #   tty: true
+  #   restart: always
+  #   image: currency-service:latest
+  #   command: bash -c "/wait-for-it.sh db:5432 -t 0 -- dotnet service.dll"
+  #   volumes:
+  #     - ./data/:/app/data/
+  #     - ./config/:/app/config/
+  #   depends_on:
+  #     - db
   expressions:
     stdin_open: true
     tty: true
     restart: always
+    depends_on:
+      - db
+      - redis
     image: expressions-service:latest
     command: bash -c "/wait-for-it.sh db:5432 -t 0 -- dotnet service.dll"
+    ports:
+      - 1001:2452
     volumes:
       - ./data/:/app/data/
       - ./config/:/app/config/
