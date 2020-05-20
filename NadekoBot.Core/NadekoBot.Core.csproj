@@ -6,6 +6,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ApplicationIcon>nadeko_icon.ico</ApplicationIcon>
     <NoWarn>CS8632</NoWarn>
+    <DefineConstants>$(DefineConstants);GLOBAL_NADEKO</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>exe</OutputType>
@@ -7,8 +6,9 @@
     <LangVersion>preview</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
+    <NoWarn>CS1573;CS1591</NoWarn>
+    <DefineConstants>GLOBAL_NADEKO</DefineConstants>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Version)' == '' ">
     <VersionPrefix Condition=" '$(VersionPrefix)' == '' ">2.0.0</VersionPrefix>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix).$(VersionSuffix)</Version>
@@ -55,9 +55,4 @@
   <ItemGroup>
     <Folder Include="config\" />
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)' == 'GlobalNadeko' ">
-    <DefineConstants>$(DefineConstants);GLOBAL_NADEKO</DefineConstants>
-    <NoWarn>$(NoWarn);CS1573;CS1591</NoWarn>
-  </PropertyGroup>
 </Project>
