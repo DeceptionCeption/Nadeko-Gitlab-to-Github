@@ -93,7 +93,6 @@ namespace Nadeko.Bot.Modules.Expressions
                     .AddField(efb => efb.WithName(GetText("response")).WithValue(res.ExprData.Response.TrimTo(1024)))).ConfigureAwait(false);
             }
 
-            // todo commandorcrinfo
             [NadekoCommand("qclear", "qclr", "quoteclear")]
             [OwnerOrAdmin]
             [RequireContext(ContextType.Guild)]

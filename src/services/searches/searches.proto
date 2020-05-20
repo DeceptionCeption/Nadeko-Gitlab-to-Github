@@ -1,0 +1,549 @@
+syntax = "proto3";
+
+package nadeko.microservices;
+
+import "google/protobuf/timestamp.proto";
+
+service Searches {
+  rpc GetRandomHostedPic(GetPicRequest) returns (HostedPicReply) {}
+  rpc GetBibleVerse(BibleRequest) returns (BibleVerse) {}
+  // rpc GetGamepadiaPage(GamepediaRequest) returns (GamepediaReply) {}
+  rpc GetWikipediaPage(WikipediaRequest) returns (WikipediaReply) {}
+  rpc GetCatFact(CatFactRequest) returns (CatFactReply) {}
+  // rpc GetHashtagDefinition(HashTagRequest) returns (HashTagData) {}
+  rpc GetDefinition(DefineRequest) returns (DefineResponse) {}
+  rpc GetUrbanDictDefinition(UrbanDictRequest) returns (UrbanDictReply) {}
+  rpc GetHearthstoneCard(HearthstoneCardRequest) returns (HearthstoneCardData) {}
+  rpc GetMtgCard(MtgCardRequest) returns (MtgCardData) {}
+  rpc SearchGoogle(GoogleSearchRequest) returns (GoogleSearchResult) {}
+  rpc ShortenUrl(ShortenUrlRequest) returns (ShortenUrlReply) {}
+  rpc ImageSearch(ImageSearchRequest) returns (ImageSearchReply) {}
+  rpc GetMovie(MovieRequest) returns (MovieData) {}
+  rpc GetTime(GetTimeRequest) returns (GetTimeReply) {}
+  rpc GetWeather(WeatherRequest) returns (WeatherData) {}
+  rpc GetCryptoData(CryptoRequest) returns (CryptoData) {}
+  rpc GetXkcdComic(XkcdRequest) returns (XkcdReply) {}
+  rpc GetPokemon(PokemonRequest) returns (PokemonData) {}
+  rpc GetPokemonAbility(PokeabRequest) returns (PokeabData) {}
+  rpc GetAnime(AnimeRequest) returns (AnimeData) {}
+  rpc GetManga(MangaRequest) returns (MangaData) {}
+  // rpc GetMyAnimeListProfile(MalRequest) returns (MalData) {}
+  rpc GetNovel(NovelRequest) returns (NovelData) {}
+  rpc GetYomamaJoke(GetYomamaJokeRequest) returns (YomamaJoke) {}
+  rpc GetChuckNorrisJoke(GetChuckNorrisJokeRequest) returns (ChuckNorrisJoke) {}
+  rpc GetRandomJoke(GetRandomJokeRequest) returns (RandomJoke) {}
+
+}
+
+enum Errors {
+    Unknown = 0;
+    InvalidInput = 1;
+    NotFound = 2;
+    ApiKeyMissing = 3;
+}
+
+message GetYomamaJokeRequest {
+	
+}
+
+message YomamaJoke {
+	string text = 1;
+}
+
+
+message GetChuckNorrisJokeRequest {
+
+}
+
+message ChuckNorrisJoke {
+	string text = 2;
+}
+
+message GetRandomJokeRequest {
+
+}
+
+message RandomJoke {
+	string text = 1;
+	string source = 2;
+}
+
+message PokeabRequest {
+  string ability = 1;
+}
+
+message PokeabData {
+	oneof Result {
+		bool notFound = 1;
+		Data data = 2;
+	}
+
+	message Data {
+	  string desc = 1;
+	  string shortDesc = 2;
+	  string name = 3;
+	  float rating = 4;
+  }
+}
+
+message MangaRequest {
+  string query = 1;
+}
+
+message MangaData {
+    message Info{
+      int32 id = 1;
+      string publishingStatus = 2;
+      string imageUrlLarge = 3;
+      string titleEnglish = 4;
+      int32 totalChapters = 5;
+      int32 totalvVolumes = 6;
+      repeated string genres = 7;
+      string averageScore = 8;
+      string link = 9;
+      string synopsis = 10;
+    }
+
+    oneof Result {
+     Info Data = 1;
+     Errors Error = 2;
+	}
+}
+
+// message MalRequest {
+//   string name = 1;
+// }
+
+// message MalData {
+//   string name = 1;
+//   int32 watching = 2;
+//   int32 completed = 3;
+//   int32 onhold = 4;
+//   int32 dropped = 5;
+//   string topAnime = 6;
+//   string url = 7;
+//   int32 planToWatch = 8;
+//   float meanscore = 9;
+//   string lastOnline = 10;
+//   string gender = 11;
+//   int32 birthday = 12;
+//   string avatarIrl = 13;
+// }
+
+message NovelRequest {
+  string query = 1;
+}
+
+message NovelData {
+    message Info{
+      string title = 1;
+      string description = 2;
+      repeated string authors = 3;
+      string status = 4;
+      repeated string genres = 5;
+      string coverUrl = 6;
+      string score = 7;
+      string link = 8;
+  }
+
+  oneof Result {
+      Info Data = 1;
+      Errors Error = 2;
+  }
+}
+
+message AnimeData {
+    message Info {
+      int32 id = 1;
+      string airingStatus = 2;
+      string titleEnglish = 3;
+      int32 totalEpisodes = 4;
+      string synopsis = 5;
+      string imageUrlLarge = 6;
+      repeated string genres = 7;
+      string averageScore = 8;
+      string link = 9;
+    }
+
+    oneof Result {
+     Info Data = 1;
+     Errors Error = 2;
+	}
+}
+
+message AnimeRequest {
+  string name = 1;
+}
+
+message PokemonData {
+
+	oneof Result {
+		bool notFound = 1;
+		Data data = 2;
+	}
+
+	message Data {
+	  int32 num = 1;
+	  string species = 2;
+	  repeated string types = 3;
+	  GenderRatio genderRatio = 4;
+	  BaseStats baseStats = 5;
+	  map<string, string> abilities = 6;
+	  float heightM = 7;
+	  float weightKg = 8;
+	  string color = 9;
+	  repeated string evos = 10;
+	  repeated string eggGroups  = 11;
+
+	  message GenderRatio {
+		float m = 1;
+		float f = 2;
+	  }
+
+	  message BaseStats {
+		int32 Hp = 1;
+		int32 Atk = 2;
+		int32 Def = 3;
+		int32 Spa = 4;
+		int32 Spd = 5;
+		int32 Spe = 6;
+	  }
+  }
+}
+
+message PokemonRequest {
+  string name = 1;
+}
+
+message XkcdReply {
+    message Info {
+      int32 num = 1;
+      string month = 2;
+      string year = 3;
+      string safeTitle = 4;
+      string img = 5;
+      string alt = 6;
+    }
+
+    oneof Result {
+     Info Data = 1;
+     Errors Error = 2;
+	}
+}
+
+message XkcdRequest {
+  // -1 means latest
+  int32 number = 1;
+}
+
+message CryptoData {
+    message Info {
+      string id = 1;
+      string name = 2;
+      string symbol = 3;
+      string websiteSlug = 4;
+      int32 rank = 5;
+      bool isNearest = 6;
+      string percentChange1h = 7;
+      double volume24h = 8;
+      string percentChange7d = 9;
+      string percentChange24h = 10;
+      double price = 11;
+      double marketCap = 12;
+    }
+
+    oneof Result {
+     Info Data = 1;
+     Errors Error = 2;
+	}
+}
+
+message CryptoRequest {
+  string name = 1;
+}
+
+message WeatherData {
+    message Info {
+      string Location = 1;
+      string Coords = 2;
+      string Condition = 3;
+      double Humidity = 4;
+      double WindSpeed = 5;
+      double Temperature = 6;
+      double TempMin = 7;
+      double TempMax = 8;
+      double Sunrise = 9;
+      double Sunset = 10;  
+      string Source = 11;
+      string SourceIcon = 12;
+      string Url = 13;
+  }
+  oneof Result {
+      Info Data = 1;
+      Errors Error = 2;
+  }
+}
+
+message WeatherRequest {
+  string Query = 1;
+}
+
+message GetTimeReply {
+    message Info {
+        string Address = 1;
+        string TimeZoneName = 2;
+        google.protobuf.Timestamp Time = 3;
+    }
+
+    oneof Result {
+        Info Data = 1;
+        Errors Error = 2;
+	}
+}
+
+message GetTimeRequest {
+  string Query = 1;
+}
+
+message MovieData {
+    message Info {
+      string Rating = 1;
+      string Genre = 2;
+      string Year = 3;
+      string Poster = 4;
+      string Title = 5;
+      string Plot = 6;
+      string ImdbId = 7;
+  }
+
+  oneof Result {
+    Info Data = 1;
+    Errors Error = 2;
+  }
+}
+
+message MovieRequest {
+  string Query = 1;
+}
+
+message ImageSearchReply {
+  message Info {
+      string Url = 1;
+      string ProviderIconUrl = 2;
+      string Query = 3;
+  }
+
+  oneof Result {
+      Info Data = 1;
+      Errors Error = 2;
+  }
+}
+
+message ImageSearchRequest {
+  string Query = 1;
+}
+
+message ShortenUrlReply {
+  string Url = 1;
+}
+
+message ShortenUrlRequest {
+  string Query = 1;
+}
+
+message GoogleSearchResult {
+  message FullData {
+      string Query = 1;
+      string FullQueryLink = 2;
+      string TotalResults = 3;
+      repeated Data Results = 4;
+
+      message Data {
+	    string Url = 1;
+	    string Name = 2;
+	    string Text = 3;
+      }
+  }
+
+  oneof Result {
+    FullData Data = 1;
+    Errors Error = 2;
+  }
+}
+
+message GoogleSearchRequest {
+  string Query = 1;
+}
+
+message MtgCardData {
+    message Info{
+      map<string, string> StoreUrls = 1;
+      string Cost = 2;
+      string Types = 3;
+      string Name = 4;
+      string Description = 5;
+      string ImageUrl = 6;
+      string Flavor = 7;
+      string Url = 8;
+    }
+
+    oneof Result {
+     Info Data = 1;
+     Errors Error = 2;
+	}
+}
+
+message MtgCardRequest {
+  string Query = 1;
+}
+
+message HearthstoneCardData {
+  oneof Result {
+    HsData Data = 1;
+    Errors Error = 2;
+  }
+
+  message HsData {
+      string Url = 1;
+      string Flavor = 2;  
+  }
+}
+
+message HearthstoneCardRequest {
+  string Name = 1;
+}
+
+message UrbanDictReply {
+  message UrbanDictData {
+	string Url = 1;
+	string Word = 2;
+	string Definition = 3;
+  }
+  message DefinitionsData {
+    repeated UrbanDictData Definitions = 1;
+  }
+  oneof Result {
+    Errors Error = 1;
+    DefinitionsData Data = 2;
+  }
+}
+
+message UrbanDictRequest {
+  string Query = 1;
+}
+
+message DefineResponse {
+ oneof Result {
+    Info Data = 1;
+    Errors Error = 2;
+ }
+
+ message Info {
+    repeated DefineData datas = 1;
+ }
+}
+
+message DefineRequest {
+    string Word = 1;
+}
+
+message DefineData {
+    string Word = 1;
+    string Definition = 2;
+    string Example = 3;
+    string WordType = 4;
+}
+/*
+message HashTagData {
+  string Name = 1;
+  string Url = 2;
+  string Text = 3;
+  string Icon = 4;
+}
+
+message HashTagRequest {
+  string Query = 1;
+}
+*/
+message CatFactReply {
+  message Info {
+    string Fact = 1;
+  }
+  oneof Result {
+        Info Data = 1;
+        Errors Error = 2;
+  }
+}
+
+message CatFactRequest {
+
+}
+
+message WikipediaReply {
+    message Info {
+        string Url = 1;
+    }
+
+    oneof Result {
+        Info Data = 1;
+        Errors Error = 2;
+	}
+}
+
+message WikipediaRequest {
+  string Query = 1;
+}
+
+/*
+message GamepediaReply {
+	message GamepediaData {
+	  string Title = 1;
+	  string Snippet = 2;
+	  string Url = 3;
+	}
+
+	oneof Response {
+		GamepediaData Data = 1;
+		string Error = 2;
+	}
+}
+
+message GamepediaRequest {
+  string Target = 1;
+  string Query = 2;
+}
+*/
+
+message BibleVerse {
+    message Info {
+      string BookName = 1;
+      int32 Chapter = 2;
+      int32 Verse = 3;
+      string Text = 4;
+    }
+
+    oneof Result {
+        Info Data = 1;
+        Errors Error = 2;
+	}
+
+}
+
+message BibleRequest {
+  string Book = 1;
+  string ChapterAndVerse = 2;
+}
+
+message GetPicRequest {
+  enum PicType {
+	Cats = 0;
+	Dogs = 1;
+	Birds = 2;
+	Food = 3;
+  }
+  PicType Type = 1;
+}
+
+message HostedPicReply {
+  string Url = 1;
+}
