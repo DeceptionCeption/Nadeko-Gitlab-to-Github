@@ -191,8 +191,8 @@ namespace NadekoBot
                 IBotConfigProvider botConfigProvider = new BotConfigProvider(_db, _botConfig, OldCache);
 
                 // new stuff
-                var si = RemoteService.CreateClient<SearchImages.SearchImagesClient>("localhost", 1002);
-                var expr = RemoteService.CreateClient<Expressions.ExpressionsClient>("localhost", 1001);
+                var si = RemoteService.CreateClient<SearchImages.SearchImagesClient>("searchimages", 2452);
+                var expr = RemoteService.CreateClient<Expressions.ExpressionsClient>("expressions", 2452);
 
                 IEventRegistryHandler eventRegistyHandler = new RedisEventRegistryHandler(Redis, new ProtoBufSerializer());
                 IEventRegistryPusher eventRegistryPusher = new RedisEventRegistryPusher(Redis, new ProtoBufSerializer());

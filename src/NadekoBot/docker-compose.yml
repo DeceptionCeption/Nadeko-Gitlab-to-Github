@@ -23,7 +23,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       #REPLACE 'password' with your own secure password
-      POSTGRES_PASSWORD: bf08bsofubyrsoufsbsdarg8yurbg089345ybg380ybg38ygb4308gyb
+      POSTGRES_PASSWORD: password
     # Read the comment in redis entry if you wish to uncomment the ports here
     ports:
       - "5432:5432"
@@ -50,8 +50,8 @@ services:
     tty: true
     restart: always
     image: searchimages-service:latest
-    ports:
-      - 1002:2452
+    # ports:
+    #   - 1002:2452
     volumes:
       - ./data/:/app/data/
       - ./config/:/app/config/
@@ -75,8 +75,8 @@ services:
       - redis
     image: expressions-service:latest
     command: bash -c "/wait-for-it.sh db:5432 -t 0 -- dotnet service.dll"
-    ports:
-      - 1001:2452
+    # ports:
+    #   - 1001:2452
     volumes:
       - ./data/:/app/data/
       - ./config/:/app/config/
