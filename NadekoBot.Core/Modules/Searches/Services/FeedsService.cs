@@ -165,7 +165,7 @@ namespace NadekoBot.Modules.Searches.Services
                 }
 
                 gc.FeedSubs.Add(fs);
-
+                uow.SaveChanges();
                 //adding all, in case bot wasn't on this guild when it started
                 foreach (var f in gc.FeedSubs)
                 {
@@ -176,7 +176,6 @@ namespace NadekoBot.Modules.Searches.Services
                     });
                 }
 
-                uow.SaveChanges();
             }
 
             return true;
