@@ -160,7 +160,7 @@
     ]
   },
   "expradd": {
-    "desc": "Adds a server expression with a trigger and a response. Running this command in DM adds a new global expression which can be used on all servers. Use quotation marks if you want the trigger to have multiple words. No quotations needed for response. Guide here: <http://nadekobot.readthedocs.io/en/v3/Expressions/>",
+    "desc": "Adds a server expression with a trigger and a response. Running this command in DM adds a new global expression which can be used on all servers. Use quotation marks if you want the trigger to have multiple words. No quotations needed for response. Guide here: <http://nadekobot.readthedocs.io/en/latest/custom-reactions/>",
     "args": [
       "hi hi back",
       "\"hello there\" Hi there %user.mention%"
