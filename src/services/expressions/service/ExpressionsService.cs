@@ -474,8 +474,8 @@ RETURNING *")
             using var uow = _exprDb.GetDbContext();
             var expr = await uow.Expressions
                 .Where(x => x.GuildId == request.GuildId
-                    && x.Trigger == trigger
-                    && x.IsQuote == true)
+                    && x.Trigger.ToLower() == trigger
+                    && x.IsQuote == request.IsQuote)
                 .OrderBy(x => Guid.NewGuid())
                 .FirstOrDefaultAsync();
 
