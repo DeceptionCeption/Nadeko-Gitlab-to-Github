@@ -30,7 +30,9 @@ namespace SearchImagesService
             _http.AddFakeHeaders();
             _cache = new SearchImageCacher();
 
-            _db = new ServiceDb<SearchImageContext>(SearchImageContext.BaseOptions.Build());
+            _db = new ServiceDb<SearchImageContext>(SearchImageContext.BaseOptions
+                .WithPassword(Environment.GetEnvironmentVariable("DB_PASSWORD"))
+                .Build());
             using var uow = _db.GetDbContext();
             _blacklistedTags = new ConcurrentDictionary<ulong, HashSet<string>>(uow.BlacklistedTags
                 .ToDictionary(x => x.GuildId, x => new HashSet<string>(x.Tags)));
