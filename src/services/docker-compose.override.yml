@@ -1,0 +1,7 @@
+services:
+  db:
+    environment:
+      POSTGRES_PASSWORD:
+  searchimages-service:
+    environment:
+      DB_PASSWORD:
