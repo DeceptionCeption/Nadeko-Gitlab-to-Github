@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 namespace NadekoBot.Modules.NSFW
 {
     [RequireNsfw]
-    public class NSFW : NadekoTopLevelModule<SearchesService>
+    public class Nsfw : NadekoTopLevelModule<SearchesService>
     {
         private new readonly SearchImages.SearchImagesClient _service;
 
-        public NSFW(SearchImages.SearchImagesClient service)
+        public Nsfw(SearchImages.SearchImagesClient service)
         {
             _service = service;
         }

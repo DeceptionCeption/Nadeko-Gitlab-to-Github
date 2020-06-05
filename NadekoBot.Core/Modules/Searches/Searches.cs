@@ -657,11 +657,11 @@ namespace NadekoBot.Modules.Searches
         [NadekoCommand, Usage, Description, Aliases]
         public async Task Safebooru(params string[] tags)
         {
-            var payload = NSFW.NSFW.GetTagRequest(Context, tags);
+            var payload = NSFW.Nsfw.GetTagRequest(Context, tags);
 
             var data = await Rpc(Context, _searchImagesService.SafeBooruAsync, payload);
 
-            await NSFW.NSFW.NsfwReply(Context, data);
+            await NSFW.Nsfw.NsfwReply(Context, data);
         }
 
         // done in 3.0
