@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NadekoBot.Core.Services.Database;
 
 namespace NadekoBot.Migrations
 {
     [DbContext(typeof(NadekoContext))]
-    partial class NadekoSqliteContextModelSnapshot : ModelSnapshot
+    [Migration("20200624034917_addrole-punishment")]
+    partial class addrolepunishment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -714,10 +716,6 @@ namespace NadekoBot.Migrations
 
                     b.Property<bool>("VoicePlusTextEnabled");
 
-                    b.Property<int>("WarnExpireAction");
-
-                    b.Property<int>("WarnExpireHours");
-
                     b.Property<bool>("WarningsInitialized");
 
                     b.HasKey("Id");
@@ -728,8 +726,6 @@ namespace NadekoBot.Migrations
                     b.HasIndex("LogSettingId");
 
                     b.HasIndex("RootPermissionId");
-
-                    b.HasIndex("WarnExpireHours");
 
                     b.ToTable("GuildConfigs");
                 });

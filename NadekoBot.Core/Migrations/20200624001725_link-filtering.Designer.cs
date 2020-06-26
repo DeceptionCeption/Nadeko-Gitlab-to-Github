@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NadekoBot.Core.Services.Database;
 
 namespace NadekoBot.Migrations
 {
     [DbContext(typeof(NadekoContext))]
-    partial class NadekoSqliteContextModelSnapshot : ModelSnapshot
+    [Migration("20200624001725_link-filtering")]
+    partial class linkfiltering
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -714,10 +716,6 @@ namespace NadekoBot.Migrations
 
                     b.Property<bool>("VoicePlusTextEnabled");
 
-                    b.Property<int>("WarnExpireAction");
-
-                    b.Property<int>("WarnExpireHours");
-
                     b.Property<bool>("WarningsInitialized");
 
                     b.HasKey("Id");
@@ -728,8 +726,6 @@ namespace NadekoBot.Migrations
                     b.HasIndex("LogSettingId");
 
                     b.HasIndex("RootPermissionId");
-
-                    b.HasIndex("WarnExpireHours");
 
                     b.ToTable("GuildConfigs");
                 });
@@ -1552,28 +1548,6 @@ namespace NadekoBot.Migrations
                     b.ToTable("UnmuteTimer");
                 });
 
-            modelBuilder.Entity("NadekoBot.Core.Services.Database.Models.UnroleTimer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime?>("DateAdded");
-
-                    b.Property<int?>("GuildConfigId");
-
-                    b.Property<ulong>("RoleId");
-
-                    b.Property<DateTime>("UnbanAt");
-
-                    b.Property<ulong>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GuildConfigId");
-
-                    b.ToTable("UnroleTimer");
-                });
-
             modelBuilder.Entity("NadekoBot.Core.Services.Database.Models.UserXpStats", b =>
                 {
                     b.Property<int>("Id")
@@ -1750,8 +1724,6 @@ namespace NadekoBot.Migrations
                     b.Property<int?>("GuildConfigId");
 
                     b.Property<int>("Punishment");
-
-                    b.Property<ulong?>("RoleId");
 
                     b.Property<int>("Time");
 
@@ -2185,13 +2157,6 @@ namespace NadekoBot.Migrations
                 {
                     b.HasOne("NadekoBot.Core.Services.Database.Models.GuildConfig")
                         .WithMany("UnmuteTimers")
-                        .HasForeignKey("GuildConfigId");
-                });
-
-            modelBuilder.Entity("NadekoBot.Core.Services.Database.Models.UnroleTimer", b =>
-                {
-                    b.HasOne("NadekoBot.Core.Services.Database.Models.GuildConfig")
-                        .WithMany("UnroleTimer")
                         .HasForeignKey("GuildConfigId");
                 });
 

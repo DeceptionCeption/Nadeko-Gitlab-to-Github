@@ -1,4 +1,5 @@
 ﻿using NadekoBot.Common.Collections;
+using NadekoBot.Core.Common.TypeReaders.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -56,7 +57,9 @@ namespace NadekoBot.Core.Services.Database.Models
 
         //filtering
         public bool FilterInvites { get; set; }
+        public bool FilterLinks { get; set; }
         public HashSet<FilterChannelId> FilterInvitesChannelIds { get; set; } = new HashSet<FilterChannelId>();
+        public HashSet<FilterLinksChannelId> FilterLinksChannelIds { get; set; } = new HashSet<FilterLinksChannelId>();
 
         //public bool FilterLinks { get; set; }
         //public HashSet<FilterLinksChannelId> FilterLinksChannels { get; set; } = new HashSet<FilterLinksChannelId>();
@@ -79,6 +82,7 @@ namespace NadekoBot.Core.Services.Database.Models
 
         public HashSet<UnmuteTimer> UnmuteTimers { get; set; } = new HashSet<UnmuteTimer>();
         public HashSet<UnbanTimer> UnbanTimer { get; set; } = new HashSet<UnbanTimer>();
+        public HashSet<UnroleTimer> UnroleTimer { get; set; } = new HashSet<UnroleTimer>();
         public HashSet<VcRoleInfo> VcRoleInfos { get; set; }
         public HashSet<CommandAlias> CommandAliases { get; set; } = new HashSet<CommandAlias>();
         public List<WarningPunishment> WarnPunishments { get; set; } = new List<WarningPunishment>();
@@ -100,6 +104,14 @@ namespace NadekoBot.Core.Services.Database.Models
         public IndexedCollection<ReactionRoleMessage> ReactionRoleMessages { get; set; } = new IndexedCollection<ReactionRoleMessage>();
         public bool NotifyStreamOffline { get; set; }
         public List<GroupName> SelfAssignableRoleGroupNames { get; set; }
+        public int WarnExpireHours { get; set; } = 0;
+        public WarnExpireAction WarnExpireAction { get; set; } = WarnExpireAction.Clear;
+    }
+
+    public enum WarnExpireAction
+    {
+        Clear,
+        Delete
     }
 
     public class GroupName : DbEntity
@@ -194,6 +206,7 @@ namespace NadekoBot.Core.Services.Database.Models
         public int Count { get; set; }
         public PunishmentAction Punishment { get; set; }
         public int Time { get; set; }
+        public ulong? RoleId { get; set; }
     }
 
     public class CommandAlias : DbEntity
@@ -253,6 +266,23 @@ namespace NadekoBot.Core.Services.Database.Models
         {
             return obj is UnbanTimer ut
                 ? ut.UserId == UserId
+                : false;
+        }
+    }
+
+    public class UnroleTimer : DbEntity
+    {
+        public ulong UserId { get; set; }
+        public ulong RoleId { get; set; }
+        public DateTime UnbanAt { get; set; }
+
+        public override int GetHashCode() =>
+            UserId.GetHashCode() ^ RoleId.GetHashCode();
+
+        public override bool Equals(object obj)
+        {
+            return obj is UnroleTimer ut
+                ? ut.UserId == UserId && ut.RoleId == RoleId
                 : false;
         }
     }

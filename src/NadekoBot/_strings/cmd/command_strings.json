@@ -1,4 +1,4 @@
-{
+﻿{
   "h": {
     "Cmd": "help h",
     "Desc": "Either shows a help for a single command, or DMs you help link if no parameters are specified.",
@@ -721,6 +721,20 @@
     "Desc": "Toggles automatic deletion of invites posted in the server. Does not affect users with the Administrator permission.",
     "Usage": [
       "{0}sfi"
+    ]
+  },
+  "chnlfilterlin": {
+    "Cmd": "chnlfilterlin cfl",
+    "Desc": "Toggles automatic deletion of links posted in the channel. Does not negate the `{0}srvrfilterlin` enabled setting. Does not affect users with the Administrator permission.",
+    "Usage": [
+      "{0}cfl"
+    ]
+  },
+  "srvrfilterlin": {
+    "Cmd": "srvrfilterlin sfl",
+    "Desc": "Toggles automatic deletion of links posted in the server. Does not affect users with the Administrator permission.",
+    "Usage": [
+      "{0}sfl"
     ]
   },
   "chnlfilterwords": {
@@ -1591,6 +1605,13 @@
     "Desc": "Queries anilist for an anime and shows the first result.",
     "Usage": [
       "{0}ani aquarion evol"
+    ]
+  },
+  "steam": {
+    "Cmd": "steam",
+    "Desc": "Returns a store link for a steam game with the specified name. It doesn't work very well because bundles.",
+    "Usage": [
+      "{0}steam Sakura Agent"
     ]
   },
   "movie": {
@@ -2597,6 +2618,15 @@
       "{0}l7 s"
     ]
   },
+  "crreact": {
+    "Cmd": "crreact crr",
+    "Desc": "Sets or resets reactions (up to 3) which will be added to the response message of the CustomReaction with the specified ID. Provide no emojis to reset.",
+    "Usage": [
+      "{0}crr 59 👍 👎 ",
+      "{0}crr 59 <a:nFlower:408963839191941120>",
+      "{0}crr 59"
+    ]
+  },
   "crad": {
     "Cmd": "crad",
     "Desc": "Toggles whether the message triggering the custom reaction will be automatically deleted.",
@@ -2720,6 +2750,14 @@
       "{0}wait 3000"
     ]
   },
+  "warnexpire": {
+    "Cmd": "warnexpire warne",
+    "Desc": "Sets the number of days after which the warnings will be cleared automatically. This setting works retroactively. If you want to delete the warnings instead of clearing them, you can set the `--delete` optional parameter.",
+    "Usage": [
+      "{0}warne 3",
+      "{0}warne 6 --delete"
+    ]
+  },
   "warnclear": {
     "Cmd": "warnclear warnc",
     "Desc": "Clears all warnings from a certain user. You can specify a number to clear a specific one.",
@@ -2737,11 +2775,12 @@
   },
   "warnpunish": {
     "Cmd": "warnpunish warnp",
-    "Desc": "Sets a punishment for a certain number of warnings. You can specify a time string after 'Ban' or 'Mute' punishment to make it a temporary mute/ban. Provide no punishment to remove.",
+    "Desc": "Sets a punishment for a certain number of warnings. You can specify a time string after 'Ban' or *'Mute' punishments to make it a temporary mute/ban. Provide no punishment to remove. Available punishments: Ban, Kick, Softban, Mute, VoiceMute, ChatMute, AddRole, RemoveRoles",
     "Usage": [
-      "{0}warnp 5 Ban",
       "{0}warnp 3",
-      "{0}warnp 5 Mute 2d12h"
+      "{0}warnp 5 Ban",
+      "{0}warnp 5 Mute 2d12h",
+      "{0}warnp 4 AddRole toxic 1h"
     ]
   },
   "claimpatreonrewards": {

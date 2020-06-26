@@ -1,7 +1,9 @@
+using CommandLine;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using NadekoBot.Common.Attributes;
+using NadekoBot.Core.Common;
 using NadekoBot.Core.Common.TypeReaders.Models;
 using NadekoBot.Core.Services.Database.Models;
 using NadekoBot.Extensions;
@@ -48,7 +50,7 @@ namespace NadekoBot.Modules.Administration
 
                 }
 
-                PunishmentAction? punishment;
+                WarningPunishment punishment;
                 try
                 {
                     punishment = await _service.Warn(ctx.Guild, user.Id, ctx.User, reason).ConfigureAwait(false);
@@ -67,6 +69,47 @@ namespace NadekoBot.Modules.Administration
                 else
                 {
                     await ReplyConfirmLocalizedAsync("user_warned_and_punished", Format.Bold(user.ToString()), Format.Bold(punishment.ToString())).ConfigureAwait(false);
+                }
+            }
+
+            public class WarnExpireOptions : INadekoCommandOptions
+            {
+                [Option('d', "delete", Default = false, HelpText = "Delete warnings instead of clearing them.")]
+                public bool Delete { get; set; } = false;
+                public void NormalizeOptions()
+                {
+
+                }
+            }
+
+            [NadekoCommand, Usage, Description, Aliases]
+            [RequireContext(ContextType.Guild)]
+            [UserPerm(GuildPerm.Administrator)]
+            [NadekoOptions(typeof(WarnExpireOptions))]
+            [Priority(2)]
+            public async Task WarnExpire(int days, params string[] args)
+            {
+                if (days < 0 || days > 366)
+                    return;
+
+                var opts = OptionsParser.ParseFrom<WarnExpireOptions>(args);
+
+                await Context.Channel.TriggerTypingAsync().ConfigureAwait(false);
+
+                await _service.WarnExpireAsync(ctx.Guild.Id, days, opts.Delete).ConfigureAwait(false);
+                if(days == 0)
+                {
+                    await ReplyConfirmLocalizedAsync("warn_expire_reset").ConfigureAwait(false);
+                    return;
+                }
+
+                if (opts.Delete)
+                {
+                    await ReplyConfirmLocalizedAsync("warn_expire_set_delete", Format.Bold(days.ToString())).ConfigureAwait(false);
+                }
+                else
+                {
+                    await ReplyConfirmLocalizedAsync("warn_expire_set_clear", Format.Bold(days.ToString())).ConfigureAwait(false);
                 }
             }
 
@@ -200,19 +243,65 @@ namespace NadekoBot.Modules.Administration
                 }
             }
 
+            public enum AddRole
+            {
+                AddRole
+            }
+
+            [NadekoCommand, Usage, Description, Aliases]
+            [RequireContext(ContextType.Guild)]
+            [UserPerm(GuildPerm.BanMembers)]
+            [Priority(1)]
+            public async Task WarnPunish(int number, AddRole _, IRole role, StoopidTime time = null)
+            {
+                var punish = PunishmentAction.AddRole;
+                var success = _service.WarnPunish(ctx.Guild.Id, number, punish, time, role);
+
+                if (!success)
+                    return;
+
+                if (time is null)
+                {
+                    await ReplyConfirmLocalizedAsync("warn_punish_set",
+                        Format.Bold(punish.ToString()),
+                        Format.Bold(number.ToString())).ConfigureAwait(false);
+                }
+                else
+                {
+                    await ReplyConfirmLocalizedAsync("warn_punish_set_timed",
+                        Format.Bold(punish.ToString()),
+                        Format.Bold(number.ToString()),
+                        Format.Bold(time.Input)).ConfigureAwait(false);
+                }
+            }
+
             [NadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.BanMembers)]
             public async Task WarnPunish(int number, PunishmentAction punish, StoopidTime time = null)
             {
+                // this should never happen. Addrole has its own method with higher priority
+                if (punish == PunishmentAction.AddRole)
+                    return;
+
                 var success = _service.WarnPunish(ctx.Guild.Id, number, punish, time);
 
                 if (!success)
                     return;
 
-                await ReplyConfirmLocalizedAsync("warn_punish_set",
-                    Format.Bold(punish.ToString()),
-                    Format.Bold(number.ToString())).ConfigureAwait(false);
+                if (time is null)
+                {
+                    await ReplyConfirmLocalizedAsync("warn_punish_set",
+                        Format.Bold(punish.ToString()),
+                        Format.Bold(number.ToString())).ConfigureAwait(false);
+                }
+                else
+                {
+                    await ReplyConfirmLocalizedAsync("warn_punish_set_timed",
+                        Format.Bold(punish.ToString()),
+                        Format.Bold(number.ToString()),
+                        Format.Bold(time.Input)).ConfigureAwait(false);
+                }
             }
 
             [NadekoCommand, Usage, Description, Aliases]
@@ -220,7 +309,7 @@ namespace NadekoBot.Modules.Administration
             [UserPerm(GuildPerm.BanMembers)]
             public async Task WarnPunish(int number)
             {
-                if (!_service.WarnPunish(ctx.Guild.Id, number))
+                if (!_service.WarnPunishRemove(ctx.Guild.Id, number))
                 {
                     return;
                 }
@@ -238,7 +327,8 @@ namespace NadekoBot.Modules.Administration
                 string list;
                 if (ps.Any())
                 {
-                    list = string.Join("\n", ps.Select(x => $"{x.Count} -> {x.Punishment} {(x.Time <= 0 ? "" : x.Time.ToString() + "m")} "));
+
+                    list = string.Join("\n", ps.Select(x => $"{x.Count} -> {x.Punishment} {(x.Punishment == PunishmentAction.AddRole ? $"<@&{x.RoleId}>" : "")} {(x.Time <= 0 ? "" : x.Time.ToString() + "m")} "));
                 }
                 else
                 {
@@ -343,7 +433,7 @@ namespace NadekoBot.Modules.Administration
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.BanMembers)]
             [BotPerm(GuildPerm.BanMembers)]
-            public async Task Unban([Leftover]string user)
+            public async Task Unban([Leftover] string user)
             {
                 var bans = await ctx.Guild.GetBansAsync().ConfigureAwait(false);
 
