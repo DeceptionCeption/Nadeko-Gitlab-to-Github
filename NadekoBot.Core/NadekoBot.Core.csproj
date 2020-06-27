@@ -51,7 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Services\SearchImages\searchimages\SearchImages.csproj" />
+    <ProjectReference Include="..\src\services\searchimages\searchimages\SearchImages.csproj" />
   </ItemGroup>
 
   <ItemGroup>
