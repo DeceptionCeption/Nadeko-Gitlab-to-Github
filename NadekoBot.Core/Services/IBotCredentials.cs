@@ -37,6 +37,7 @@ namespace NadekoBot.Core.Services
         void Reload();
         string LocationIqApiKey { get; }
         string TimezoneDbApiKey { get; }
+        string CoinmarketcapApiKey { get; }
     }
 
     public class RestartConfig

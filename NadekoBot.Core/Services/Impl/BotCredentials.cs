@@ -45,9 +45,10 @@ namespace NadekoBot.Core.Services.Impl
         public string VotesToken { get; private set; }
         public string BotListToken { get; private set; }
         public string RedisOptions { get; private set; }
-        public string ServicesIp { get; private set; }
         public string LocationIqApiKey { get; private set; }
         public string TimezoneDbApiKey { get; private set; }
+        public string ServicesIp { get; private set; }
+        public string CoinmarketcapApiKey { get; private set; }
 
         public BotCredentials()
         {
@@ -91,6 +92,11 @@ namespace NadekoBot.Core.Services.Impl
                 MiningProxyCreds = data[nameof(MiningProxyCreds)];
                 LocationIqApiKey = data[nameof(LocationIqApiKey)];
                 TimezoneDbApiKey = data[nameof(TimezoneDbApiKey)];
+                CoinmarketcapApiKey = data[nameof(CoinmarketcapApiKey)];
+                if(string.IsNullOrWhiteSpace(CoinmarketcapApiKey))
+                {
+                    CoinmarketcapApiKey = "e79ec505-0913-439d-ae07-069e296a6079";
+                }
                 if (!string.IsNullOrWhiteSpace(data[nameof(RedisOptions)]))
                     RedisOptions = data[nameof(RedisOptions)];
                 else
