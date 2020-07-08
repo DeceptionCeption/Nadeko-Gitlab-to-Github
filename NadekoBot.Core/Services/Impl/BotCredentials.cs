@@ -165,7 +165,6 @@ namespace NadekoBot.Core.Services.Impl
             }
 
         }
-
         public bool IsOwner(IUser u) => OwnerIds.Contains(u.Id);
     }
 }
