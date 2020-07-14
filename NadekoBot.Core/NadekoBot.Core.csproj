@@ -22,6 +22,7 @@
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.47.0.2008" />
     <PackageReference Include="Google.Apis.Customsearch.v1" Version="1.48.0.2014" />
     <PackageReference Include="Html2Markdown" Version="3.3.1.407" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.5" />
@@ -42,6 +43,7 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0003" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0010" />
     <PackageReference Include="StackExchange.Redis" Version="1.2.7-alpha-00002" />
+    <PackageReference Include="System.Linq.Async" Version="4.1.1" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="YoutubeExplode" Version="5.1.1" />
   </ItemGroup>
