@@ -25,6 +25,7 @@ namespace NadekoBot.Modules.Administration.Services
     {
         public ConcurrentDictionary<ulong, string> GuildMuteRoles { get; }
         public ConcurrentDictionary<ulong, ConcurrentHashSet<ulong>> MutedUsers { get; }
+
         public ConcurrentDictionary<ulong, ConcurrentDictionary<(ulong, TimerType), Timer>> Un_Timers { get; }
             = new ConcurrentDictionary<ulong, ConcurrentDictionary<(ulong, TimerType), Timer>>();
 
@@ -43,86 +44,98 @@ namespace NadekoBot.Modules.Administration.Services
 
         public event Action<IGuildUser, IUser, MuteType> UserUnmuted = delegate { };
 
-        private static readonly OverwritePermissions denyOverwrite = new OverwritePermissions(addReactions: PermValue.Deny, sendMessages: PermValue.Deny, attachFiles: PermValue.Deny);
+        private static readonly OverwritePermissions denyOverwrite =
+            new OverwritePermissions(addReactions: PermValue.Deny, sendMessages: PermValue.Deny,
+                attachFiles: PermValue.Deny);
 
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly DiscordSocketClient _client;
         private readonly DbService _db;
 
-        public MuteService(DiscordSocketClient client, NadekoBot bot, DbService db)
+        public MuteService(DiscordSocketClient client, DbService db)
         {
             _client = client;
             _db = db;
             _log.Info($"Loading {this.GetType().Name}");
 
-            GuildMuteRoles = bot
-                .AllGuildConfigs
-                .Where(c => !string.IsNullOrWhiteSpace(c.MuteRoleName))
-                .ToDictionary(c => c.GuildId, c => c.MuteRoleName)
-                .ToConcurrent();
-
-            MutedUsers = new ConcurrentDictionary<ulong, ConcurrentHashSet<ulong>>(bot
-                .AllGuildConfigs
-                .ToDictionary(
-                    k => k.GuildId,
-                    v => new ConcurrentHashSet<ulong>(v.MutedUsers.Select(m => m.UserId))
-            ));
-
-            var max = TimeSpan.FromDays(49);
-
-            foreach (var conf in bot.AllGuildConfigs)
+            using (var uow = db.GetDbContext())
             {
-                foreach (var x in conf.UnmuteTimers)
+                var guildIds = client.Guilds.Select(x => x.Id).ToList();
+                var configs = uow._context.Set<GuildConfig>().AsQueryable()
+                    .Include(x => x.MutedUsers)
+                    .Include(x => x.UnbanTimer)
+                    .Include(x => x.UnmuteTimers)
+                    .Include(x => x.UnroleTimer)
+                    .Where(x => guildIds.Contains(x.GuildId))
+                    .ToList();
+
+                GuildMuteRoles = configs
+                    .Where(c => !string.IsNullOrWhiteSpace(c.MuteRoleName))
+                    .ToDictionary(c => c.GuildId, c => c.MuteRoleName)
+                    .ToConcurrent();
+
+                MutedUsers = new ConcurrentDictionary<ulong, ConcurrentHashSet<ulong>>(configs
+                    .ToDictionary(
+                        k => k.GuildId,
+                        v => new ConcurrentHashSet<ulong>(v.MutedUsers.Select(m => m.UserId))
+                    ));
+
+                var max = TimeSpan.FromDays(49);
+
+                foreach (var conf in configs)
                 {
-                    TimeSpan after;
-                    if (x.UnmuteAt - TimeSpan.FromMinutes(2) <= DateTime.UtcNow)
+                    foreach (var x in conf.UnmuteTimers)
                     {
-                        after = TimeSpan.FromMinutes(2);
+                        TimeSpan after;
+                        if (x.UnmuteAt - TimeSpan.FromMinutes(2) <= DateTime.UtcNow)
+                        {
+                            after = TimeSpan.FromMinutes(2);
+                        }
+                        else
+                        {
+                            var unmute = x.UnmuteAt - DateTime.UtcNow;
+                            after = unmute > max ? max : unmute;
+                        }
+
+                        StartUn_Timer(conf.GuildId, x.UserId, after, TimerType.Mute);
                     }
-                    else
+
+                    foreach (var x in conf.UnbanTimer)
                     {
-                        var unmute = x.UnmuteAt - DateTime.UtcNow;
-                        after = unmute > max ?
-                            max : unmute;
+                        TimeSpan after;
+                        if (x.UnbanAt - TimeSpan.FromMinutes(2) <= DateTime.UtcNow)
+                        {
+                            after = TimeSpan.FromMinutes(2);
+                        }
+                        else
+                        {
+                            var unban = x.UnbanAt - DateTime.UtcNow;
+                            after = unban > max ? max : unban;
+                        }
+
+                        StartUn_Timer(conf.GuildId, x.UserId, after, TimerType.Ban);
                     }
-                    StartUn_Timer(conf.GuildId, x.UserId, after, TimerType.Mute);
+
+                    foreach (var x in conf.UnroleTimer)
+                    {
+                        TimeSpan after;
+                        if (x.UnbanAt - TimeSpan.FromMinutes(2) <= DateTime.UtcNow)
+                        {
+                            after = TimeSpan.FromMinutes(2);
+                        }
+                        else
+                        {
+                            var unban = x.UnbanAt - DateTime.UtcNow;
+                            after = unban > max ? max : unban;
+                        }
+
+                        StartUn_Timer(conf.GuildId, x.UserId, after, TimerType.AddRole, x.RoleId);
+                    }
                 }
 
-                foreach (var x in conf.UnbanTimer)
-                {
-                    TimeSpan after;
-                    if (x.UnbanAt - TimeSpan.FromMinutes(2) <= DateTime.UtcNow)
-                    {
-                        after = TimeSpan.FromMinutes(2);
-                    }
-                    else
-                    {
-                        var unban = x.UnbanAt - DateTime.UtcNow;
-                        after = unban > max ?
-                            max : unban;
-                    }
-                    StartUn_Timer(conf.GuildId, x.UserId, after, TimerType.Ban);
-                }
-
-                foreach (var x in conf.UnroleTimer)
-                {
-                    TimeSpan after;
-                    if (x.UnbanAt - TimeSpan.FromMinutes(2) <= DateTime.UtcNow)
-                    {
-                        after = TimeSpan.FromMinutes(2);
-                    }
-                    else
-                    {
-                        var unban = x.UnbanAt - DateTime.UtcNow;
-                        after = unban > max ?
-                            max : unban;
-                    }
-                    StartUn_Timer(conf.GuildId, x.UserId, after, TimerType.AddRole, x.RoleId);
-                }
+                _client.UserJoined += Client_UserJoined;
+                _log.Info($"Loaded {this.GetType().Name}");
             }
-
-            _client.UserJoined += Client_UserJoined;
-            _log.Info($"Loaded {this.GetType().Name}");
         }
 
         private Task Client_UserJoined(IGuildUser usr)
@@ -139,6 +152,7 @@ namespace NadekoBot.Modules.Administration.Services
             {
                 _log.Warn(ex);
             }
+
             return Task.CompletedTask;
         }
 
@@ -146,7 +160,14 @@ namespace NadekoBot.Modules.Administration.Services
         {
             if (type == MuteType.All)
             {
-                try { await usr.ModifyAsync(x => x.Mute = true).ConfigureAwait(false); } catch { }
+                try
+                {
+                    await usr.ModifyAsync(x => x.Mute = true).ConfigureAwait(false);
+                }
+                catch
+                {
+                }
+
                 var muteRole = await GetMuteRole(usr.Guild).ConfigureAwait(false);
                 if (!usr.RoleIds.Contains(muteRole.Id))
                     await usr.AddRoleAsync(muteRole).ConfigureAwait(false);
@@ -167,6 +188,7 @@ namespace NadekoBot.Modules.Administration.Services
 
                     await uow.SaveChangesAsync();
                 }
+
                 UserMuted(usr, mod, MuteType.All);
             }
             else if (type == MuteType.Voice)
@@ -176,7 +198,9 @@ namespace NadekoBot.Modules.Administration.Services
                     await usr.ModifyAsync(x => x.Mute = true).ConfigureAwait(false);
                     UserMuted(usr, mod, MuteType.Voice);
                 }
-                catch { }
+                catch
+                {
+                }
             }
             else if (type == MuteType.Chat)
             {
@@ -204,6 +228,7 @@ namespace NadekoBot.Modules.Administration.Services
                     {
                         uow._context.Remove(toRemove);
                     }
+
                     if (MutedUsers.TryGetValue(guildId, out ConcurrentHashSet<ulong> muted))
                         muted.TryRemove(usrId);
 
@@ -211,10 +236,27 @@ namespace NadekoBot.Modules.Administration.Services
 
                     await uow.SaveChangesAsync();
                 }
+
                 if (usr != null)
                 {
-                    try { await usr.ModifyAsync(x => x.Mute = false).ConfigureAwait(false); } catch { }
-                    try { await usr.RemoveRoleAsync(await GetMuteRole(usr.Guild).ConfigureAwait(false)).ConfigureAwait(false); } catch { /*ignore*/ }
+                    try
+                    {
+                        await usr.ModifyAsync(x => x.Mute = false).ConfigureAwait(false);
+                    }
+                    catch
+                    {
+                    }
+
+                    try
+                    {
+                        await usr.RemoveRoleAsync(await GetMuteRole(usr.Guild).ConfigureAwait(false))
+                            .ConfigureAwait(false);
+                    }
+                    catch
+                    {
+                        /*ignore*/
+                    }
+
                     UserUnmuted(usr, mod, MuteType.All);
                 }
             }
@@ -227,7 +269,9 @@ namespace NadekoBot.Modules.Administration.Services
                     await usr.ModifyAsync(x => x.Mute = false).ConfigureAwait(false);
                     UserUnmuted(usr, mod, MuteType.Voice);
                 }
-                catch { }
+                catch
+                {
+                }
             }
             else if (type == MuteType.Chat)
             {
@@ -250,14 +294,17 @@ namespace NadekoBot.Modules.Administration.Services
             var muteRole = guild.Roles.FirstOrDefault(r => r.Name == muteRoleName);
             if (muteRole == null)
             {
-
                 //if it doesn't exist, create it
-                try { muteRole = await guild.CreateRoleAsync(muteRoleName, isMentionable: false).ConfigureAwait(false); }
+                try
+                {
+                    muteRole = await guild.CreateRoleAsync(muteRoleName, isMentionable: false).ConfigureAwait(false);
+                }
                 catch
                 {
                     //if creations fails,  maybe the name is not correct, find default one, if doesn't work, create default one
                     muteRole = guild.Roles.FirstOrDefault(r => r.Name == muteRoleName) ??
-                        await guild.CreateRoleAsync(defaultMuteRoleName, isMentionable: false).ConfigureAwait(false);
+                               await guild.CreateRoleAsync(defaultMuteRoleName, isMentionable: false)
+                                   .ConfigureAwait(false);
                 }
             }
 
@@ -266,10 +313,10 @@ namespace NadekoBot.Modules.Administration.Services
                 try
                 {
                     if (!toOverwrite.PermissionOverwrites.Any(x => x.TargetId == muteRole.Id
-                        && x.TargetType == PermissionTarget.Role))
+                                                                   && x.TargetType == PermissionTarget.Role))
                     {
                         await toOverwrite.AddPermissionOverwriteAsync(muteRole, denyOverwrite)
-                                .ConfigureAwait(false);
+                            .ConfigureAwait(false);
 
                         await Task.Delay(200).ConfigureAwait(false);
                     }
@@ -285,7 +332,8 @@ namespace NadekoBot.Modules.Administration.Services
 
         public async Task TimedMute(IGuildUser user, IUser mod, TimeSpan after, MuteType muteType = MuteType.All)
         {
-            await MuteUser(user, mod, muteType).ConfigureAwait(false); // mute the user. This will also remove any previous unmute timers
+            await MuteUser(user, mod, muteType)
+                .ConfigureAwait(false); // mute the user. This will also remove any previous unmute timers
             using (var uow = _db.GetDbContext())
             {
                 var config = uow.GuildConfigs.ForId(user.GuildId, set => set.Include(x => x.UnmuteTimers));
@@ -296,6 +344,7 @@ namespace NadekoBot.Modules.Administration.Services
                 }); // add teh unmute timer to the database
                 uow.SaveChanges();
             }
+
             StartUn_Timer(user.GuildId, user.Id, after, TimerType.Mute); // start the timer
         }
 
@@ -312,6 +361,7 @@ namespace NadekoBot.Modules.Administration.Services
                 }); // add teh unmute timer to the database
                 uow.SaveChanges();
             }
+
             StartUn_Timer(user.GuildId, user.Id, after, TimerType.Ban); // start the timer
         }
 
@@ -329,10 +379,17 @@ namespace NadekoBot.Modules.Administration.Services
                 }); // add teh unmute timer to the database
                 uow.SaveChanges();
             }
+
             StartUn_Timer(user.GuildId, user.Id, after, TimerType.AddRole, role.Id); // start the timer
         }
 
-        public enum TimerType { Mute, Ban, AddRole }
+        public enum TimerType
+        {
+            Mute,
+            Ban,
+            AddRole
+        }
+
         public void StartUn_Timer(ulong guildId, ulong userId, TimeSpan after, TimerType type, ulong? roleId = null)
         {
             //load the unmute timers for this guild
@@ -429,10 +486,12 @@ namespace NadekoBot.Modules.Administration.Services
                     var config = uow.GuildConfigs.ForId(guildId, set => set.Include(x => x.UnbanTimer));
                     toDelete = config.UnbanTimer.FirstOrDefault(x => x.UserId == userId);
                 }
+
                 if (toDelete != null)
                 {
                     uow._context.Remove(toDelete);
                 }
+
                 uow.SaveChanges();
             }
         }

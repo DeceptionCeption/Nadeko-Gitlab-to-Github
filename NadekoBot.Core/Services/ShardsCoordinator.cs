@@ -117,7 +117,7 @@ namespace NadekoBot.Core.Services
                 
                 .Distinct() // make sure no duplicates
                 .ToList();
-
+            
             for (var i = 0; i < shardIds.Count; i++)
             {
                 var id = shardIds[i];
