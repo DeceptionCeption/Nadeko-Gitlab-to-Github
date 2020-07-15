@@ -139,8 +139,7 @@ namespace NadekoBot.Core.Services
 #endif
                 msg.Time = DateTime.UtcNow + TimeSpan.FromSeconds(delay * (id + 1));
                 db.ListRightPush(_key + "_shardstats",
-                    JsonConvert.SerializeObject(msg),
-                    flags: CommandFlags.FireAndForget);
+                    JsonConvert.SerializeObject(msg));
             }
 
             _curProcessId = Process.GetCurrentProcess().Id;
