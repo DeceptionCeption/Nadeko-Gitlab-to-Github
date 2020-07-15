@@ -22,6 +22,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog.Fluent;
 
 namespace NadekoBot
 {
@@ -163,8 +164,10 @@ namespace NadekoBot
 
                 uow.DiscordUsers.EnsureCreated(_bot.Id, _bot.Username, _bot.Discriminator, _bot.AvatarId);
 
+                _log.Info("Loading all guild configs");
                 AllGuildConfigs = uow.GuildConfigs.GetAllGuildConfigs(startingGuildIdList).ToImmutableArray();
 
+                _log.Info("Configs loaded");
                 IBotConfigProvider botConfigProvider = new BotConfigProvider(_db, _botConfig, Cache);
 
                 // new stuff
@@ -189,8 +192,10 @@ namespace NadekoBot
                     AllowAutoRedirect = false
                 });
 
+                _log.Info("Loading services from assembly");
                 s.LoadFrom(Assembly.GetAssembly(typeof(CommandHandler)));
 
+                _log.Info("Building service provider");
                 //initialize Services
                 Services = s.BuildServiceProvider();
                 var commandHandler = Services.GetService<CommandHandler>();

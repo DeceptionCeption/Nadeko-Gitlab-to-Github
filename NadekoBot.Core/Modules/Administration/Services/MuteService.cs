@@ -53,6 +53,7 @@ namespace NadekoBot.Modules.Administration.Services
         {
             _client = client;
             _db = db;
+            _log.Info($"Loading {this.GetType().Name}");
 
             GuildMuteRoles = bot
                 .AllGuildConfigs
@@ -121,6 +122,7 @@ namespace NadekoBot.Modules.Administration.Services
             }
 
             _client.UserJoined += Client_UserJoined;
+            _log.Info($"Loaded {this.GetType().Name}");
         }
 
         private Task Client_UserJoined(IGuildUser usr)

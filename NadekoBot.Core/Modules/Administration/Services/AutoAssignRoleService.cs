@@ -24,7 +24,7 @@ namespace NadekoBot.Modules.Administration.Services
         {
             _log = LogManager.GetCurrentClassLogger();
             _client = client;
-            _db = db;
+            _db = db;_log.Info($"Loading {this.GetType().Name}");
 
             AutoAssignedRoles = new ConcurrentDictionary<ulong, ulong>(
                 bot.AllGuildConfigs
@@ -101,7 +101,7 @@ namespace NadekoBot.Modules.Administration.Services
                         });
                 }
                 return Task.CompletedTask;
-            };
+            };_log.Info($"Loaded {this.GetType().Name}");
         }
 
         public void EnableAar(ulong guildId, ulong roleId)

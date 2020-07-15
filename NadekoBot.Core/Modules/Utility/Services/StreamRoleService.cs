@@ -28,6 +28,7 @@ namespace NadekoBot.Modules.Utility.Services
             this._log = LogManager.GetCurrentClassLogger();
             this._db = db;
             this._client = client;
+            _log.Info($"Loading {this.GetType().Name}.");
 
             guildSettings = bot.AllGuildConfigs
                 .ToDictionary(x => x.GuildId, x => x.StreamRole)
@@ -47,6 +48,7 @@ namespace NadekoBot.Modules.Utility.Services
                     // ignored
                 }
             });
+            _log.Info($"Loaded {this.GetType().Name}.");
         }
 
         public Task Unload()

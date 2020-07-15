@@ -61,6 +61,7 @@ namespace NadekoBot.Modules.CustomReactions.Services
             _cache = cache;
             _gperm = gperm;
 
+            _log.Info($"Loading {this.GetType().Name}");
             var sub = _cache.Redis.GetSubscriber();
             sub.Subscribe(_client.CurrentUser.Id + "_crs.reload", (ch, msg) =>
             {
@@ -90,8 +91,10 @@ namespace NadekoBot.Modules.CustomReactions.Services
                     gcr.Reactions = obj.Re;
                 }
             }, StackExchange.Redis.CommandFlags.FireAndForget);
+            _log.Info($"Loaded {this.GetType().Name}");
 
             ReloadInternal(bot.AllGuildConfigs);
+            _log.Info($"Reloaded {this.GetType().Name}");
 
             bot.JoinedGuild += Bot_JoinedGuild;
             _client.LeftGuild += _client_LeftGuild;

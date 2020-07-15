@@ -77,7 +77,7 @@ namespace NadekoBot.Modules.Permissions.Services
         {
             _log = LogManager.GetCurrentClassLogger();
             _db = db;
-
+            _log.Info($"Loading {this.GetType().Name}.");
             InviteFilteringServers = new ConcurrentHashSet<ulong>(bot.AllGuildConfigs.Where(gc => gc.FilterInvites).Select(gc => gc.GuildId));
             InviteFilteringChannels = new ConcurrentHashSet<ulong>(bot.AllGuildConfigs.SelectMany(gc => gc.FilterInvitesChannelIds.Select(fci => fci.ChannelId)));
 
@@ -108,6 +108,7 @@ namespace NadekoBot.Modules.Permissions.Services
                 });
                 return Task.CompletedTask;
             };
+            _log.Info($"Loaded {this.GetType().Name}.");
         }
 
         public async Task<bool> RunBehavior(DiscordSocketClient _, IGuild guild, IUserMessage msg)

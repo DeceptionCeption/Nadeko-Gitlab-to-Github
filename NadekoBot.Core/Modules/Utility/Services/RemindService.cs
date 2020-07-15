@@ -37,6 +37,7 @@ namespace NadekoBot.Modules.Utility.Services
             _config = config;
             _client = client;
             _log = LogManager.GetCurrentClassLogger();
+            _log.Info($"Loading {this.GetType().Name}.");
             _db = db;
 
             List<Reminder> reminders;
@@ -50,6 +51,7 @@ namespace NadekoBot.Modules.Utility.Services
             {
                 StartReminder(r);
             }
+            _log.Info($"Loaded {this.GetType().Name}.");
         }
 
         public void StartReminder(Reminder r)

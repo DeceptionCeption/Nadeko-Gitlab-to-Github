@@ -7,19 +7,26 @@ using NadekoBot.Common.Collections;
 using NadekoBot.Common.ModuleBehaviors;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
+using NLog;
+using NLog.Fluent;
 
 namespace NadekoBot.Modules.Permissions.Services
 {
     public class CmdCdService : ILateBlocker, INService
     {
+        private Logger _log;
         public ConcurrentDictionary<ulong, ConcurrentHashSet<CommandCooldown>> CommandCooldowns { get; }
         public ConcurrentDictionary<ulong, ConcurrentHashSet<ActiveCooldown>> ActiveCooldowns { get; } = new ConcurrentDictionary<ulong, ConcurrentHashSet<ActiveCooldown>>();
 
         public CmdCdService(NadekoBot bot)
         {
+            _log = LogManager.GetCurrentClassLogger();
+            _log.Info($"Loading {this.GetType().Name}.");
             CommandCooldowns = new ConcurrentDictionary<ulong, ConcurrentHashSet<CommandCooldown>>(
                 bot.AllGuildConfigs.ToDictionary(k => k.GuildId, 
                                  v => new ConcurrentHashSet<CommandCooldown>(v.CommandCooldowns)));
+            
+            _log.Info($"Loaded {this.GetType().Name}.");
         }
 
         public Task<bool> TryBlockLate(DiscordSocketClient client, IUserMessage msg, IGuild guild, 

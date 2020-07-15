@@ -11,6 +11,8 @@ using NadekoBot.Modules.Permissions.Common;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
 using NadekoBot.Core.Services.Impl;
+using NLog;
+using NLog.Fluent;
 
 namespace NadekoBot.Modules.Permissions.Services
 {
@@ -19,6 +21,7 @@ namespace NadekoBot.Modules.Permissions.Services
         private readonly DbService _db;
         private readonly CommandHandler _cmd;
         private readonly NadekoStrings _strings;
+        private Logger _log;
 
         //guildid, root permission
         public ConcurrentDictionary<ulong, PermissionCache> Cache { get; } =
@@ -26,6 +29,8 @@ namespace NadekoBot.Modules.Permissions.Services
 
         public PermissionService(DiscordSocketClient client, DbService db, CommandHandler cmd, NadekoStrings strings)
         {
+            _log = LogManager.GetCurrentClassLogger();
+            _log.Info($"Loading {this.GetType().Name}.");
             _db = db;
             _cmd = cmd;
             _strings = strings;
@@ -42,6 +47,7 @@ namespace NadekoBot.Modules.Permissions.Services
                     });
                 }
             }
+            _log.Info($"Loading {this.GetType().Name}.");
         }
 
         public PermissionCache GetCacheFor(ulong guildId)

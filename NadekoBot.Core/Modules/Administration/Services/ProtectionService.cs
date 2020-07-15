@@ -36,8 +36,10 @@ namespace NadekoBot.Modules.Administration.Services
             _mute = mute;
             _db = db;
             _bot = bot;
+            _log.Info($"Loading {this.GetType().Name}");
 
             Initialize();
+            _log.Info($"Loaded {this.GetType().Name}");
 
             _client.MessageReceived += HandleAntiSpam;
             _client.UserJoined += HandleAntiRaid;

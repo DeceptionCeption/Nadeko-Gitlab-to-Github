@@ -30,6 +30,7 @@ namespace NadekoBot.Modules.Administration.Services
             _log = LogManager.GetCurrentClassLogger();
             _bot = bot;
             _db = db;
+            _log.Info($"Loading {this.GetType().Name}");
 
             DeleteMessagesOnCommand = new ConcurrentHashSet<ulong>(bot.AllGuildConfigs
                 .Where(g => g.DeleteMessageOnCommand)
@@ -41,6 +42,7 @@ namespace NadekoBot.Modules.Administration.Services
                 .ToConcurrent();
 
             cmdHandler.CommandExecuted += DelMsgOnCmd_Handler;
+            _log.Info($"Loaded {this.GetType().Name}");
         }
 
         public (bool DelMsgOnCmd, IEnumerable<DelMsgOnCmdChannel> channels) GetDelMsgOnCmdData(ulong guildId)
@@ -66,13 +68,27 @@ namespace NadekoBot.Modules.Administration.Services
                 {
                     if (state && cmd.Name != "prune" && cmd.Name != "pick")
                     {
-                        try { await msg.DeleteAsync().ConfigureAwait(false); } catch { }
+                        try
+                        {
+                            await msg.DeleteAsync().ConfigureAwait(false);
+                        }
+                        catch
+                        {
+                        }
                     }
+
                     //if state is false, that means do not do it
                 }
-                else if (DeleteMessagesOnCommand.Contains(channel.Guild.Id) && cmd.Name != "prune" && cmd.Name != "pick")
+                else if (DeleteMessagesOnCommand.Contains(channel.Guild.Id) && cmd.Name != "prune" &&
+                         cmd.Name != "pick")
                 {
-                    try { await msg.DeleteAsync().ConfigureAwait(false); } catch { }
+                    try
+                    {
+                        await msg.DeleteAsync().ConfigureAwait(false);
+                    }
+                    catch
+                    {
+                    }
                 }
             });
             return Task.CompletedTask;
@@ -88,6 +104,7 @@ namespace NadekoBot.Modules.Administration.Services
 
                 uow.SaveChanges();
             }
+
             return enabled;
         }
 
@@ -111,7 +128,7 @@ namespace NadekoBot.Modules.Administration.Services
                 {
                     if (old is null)
                     {
-                        old = new DelMsgOnCmdChannel { ChannelId = chId };
+                        old = new DelMsgOnCmdChannel {ChannelId = chId};
                         conf.DelMsgOnCmdChannels.Add(old);
                     }
 
@@ -160,8 +177,8 @@ namespace NadekoBot.Modules.Administration.Services
                 return;
 
             var rep = new ReplacementBuilder()
-                    .WithDefault(context)
-                    .Build();
+                .WithDefault(context)
+                .Build();
 
             if (CREmbed.TryParse(text, out var crembed))
             {
