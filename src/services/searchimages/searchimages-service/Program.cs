@@ -32,11 +32,11 @@ namespace SearchImagesService
         {
             var log = new LoggerConfiguration()
                 .WriteTo.Console(Serilog.Events.LogEventLevel.Information)
-                .WriteTo.Elasticsearch(new Serilog.Sinks.Elasticsearch.ElasticsearchSinkOptions(new Uri("http://elasticsearch:9200"))
-                {
-                    FailureCallback = e => Console.WriteLine("Unable to submit event " + e.MessageTemplate),
-                    MinimumLogEventLevel = Serilog.Events.LogEventLevel.Debug,
-                })
+                // .WriteTo.Elasticsearch(new Serilog.Sinks.Elasticsearch.ElasticsearchSinkOptions(new Uri("http://elasticsearch:9200"))
+                // {
+                //     FailureCallback = e => Console.WriteLine("Unable to submit event " + e.MessageTemplate),
+                //     MinimumLogEventLevel = Serilog.Events.LogEventLevel.Debug,
+                // })
                 .CreateLogger();
 
             Log.Logger = log;

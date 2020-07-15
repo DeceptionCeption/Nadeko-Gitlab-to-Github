@@ -306,7 +306,7 @@ namespace NadekoBot.Core.Services
                         var all = db.ListRange(_creds.RedisKey() + "_shardstats")
                            .Select(x => JsonConvert.DeserializeObject<ShardComMessage>(x));
                         var statuses = all
-                           .Where(x => x.Time < DateTime.UtcNow - TimeSpan.FromSeconds(30))
+                           .Where(x => x.Time < DateTime.UtcNow - TimeSpan.FromSeconds(90))
                            .ToArray();
 
                         if (!statuses.Any())
@@ -332,7 +332,7 @@ namespace NadekoBot.Core.Services
                                 _shardStartQueue.Enqueue(s.ShardId);
 
                                 //to prevent shards which are already scheduled for restart to be scheduled again
-                                s.Time = DateTime.UtcNow + TimeSpan.FromSeconds(60 * _shardStartQueue.Count);
+                                s.Time = DateTime.UtcNow + TimeSpan.FromSeconds(90 * _shardStartQueue.Count);
                                 db.ListSetByIndex(_key + "_shardstats", s.ShardId,
                                     JsonConvert.SerializeObject(s), CommandFlags.FireAndForget);
                                 _log.Warn("Shard {0} is scheduled for a restart because it's unresponsive.", s.ShardId);
