@@ -30,18 +30,6 @@ namespace NadekoBot.Modules.Administration.Services
             = new ConcurrentDictionary<ulong, ConcurrentDictionary<(ulong, TimerType), Timer>>();
 
         public event Action<IGuildUser, IUser, MuteType> UserMuted = delegate { };
-
-        public async Task SetMuteRoleAsync(ulong guildId, string name)
-        {
-            using (var uow = _db.GetDbContext())
-            {
-                var config = uow.GuildConfigs.ForId(guildId, set => set);
-                config.MuteRoleName = name;
-                GuildMuteRoles.AddOrUpdate(guildId, name, (id, old) => name);
-                await uow.SaveChangesAsync();
-            }
-        }
-
         public event Action<IGuildUser, IUser, MuteType> UserUnmuted = delegate { };
 
         private static readonly OverwritePermissions denyOverwrite =
@@ -134,7 +122,6 @@ namespace NadekoBot.Modules.Administration.Services
                 }
 
                 _client.UserJoined += Client_UserJoined;
-                _log.Info($"Loaded {this.GetType().Name}");
             }
         }
 
@@ -154,6 +141,17 @@ namespace NadekoBot.Modules.Administration.Services
             }
 
             return Task.CompletedTask;
+        }
+
+        public async Task SetMuteRoleAsync(ulong guildId, string name)
+        {
+            using (var uow = _db.GetDbContext())
+            {
+                var config = uow.GuildConfigs.ForId(guildId, set => set);
+                config.MuteRoleName = name;
+                GuildMuteRoles.AddOrUpdate(guildId, name, (id, old) => name);
+                await uow.SaveChangesAsync();
+            }
         }
 
         public async Task MuteUser(IGuildUser usr, IUser mod, MuteType type = MuteType.All)

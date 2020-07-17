@@ -109,9 +109,8 @@ namespace NadekoBot.Core.Services
             //var v3TestingShard = (int)((236275461590745088 >> 22) % data.TotalShards);
 
             var shardIds = Enumerable.Range(0, _creds.TotalShards) // get all shards which need to be restarted, at startup, that's all shards
-                .Except(new int[] { 0, nadekoLogShard, 50 }) // remove shard 0 and #NadekoLog shard from startup list, to make them start first
+                .Except(new int[] { 0, nadekoLogShard }) // remove shard 0 and #NadekoLog shard from startup list, to make them start first
                 .Shuffle() // start all shards in a random order
-                .Prepend(50) // shard which is getting stuck
                 .Prepend(nadekoLogShard) // 2 - then start #NadekoLog shard
                 .Prepend(0) // 1 - first start shard 0
                 
