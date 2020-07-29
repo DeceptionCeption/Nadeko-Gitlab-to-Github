@@ -44,7 +44,6 @@ namespace NadekoBot.Modules.Administration.Services
         {
             _client = client;
             _db = db;
-            _log.Info($"Loading {this.GetType().Name}");
 
             using (var uow = db.GetDbContext())
             {

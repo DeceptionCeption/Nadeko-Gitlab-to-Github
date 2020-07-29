@@ -24,6 +24,7 @@ namespace NadekoBot.Modules.Administration.Services
         {
             _log = LogManager.GetCurrentClassLogger();
             _client = client;
+            _db = db;
 
             AutoAssignedRoles = new ConcurrentDictionary<ulong, ulong>(
                 bot.AllGuildConfigs
