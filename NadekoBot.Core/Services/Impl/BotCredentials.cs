@@ -14,7 +14,6 @@ namespace NadekoBot.Core.Services.Impl
     {
         private Logger _log;
 
-        public ulong ClientId { get; private set; }
         public string GoogleApiKey { get; private set; }
         public string MashapeKey { get; private set; }
         public string Token { get; private set; }
@@ -36,8 +35,6 @@ namespace NadekoBot.Core.Services.Impl
         public int ShardRunPort { get; private set; }
 
         public string PatreonCampaignId { get; private set; }
-        public string MiningProxyUrl { get; private set; }
-        public string MiningProxyCreds { get; private set; }
 
         public string TwitchClientId { get; private set; }
 
@@ -47,8 +44,9 @@ namespace NadekoBot.Core.Services.Impl
         public string RedisOptions { get; private set; }
         public string LocationIqApiKey { get; private set; }
         public string TimezoneDbApiKey { get; private set; }
-        public string ServicesIp { get; private set; }
         public string CoinmarketcapApiKey { get; private set; }
+
+        public string ServicesIp { get; private set; }
 
         public BotCredentials()
         {
@@ -59,9 +57,18 @@ namespace NadekoBot.Core.Services.Impl
 
         public void Reload()
         {
-            try { File.WriteAllText("./credentials_example.json", JsonConvert.SerializeObject(new CredentialsModel(), Formatting.Indented)); } catch { }
+            try
+            {
+                File.WriteAllText("./credentials_example.json",
+                    JsonConvert.SerializeObject(new CredentialsModel(), Formatting.Indented));
+            }
+            catch
+            {
+            }
+
             if (!File.Exists(_credsFileName))
-                _log.Warn($"credentials.json is missing. Attempting to load creds from environment variables prefixed with 'NadekoBot_'. Example is in {Path.GetFullPath("./credentials_example.json")}");
+                _log.Warn(
+                    $"credentials.json is missing. Attempting to load creds from environment variables prefixed with 'NadekoBot_'. Example is in {Path.GetFullPath("./credentials_example.json")}");
             try
             {
                 var configBuilder = new ConfigurationBuilder();
@@ -73,13 +80,15 @@ namespace NadekoBot.Core.Services.Impl
                 Token = data[nameof(Token)];
                 if (string.IsNullOrWhiteSpace(Token))
                 {
-                    _log.Error("Token is missing from credentials.json or Environment varibles. Add it and restart the program.");
+                    _log.Error(
+                        "Token is missing from credentials.json or Environment varibles. Add it and restart the program.");
                     if (!Console.IsInputRedirected)
                         Console.ReadKey();
                     Environment.Exit(3);
                 }
-                OwnerIds = data.GetSection("OwnerIds").GetChildren().Select(c => ulong.Parse(c.Value)).ToImmutableArray();
-                LoLApiKey = data[nameof(LoLApiKey)];
+
+                OwnerIds = data.GetSection("OwnerIds").GetChildren().Select(c => ulong.Parse(c.Value))
+                    .ToImmutableArray();
                 GoogleApiKey = data[nameof(GoogleApiKey)];
                 MashapeKey = data[nameof(MashapeKey)];
                 OsuApiKey = data[nameof(OsuApiKey)];
@@ -88,15 +97,14 @@ namespace NadekoBot.Core.Services.Impl
                 ShardRunCommand = data[nameof(ShardRunCommand)];
                 ShardRunArguments = data[nameof(ShardRunArguments)];
                 CleverbotApiKey = data[nameof(CleverbotApiKey)];
-                MiningProxyUrl = data[nameof(MiningProxyUrl)];
-                MiningProxyCreds = data[nameof(MiningProxyCreds)];
                 LocationIqApiKey = data[nameof(LocationIqApiKey)];
                 TimezoneDbApiKey = data[nameof(TimezoneDbApiKey)];
                 CoinmarketcapApiKey = data[nameof(CoinmarketcapApiKey)];
-                if(string.IsNullOrWhiteSpace(CoinmarketcapApiKey))
+                if (string.IsNullOrWhiteSpace(CoinmarketcapApiKey))
                 {
                     CoinmarketcapApiKey = "e79ec505-0913-439d-ae07-069e296a6079";
                 }
+
                 if (!string.IsNullOrWhiteSpace(data[nameof(RedisOptions)]))
                     RedisOptions = data[nameof(RedisOptions)];
                 else
@@ -138,18 +146,14 @@ namespace NadekoBot.Core.Services.Impl
                     ts = 0;
                 TotalShards = ts < 1 ? 1 : ts;
 
-                if (!ulong.TryParse(data[nameof(ClientId)], out ulong clId))
-                    clId = 0;
-                ClientId = clId;
-
                 CarbonKey = data[nameof(CarbonKey)];
                 var dbSection = data.GetSection("db");
                 Db = new DBConfig(string.IsNullOrWhiteSpace(dbSection["Type"])
-                                ? "sqlite"
-                                : dbSection["Type"],
-                            string.IsNullOrWhiteSpace(dbSection["ConnectionString"])
-                                ? "Data Source=data/NadekoBot.db"
-                                : dbSection["ConnectionString"]);
+                        ? "sqlite"
+                        : dbSection["Type"],
+                    string.IsNullOrWhiteSpace(dbSection["ConnectionString"])
+                        ? "Data Source=data/NadekoBot.db"
+                        : dbSection["ConnectionString"]);
 
                 TwitchClientId = data[nameof(TwitchClientId)];
                 if (string.IsNullOrWhiteSpace(TwitchClientId))
@@ -163,8 +167,8 @@ namespace NadekoBot.Core.Services.Impl
                 _log.Fatal(ex);
                 throw;
             }
-
         }
+
         public bool IsOwner(IUser u) => OwnerIds.Contains(u.Id);
     }
 }

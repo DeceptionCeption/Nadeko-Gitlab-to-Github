@@ -26,7 +26,6 @@ namespace NadekoBot.Modules.Administration.Services
             _log = LogManager.GetCurrentClassLogger();
             _db = db;
             _client = client;
-            _log.Info($"Loading {this.GetType().Name}");
             _client.UserVoiceStateUpdated += ClientOnUserVoiceStateUpdated;
             VcRoles = new ConcurrentDictionary<ulong, ConcurrentDictionary<ulong, IRole>>();
             ToAssign = new ConcurrentDictionary<ulong, ConcurrentQueue<(bool, IGuildUser, IRole)>>();
@@ -78,7 +77,6 @@ namespace NadekoBot.Modules.Administration.Services
 
             _client.LeftGuild += _client_LeftGuild;
             bot.JoinedGuild += Bot_JoinedGuild;
-            _log.Info($"Loaded {this.GetType().Name}");
         }
 
         private Task Bot_JoinedGuild(GuildConfig arg)

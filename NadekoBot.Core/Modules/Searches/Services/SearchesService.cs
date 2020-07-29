@@ -52,7 +52,9 @@ namespace NadekoBot.Modules.Searches.Services
         public ConcurrentDictionary<ulong, Timer> AutoHentaiTimers { get; } = new ConcurrentDictionary<ulong, Timer>();
         public ConcurrentDictionary<ulong, Timer> AutoBoobTimers { get; } = new ConcurrentDictionary<ulong, Timer>();
         public ConcurrentDictionary<ulong, Timer> AutoButtTimers { get; } = new ConcurrentDictionary<ulong, Timer>();
-
+        
+        private readonly List<string> _yomamaJokes;
+        
         public SearchesService(DiscordSocketClient client, IGoogleApiService google,
             DbService db, NadekoBot bot, IDataCache cache, IHttpClientFactory factory,
             FontProvider fonts, IBotCredentials creds)
@@ -113,6 +115,18 @@ namespace NadekoBot.Modules.Searches.Services
             }
             else
                 _log.Warn("data/magicitems.json is missing. Magic items are not loaded.");
+
+            if (File.Exists("data/yomama.txt"))
+            {
+                _yomamaJokes = File.ReadAllLines("data/yomama.txt")
+                    .Shuffle()
+                    .ToList();
+            }
+            else
+            {
+                _yomamaJokes = new List<string>();
+                _log.Warn("data/yomama.txt is missing. .yomama command won't work");
+            }
         }
 
         public async Task<Stream> GetRipPictureAsync(string text, Uri imgUrl)
@@ -340,14 +354,31 @@ namespace NadekoBot.Modules.Searches.Services
             text = text?.Trim();
             return (await _google.Translate(text, from, to).ConfigureAwait(false)).SanitizeMentions();
         }
-
-        public async Task<string> GetYomamaJoke()
+        
+        private readonly object yomamaLock = new object();
+        private int yomamaJokeIndex = 0;
+        public Task<string> GetYomamaJoke()
         {
-            using (var http = _httpFactory.CreateClient())
+            string joke;
+            lock (yomamaLock)
             {
-                var response = await http.GetStringAsync(new Uri("http://api.yomomma.info/")).ConfigureAwait(false);
-                return JObject.Parse(response)["joke"].ToString() + " 😆";
+                if (yomamaJokeIndex >= _yomamaJokes.Count)
+                {
+                    yomamaJokeIndex = 0;
+                    var newList = _yomamaJokes.ToList();
+                    _yomamaJokes.Clear();
+                    _yomamaJokes.AddRange(newList.Shuffle());
+                }
+
+                joke = _yomamaJokes[yomamaJokeIndex++];
             }
+            return Task.FromResult(joke);
+            
+            // using (var http = _httpFactory.CreateClient())
+            // {
+            //     var response = await http.GetStringAsync(new Uri("http://api.yomomma.info/")).ConfigureAwait(false);
+            //     return JObject.Parse(response)["joke"].ToString() + " 😆";
+            // }
         }
 
         public static async Task<(string Text, string BaseUri)> GetRandomJoke()

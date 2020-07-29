@@ -146,7 +146,6 @@ namespace NadekoBot.Modules.Searches
 
         // done in 3.0
         [NadekoCommand, Usage, Description, Aliases]
-        [NoPublicBot]
         public async Task Time([Leftover] string query)
         {
             if (!await ValidateQuery(ctx.Channel, query).ConfigureAwait(false))
@@ -155,7 +154,7 @@ namespace NadekoBot.Modules.Searches
             await ctx.Channel.TriggerTypingAsync().ConfigureAwait(false);
 
             var (data, err) = await _service.GetTimeDataAsync(query).ConfigureAwait(false);
-            if (!(err == null))
+            if (!(err is null))
             {
                 string errorKey;
                 switch (err)

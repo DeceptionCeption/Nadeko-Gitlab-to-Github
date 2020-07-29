@@ -30,7 +30,6 @@ namespace NadekoBot.Modules.Administration.Services
             _log = LogManager.GetCurrentClassLogger();
             _bot = bot;
             _db = db;
-            _log.Info($"Loading {this.GetType().Name}");
 
             DeleteMessagesOnCommand = new ConcurrentHashSet<ulong>(bot.AllGuildConfigs
                 .Where(g => g.DeleteMessageOnCommand)
@@ -42,7 +41,6 @@ namespace NadekoBot.Modules.Administration.Services
                 .ToConcurrent();
 
             cmdHandler.CommandExecuted += DelMsgOnCmd_Handler;
-            _log.Info($"Loaded {this.GetType().Name}");
         }
 
         public (bool DelMsgOnCmd, IEnumerable<DelMsgOnCmdChannel> channels) GetDelMsgOnCmdData(ulong guildId)

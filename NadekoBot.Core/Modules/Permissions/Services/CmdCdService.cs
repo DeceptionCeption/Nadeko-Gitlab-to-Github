@@ -21,12 +21,10 @@ namespace NadekoBot.Modules.Permissions.Services
         public CmdCdService(NadekoBot bot)
         {
             _log = LogManager.GetCurrentClassLogger();
-            _log.Info($"Loading {this.GetType().Name}.");
             CommandCooldowns = new ConcurrentDictionary<ulong, ConcurrentHashSet<CommandCooldown>>(
                 bot.AllGuildConfigs.ToDictionary(k => k.GuildId, 
                                  v => new ConcurrentHashSet<CommandCooldown>(v.CommandCooldowns)));
             
-            _log.Info($"Loaded {this.GetType().Name}.");
         }
 
         public Task<bool> TryBlockLate(DiscordSocketClient client, IUserMessage msg, IGuild guild, 

@@ -22,12 +22,8 @@ namespace NadekoBot.Modules.Searches.Services
         private readonly ConcurrentDictionary<string, DateTime> _lastPosts =
             new ConcurrentDictionary<string, DateTime>();
 
-        private Logger _log;
-
         public FeedsService(NadekoBot bot, DbService db, DiscordSocketClient client)
         {
-            _log = LogManager.GetCurrentClassLogger();
-            _log.Info($"Loading {this.GetType().Name}.");
             _db = db;
 
             _subs = bot
@@ -40,7 +36,6 @@ namespace NadekoBot.Modules.Searches.Services
             _client = client;
 
             var _ = Task.Run(TrackFeeds);
-            _log.Info($"Loaded {this.GetType().Name}.");
         }
 
         public async Task<EmbedBuilder> TrackFeeds()

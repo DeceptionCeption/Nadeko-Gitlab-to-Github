@@ -30,7 +30,6 @@ namespace NadekoBot.Modules.Permissions.Services
         public PermissionService(DiscordSocketClient client, DbService db, CommandHandler cmd, NadekoStrings strings)
         {
             _log = LogManager.GetCurrentClassLogger();
-            _log.Info($"Loading {this.GetType().Name}.");
             _db = db;
             _cmd = cmd;
             _strings = strings;
@@ -47,7 +46,6 @@ namespace NadekoBot.Modules.Permissions.Services
                     });
                 }
             }
-            _log.Info($"Loading {this.GetType().Name}.");
         }
 
         public PermissionCache GetCacheFor(ulong guildId)
