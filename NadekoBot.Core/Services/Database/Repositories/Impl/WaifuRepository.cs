@@ -184,12 +184,13 @@ VALUES ({null}, {null}, {1}, (SELECT Id FROM DiscordUser WHERE UserId={userId}))
             if (toReturn is null)
                 return null;
 
-            toReturn.ClaimerPoints += +_context.Set<WaifuInfo>()
+            toReturn.ClaimerPoints += _context.Set<WaifuInfo>()
                 .AsQueryable()
                 .Where(x => x.Claimer.UserId == userId)
                 .ToList()
-                .DefaultIfEmpty()
-                .Sum(x => x.Price);
+                .Select(x => x.Price)
+                .DefaultIfEmpty(0)
+                .Sum();
             
             toReturn.Claims30 = toReturn.Claims30 is null
                 ? new List<string>()
