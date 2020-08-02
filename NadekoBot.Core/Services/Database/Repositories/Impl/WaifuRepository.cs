@@ -177,17 +177,19 @@ VALUES ({null}, {null}, {1}, (SELECT Id FROM DiscordUser WHERE UserId={userId}))
                         .AsQueryable()
                         .Where(x => (x.UserId == userId && x.Reason == "Claimed Waifu")
                             || (x.UserId == userId && x.Reason == "Gift"))
-                        .Sum(x => Math.Abs(x.Amount)) + _context.Set<WaifuInfo>()
-                            .AsQueryable()
-                            .Where(x => x.Claimer.UserId == userId)
-                            .ToList()
-                            .DefaultIfEmpty()
-                            .Sum(x => x.Price)
+                        .Sum(x => Math.Abs(x.Amount))
                 })
             .FirstOrDefault();
 
             if (toReturn is null)
                 return null;
+
+            toReturn.ClaimerPoints += +_context.Set<WaifuInfo>()
+                .AsQueryable()
+                .Where(x => x.Claimer.UserId == userId)
+                .ToList()
+                .DefaultIfEmpty()
+                .Sum(x => x.Price);
             
             toReturn.Claims30 = toReturn.Claims30 is null
                 ? new List<string>()
