@@ -105,11 +105,16 @@ WHERE UserId = (SELECT Id from DiscordUser WHERE UserId={userId}) AND
                 .Count();
         }
 
-        public WaifuInfoStats GetWaifuInfo(ulong userId)
+        public void EnsureWaifuInfoCreated(ulong userId)
         {
             _context.Database.ExecuteSqlInterpolated($@"
 INSERT OR IGNORE INTO WaifuInfo (AffinityId, ClaimerId, Price, WaifuId)
 VALUES ({null}, {null}, {1}, (SELECT Id FROM DiscordUser WHERE UserId={userId}));");
+        }
+        
+        public WaifuInfoStats GetWaifuInfo(ulong userId)
+        {
+            EnsureWaifuInfoCreated(userId);
 
             var toReturn = _set.AsQueryable()
                 .Where(w => w.WaifuId == _context.Set<DiscordUser>()
@@ -167,6 +172,15 @@ VALUES ({null}, {null}, {1}, (SELECT Id FROM DiscordUser WHERE UserId={userId}))
                         .AsQueryable()
                         .Where(x => x.WaifuInfoId == w.Id)
                         .ToList(),
+                    
+                    ClaimerPoints = _context.Set<CurrencyTransaction>()
+                        .AsQueryable()
+                        .Where(x => (x.UserId == userId && x.Reason == "Claimed Waifu")
+                            || (x.UserId == userId && x.Reason == "Gift"))
+                        .Sum(x => Math.Abs(x.Amount)) + _context.Set<WaifuInfo>()
+                            .AsQueryable()
+                            .Where(x => x.Claimer.UserId == userId)
+                            .Sum(x => x.Price)
                 })
             .FirstOrDefault();
 

@@ -7,8 +7,13 @@ using NadekoBot.Core.Services.Database.Repositories;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.WebSocket;
+using NadekoBot.Common.ModuleBehaviors;
+using Newtonsoft.Json;
+using StackExchange.Redis;
 
 namespace NadekoBot.Modules.Gambling.Services
 {
@@ -21,19 +26,63 @@ namespace NadekoBot.Modules.Gambling.Services
             public int Divorces { get; set; }
         }
 
+        public class ClaimerPointsConfig
+        {
+            public int WaifuValueMinutesTimeout { get; set; } = 5;
+            public int WaifuValueIncreaseAmount { get; set; } = 3;
+        }
+
         private readonly DbService _db;
         private readonly ICurrencyService _cs;
         private readonly IBotConfigProvider _bc;
         private readonly IDataCache _cache;
         private readonly Logger _log;
+        private readonly ClaimerPointsConfig _conf;
 
-        public WaifuService(DbService db, ICurrencyService cs, IBotConfigProvider bc, IDataCache cache)
+        public WaifuService(DbService db, ICurrencyService cs, IBotConfigProvider bc, IDataCache cache,
+            CommandHandler handler)
         {
             _db = db;
             _cs = cs;
             _bc = bc;
             _cache = cache;
             _log = LogManager.GetCurrentClassLogger();
+
+            if (!File.Exists("data/claimer_points.json"))
+            {
+                File.WriteAllText("data/claimer_points.json", JsonConvert.SerializeObject(new ClaimerPointsConfig()));
+            }
+
+            _conf = JsonConvert.DeserializeObject<ClaimerPointsConfig>(File.ReadAllText("data/claimer_points.json"));
+
+            handler.OnMessageNoTrigger += HandlerOnOnMessageNoTrigger;
+        }
+
+        private async Task HandlerOnOnMessageNoTrigger(IUserMessage arg)
+        {
+            if (arg.Author.IsBot)
+                return;
+
+            var key = $"{_cache.RedisKey}_{arg.Author.Id}_claimerpoint_xp_timeout";
+
+            var db = _cache.Redis.GetDatabase();
+            if (!await db.StringSetAsync(
+                key,
+                true,
+                expiry: TimeSpan.FromMinutes(_conf.WaifuValueMinutesTimeout),
+                when: When.NotExists))
+            {
+                return;
+            }
+
+            using (var uow = _db.GetDbContext())
+            {
+                uow.Waifus.EnsureWaifuInfoCreated(arg.Author.Id);
+                var wi = uow._context.Set<WaifuInfo>()
+                    .First(x => x.Waifu.UserId == arg.Author.Id);
+                wi.Price += _conf.WaifuValueIncreaseAmount;
+                await uow.SaveChangesAsync();
+            }
         }
 
         public async Task<bool> WaifuTransfer(IUser owner, ulong waifuId, IUser newOwner)
@@ -75,17 +124,19 @@ namespace NadekoBot.Modules.Gambling.Services
                     return _bc.BotConfig.MinWaifuPrice;
 
                 var divorces = uow._context.WaifuUpdates.Count(x => x.Old != null &&
-                        x.Old.UserId == user.Id &&
-                        x.UpdateType == WaifuUpdateType.Claimed &&
-                        x.New == null);
+                                                                    x.Old.UserId == user.Id &&
+                                                                    x.UpdateType == WaifuUpdateType.Claimed &&
+                                                                    x.New == null);
                 var affs = uow._context.WaifuUpdates
-                        .AsQueryable()
-                        .Where(w => w.User.UserId == user.Id && w.UpdateType == WaifuUpdateType.AffinityChanged && w.New != null)
-                        .ToList()
-                        .GroupBy(x => x.New)
-                        .Count();
+                    .AsQueryable()
+                    .Where(w => w.User.UserId == user.Id && w.UpdateType == WaifuUpdateType.AffinityChanged &&
+                                w.New != null)
+                    .ToList()
+                    .GroupBy(x => x.New)
+                    .Count();
 
-                return (int)Math.Ceiling(waifu.Price * 1.25f) + ((divorces + affs + 2) * _bc.BotConfig.DivorcePriceMultiplier);
+                return (int) Math.Ceiling(waifu.Price * 1.25f) +
+                       ((divorces + affs + 2) * _bc.BotConfig.DivorcePriceMultiplier);
             }
         }
 
@@ -100,15 +151,15 @@ namespace NadekoBot.Modules.Gambling.Services
                 var affs = uow._context.WaifuUpdates
                     .AsQueryable()
                     .Where(w => w.User.UserId == user.Id
-                        && w.UpdateType == WaifuUpdateType.AffinityChanged
-                        && w.New != null);
+                                && w.UpdateType == WaifuUpdateType.AffinityChanged
+                                && w.New != null);
 
                 var divorces = uow._context.WaifuUpdates
                     .AsQueryable()
                     .Where(x => x.Old != null &&
-                        x.Old.UserId == user.Id &&
-                        x.UpdateType == WaifuUpdateType.Claimed &&
-                        x.New == null);
+                                x.Old.UserId == user.Id &&
+                                x.UpdateType == WaifuUpdateType.Claimed &&
+                                x.New == null);
 
                 //reset changes of heart to 0
                 uow._context.WaifuUpdates.RemoveRange(affs);
@@ -126,6 +177,7 @@ namespace NadekoBot.Modules.Gambling.Services
 
                 uow.SaveChanges();
             }
+
             return true;
         }
 
@@ -231,7 +283,6 @@ namespace NadekoBot.Modules.Gambling.Services
                 var now = DateTime.UtcNow;
                 if (w?.Affinity?.UserId == target?.Id)
                 {
-
                 }
                 else if (!_cache.TryAddAffinityCooldown(user.Id, out remaining))
                 {
@@ -309,7 +360,7 @@ namespace NadekoBot.Modules.Gambling.Services
                     if (w.Affinity?.UserId == user.Id)
                     {
                         await _cs.AddAsync(w.Waifu.UserId, "Waifu Compensation", amount, gamble: true);
-                        w.Price = (int)Math.Floor(w.Price * 0.75f);
+                        w.Price = (int) Math.Floor(w.Price * 0.75f);
                         result = DivorceResult.SucessWithPenalty;
                     }
                     else
@@ -318,6 +369,7 @@ namespace NadekoBot.Modules.Gambling.Services
 
                         result = DivorceResult.Success;
                     }
+
                     var oldClaimer = w.Claimer;
                     w.Claimer = null;
 
@@ -357,16 +409,18 @@ namespace NadekoBot.Modules.Gambling.Services
                         Waifu = uow.DiscordUsers.GetOrCreate(giftedWaifu),
                     });
                 }
+
                 w.Items.Add(itemObj);
                 if (w.Claimer?.UserId == from)
                 {
-                    w.Price += (int)(itemObj.Price * 0.95);
+                    w.Price += (int) (itemObj.Price * 0.95);
                 }
                 else
                     w.Price += itemObj.Price / 2;
 
                 await uow.SaveChangesAsync();
             }
+
             return true;
         }
 
@@ -388,7 +442,8 @@ namespace NadekoBot.Modules.Gambling.Services
                         DivorceCount = 0,
                         FullName = target.ToString(),
                         Items = new List<WaifuItem>(),
-                        Price = 1
+                        Price = 1,
+                        ClaimerPoints = 0,
                     };
                 }
 

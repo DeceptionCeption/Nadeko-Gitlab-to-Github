@@ -11,6 +11,7 @@ namespace NadekoBot.Core.Services
         ConnectionMultiplexer Redis { get; }
         IImageCache LocalImages { get; }
         ILocalDataCache LocalData { get; }
+        string RedisKey { get; }
 
         Task<(bool Success, byte[] Data)> TryGetImageDataAsync(Uri key);
         Task<(bool Success, string Data)> TryGetAnimeDataAsync(string key);

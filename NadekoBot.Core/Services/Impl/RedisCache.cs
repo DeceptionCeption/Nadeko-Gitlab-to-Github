@@ -20,7 +20,7 @@ namespace NadekoBot.Core.Services.Impl
         public IImageCache LocalImages { get; }
         public ILocalDataCache LocalData { get; }
 
-        private readonly string _redisKey;
+        public string RedisKey { get; }
         private readonly EndPoint _redisEndpoint;
 
         public RedisCache(IBotCredentials creds, int shardId)
@@ -34,7 +34,7 @@ namespace NadekoBot.Core.Services.Impl
             Redis.PreserveAsyncOrder = false;
             LocalImages = new RedisImagesCache(Redis, creds);
             LocalData = new RedisLocalDataCache(Redis, creds, shardId);
-            _redisKey = creds.RedisKey();
+            RedisKey = creds.RedisKey();
         }
 
         // things here so far don't need the bot id
@@ -89,12 +89,12 @@ namespace NadekoBot.Core.Services.Impl
             {
                 var time = TimeSpan.FromHours(period);
                 var _db = Redis.GetDatabase();
-                if ((bool?)_db.StringGet($"{_redisKey}_timelyclaim_{id}") == null)
+                if ((bool?)_db.StringGet($"{RedisKey}_timelyclaim_{id}") == null)
                 {
-                    _db.StringSet($"{_redisKey}_timelyclaim_{id}", true, time);
+                    _db.StringSet($"{RedisKey}_timelyclaim_{id}", true, time);
                     return null;
                 }
-                return _db.KeyTimeToLive($"{_redisKey}_timelyclaim_{id}");
+                return _db.KeyTimeToLive($"{RedisKey}_timelyclaim_{id}");
             }
         }
 
@@ -102,7 +102,7 @@ namespace NadekoBot.Core.Services.Impl
         {
             var server = Redis.GetServer(_redisEndpoint);
             var _db = Redis.GetDatabase();
-            foreach (var k in server.Keys(pattern: $"{_redisKey}_timelyclaim_*"))
+            foreach (var k in server.Keys(pattern: $"{RedisKey}_timelyclaim_*"))
             {
                 _db.KeyDelete(k, CommandFlags.FireAndForget);
             }
@@ -111,11 +111,11 @@ namespace NadekoBot.Core.Services.Impl
         public bool TryAddAffinityCooldown(ulong userId, out TimeSpan? time)
         {
             var _db = Redis.GetDatabase();
-            time = _db.KeyTimeToLive($"{_redisKey}_affinity_{userId}");
+            time = _db.KeyTimeToLive($"{RedisKey}_affinity_{userId}");
             if (time == null)
             {
                 time = TimeSpan.FromMinutes(30);
-                _db.StringSet($"{_redisKey}_affinity_{userId}", true, time);
+                _db.StringSet($"{RedisKey}_affinity_{userId}", true, time);
                 return true;
             }
             return false;
@@ -124,11 +124,11 @@ namespace NadekoBot.Core.Services.Impl
         public bool TryAddDivorceCooldown(ulong userId, out TimeSpan? time)
         {
             var _db = Redis.GetDatabase();
-            time = _db.KeyTimeToLive($"{_redisKey}_divorce_{userId}");
+            time = _db.KeyTimeToLive($"{RedisKey}_divorce_{userId}");
             if (time == null)
             {
                 time = TimeSpan.FromHours(6);
-                _db.StringSet($"{_redisKey}_divorce_{userId}", true, time);
+                _db.StringSet($"{RedisKey}_divorce_{userId}", true, time);
                 return true;
             }
             return false;
@@ -137,13 +137,13 @@ namespace NadekoBot.Core.Services.Impl
         public Task SetStreamDataAsync(string url, string data)
         {
             var _db = Redis.GetDatabase();
-            return _db.StringSetAsync($"{_redisKey}_stream_{url}", data, expiry: TimeSpan.FromHours(6));
+            return _db.StringSetAsync($"{RedisKey}_stream_{url}", data, expiry: TimeSpan.FromHours(6));
         }
 
         public bool TryGetStreamData(string url, out string dataStr)
         {
             var _db = Redis.GetDatabase();
-            dataStr = _db.StringGet($"{_redisKey}_stream_{url}");
+            dataStr = _db.StringGet($"{RedisKey}_stream_{url}");
 
             return !string.IsNullOrWhiteSpace(dataStr);
         }
@@ -151,7 +151,7 @@ namespace NadekoBot.Core.Services.Impl
         public TimeSpan? TryAddRatelimit(ulong id, string name, int expireIn)
         {
             var _db = Redis.GetDatabase();
-            if (_db.StringSet($"{_redisKey}_ratelimit_{id}_{name}",
+            if (_db.StringSet($"{RedisKey}_ratelimit_{id}_{name}",
                 0, // i don't use the value
                 TimeSpan.FromSeconds(expireIn),
                 When.NotExists))
@@ -159,13 +159,13 @@ namespace NadekoBot.Core.Services.Impl
                 return null;
             }
 
-            return _db.KeyTimeToLive($"{_redisKey}_ratelimit_{id}_{name}");
+            return _db.KeyTimeToLive($"{RedisKey}_ratelimit_{id}_{name}");
         }
 
         public bool TryGetEconomy(out string data)
         {
             var _db = Redis.GetDatabase();
-            if ((data = _db.StringGet($"{_redisKey}_economy")) != null)
+            if ((data = _db.StringGet($"{RedisKey}_economy")) != null)
             {
                 return true;
             }
@@ -176,7 +176,7 @@ namespace NadekoBot.Core.Services.Impl
         public void SetEconomy(string data)
         {
             var _db = Redis.GetDatabase();
-            _db.StringSet($"{_redisKey}_economy",
+            _db.StringSet($"{RedisKey}_economy",
                 data,
                 expiry: TimeSpan.FromMinutes(3));
         }
