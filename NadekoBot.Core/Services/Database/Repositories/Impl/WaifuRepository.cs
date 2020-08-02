@@ -180,6 +180,8 @@ VALUES ({null}, {null}, {1}, (SELECT Id FROM DiscordUser WHERE UserId={userId}))
                         .Sum(x => Math.Abs(x.Amount)) + _context.Set<WaifuInfo>()
                             .AsQueryable()
                             .Where(x => x.Claimer.UserId == userId)
+                            .ToList()
+                            .DefaultIfEmpty()
                             .Sum(x => x.Price)
                 })
             .FirstOrDefault();
