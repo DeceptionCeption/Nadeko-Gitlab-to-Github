@@ -97,7 +97,7 @@ namespace NadekoBot.Modules.Utility
         public async Task InRole([Leftover] IRole role)
         {
             await Context.Channel.TriggerTypingAsync().ConfigureAwait(false);
-            await _tracker.EnsureUsersDownloadedAsync(ctx.Guild).ConfigureAwait(false);
+            // await _tracker.EnsureUsersDownloadedAsync(ctx.Guild).ConfigureAwait(false);
 
             var users = await ctx.Guild.GetUsersAsync();
             var roleUsers = users
