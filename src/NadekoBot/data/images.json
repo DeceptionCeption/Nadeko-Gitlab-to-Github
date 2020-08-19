@@ -2,10 +2,10 @@
   "Version": 3,
   "Coins": {
     "Heads": [
-      "https://nadeko-pictures.nyc3.digitaloceanspaces.com/other/coins/heads.png"
+      "https://cdn.nadeko.bot/coins/headsr.png"
     ],
     "Tails": [
-      "https://nadeko-pictures.nyc3.digitaloceanspaces.com/other/coins/tails.png"
+      "https://cdn.nadeko.bot/coins/tailsr.png"
     ]
   },
   "Currency": [
