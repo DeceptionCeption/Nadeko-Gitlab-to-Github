@@ -99,9 +99,10 @@ namespace NadekoBot.Modules.Utility
             await Context.Channel.TriggerTypingAsync().ConfigureAwait(false);
             // await _tracker.EnsureUsersDownloadedAsync(ctx.Guild).ConfigureAwait(false);
 
-            var users = await ctx.Guild.GetUsersAsync();
-            var roleUsers = users
-                .Where(u => u.RoleIds.Contains(role.Id))
+            var guild = (SocketGuild)ctx.Guild;
+            // var users = await ctx.Guild.GetUsersAsync();
+            var roleUsers = guild.Users
+                .Where(u => u.Roles.Contains(role))
                 .Select(u => u.ToString())
                 .ToArray();
 
