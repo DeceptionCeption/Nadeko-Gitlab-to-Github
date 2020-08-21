@@ -818,7 +818,8 @@ namespace NadekoBot.Modules.Xp.Services
                         img.Mutate(x =>
                         {
                             x.DrawText(textOptions,
-                                "@" + username, usernameFont,
+                                "@" + username, 
+                                usernameFont,
                                 _template.User.Name.Color,
                                 new PointF(_template.User.Name.Pos.X, _template.User.Name.Pos.Y));
                         });
