@@ -4,6 +4,7 @@ using NadekoBot.Extensions;
 using NadekoBot.Core.Services;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NadekoBot.Common.Attributes;
 using NadekoBot.Modules.Gambling.Services;
@@ -53,7 +54,6 @@ namespace NadekoBot.Modules.Gambling
             [OwnerOnly]
             public async Task SlotStats()
             {
-                //i remembered to not be a moron
                 var paid = _totalPaidOut;
                 var bet = _totalBet;
 
@@ -92,6 +92,9 @@ namespace NadekoBot.Modules.Gambling
 
                         return;
                     }
+
+                    Interlocked.Add(ref _totalBet, amount);
+                    Interlocked.Add(ref _totalPaidOut, result.Won);
 
                     long ownedAmount;
                     using (var uow = _db.GetDbContext())
@@ -162,7 +165,6 @@ namespace NadekoBot.Modules.Gambling
 
                         using (var imgStream = bgImage.ToStream())
                         {
-                            //sw.PrintLap("sending");
                             await ctx.Channel.SendFileAsync(imgStream,
                                 filename: "result.png",
                                 text: Format.Bold(ctx.User.ToString()) + " " + msg).ConfigureAwait(false);
