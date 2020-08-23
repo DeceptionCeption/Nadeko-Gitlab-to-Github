@@ -116,8 +116,8 @@ namespace NadekoBot.Modules.Gambling
                                     VerticalAlignment = VerticalAlignment.Center,
                                     WrapTextWidth = 140,
                                 }
-                            }, result.Won.ToString(), _fonts.NotoSans.CreateFont(30), SixLabors.ImageSharp.Color.Red,
-                            new PointF(225, 95)));
+                            }, result.Won.ToString(), _fonts.DottyFont.CreateFont(65), SixLabors.ImageSharp.Color.Red,
+                            new PointF(227, 92)));
 
                         bgImage.Mutate(x => x.DrawText(new TextGraphicsOptions
                             {
@@ -127,8 +127,8 @@ namespace NadekoBot.Modules.Gambling
                                     VerticalAlignment = VerticalAlignment.Center,
                                     WrapTextWidth = 135,
                                 }
-                            }, amount.ToString(), _fonts.NotoSans.CreateFont(25), SixLabors.ImageSharp.Color.Red,
-                            new PointF(129, 475)));
+                            }, amount.ToString(), _fonts.DottyFont.CreateFont(50), SixLabors.ImageSharp.Color.Red,
+                            new PointF(129, 472)));
 
                         bgImage.Mutate(x => x.DrawText(new TextGraphicsOptions
                             {
@@ -138,15 +138,15 @@ namespace NadekoBot.Modules.Gambling
                                     VerticalAlignment = VerticalAlignment.Center,
                                     WrapTextWidth = 135,
                                 }
-                            }, ownedAmount.ToString(), _fonts.NotoSans.CreateFont(25), SixLabors.ImageSharp.Color.Red,
-                            new PointF(325, 475)));
+                            }, ownedAmount.ToString(), _fonts.DottyFont.CreateFont(50), SixLabors.ImageSharp.Color.Red,
+                            new PointF(325, 472)));
                         //sw.PrintLap("drew red text");
 
                         for (var i = 0; i < 3; i++)
                         {
                             using (var img = Image.Load(_images.SlotEmojis[numbers[i]]))
                             {
-                                bgImage.Mutate(x => x.DrawImage(img, new Point(148 + 105 * i, 230), 1f));
+                                bgImage.Mutate(x => x.DrawImage(img, new Point(148 + 105 * i, 217), 1f));
                             }
                         }
 

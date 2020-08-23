@@ -3,6 +3,8 @@ using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace NadekoBot.Core.Services.Impl
 {
@@ -49,7 +51,10 @@ namespace NadekoBot.Core.Services.Impl
             }
 
             RipFont = NotoSans.CreateFont(20, FontStyle.Bold);
+            DottyFont = FallBackFonts.First(x => x.Name == "dotty");
         }
+
+        public FontFamily DottyFont { get; }
 
         public FontFamily UniSans { get; }
         public FontFamily NotoSans { get; }
