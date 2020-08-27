@@ -190,7 +190,7 @@ namespace NadekoBot.Modules
         {
             try
             {
-                var options = new CallOptions(headers: new Metadata());
+                var options = new CallOptions(headers: new Metadata(), deadline: DateTime.UtcNow.AddSeconds(10));
                 options.Headers.Add("accept-language", locale);
 
                 var result = await rpcFactory(request, options);
