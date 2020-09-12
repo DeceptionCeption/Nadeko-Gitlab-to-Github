@@ -509,6 +509,8 @@ namespace NadekoBot.Modules.Gambling
                 opts.Clean = false;
             }
 
+            opts.Clean = false;
+
             if (opts.Clean)
             {
                 var now = DateTime.UtcNow;
