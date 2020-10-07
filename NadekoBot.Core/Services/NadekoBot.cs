@@ -81,18 +81,26 @@ namespace NadekoBot
 
             Client = new DiscordSocketClient(new DiscordSocketConfig
             {
-#if GLOBAL_NADEKO
                 MessageCacheSize = 0,
-#else
-                MessageCacheSize = 50,
-#endif
                 LogLevel = LogSeverity.Warning,
                 ConnectionTimeout = int.MaxValue,
                 TotalShards = Credentials.TotalShards,
                 ShardId = shardId,
                 AlwaysDownloadUsers = false,
                 DefaultRetryMode = RetryMode.Retry502,
-                RateLimitPrecision = RateLimitPrecision.Millisecond
+                RateLimitPrecision = RateLimitPrecision.Millisecond,
+                GatewayIntents = GatewayIntents.Guilds
+                    | GatewayIntents.DirectMessages
+                    | GatewayIntents.GuildBans
+                    | GatewayIntents.GuildEmojis
+                    | GatewayIntents.GuildIntegrations
+                    | GatewayIntents.GuildInvites
+                    | GatewayIntents.GuildMessages
+                    | GatewayIntents.GuildPresences
+                    | GatewayIntents.DirectMessageReactions
+                    | GatewayIntents.DirectMessages
+                    | GatewayIntents.GuildMessageReactions
+                    | GatewayIntents.GuildVoiceStates
             });
 
             CommandService = new CommandService(new CommandServiceConfig()
