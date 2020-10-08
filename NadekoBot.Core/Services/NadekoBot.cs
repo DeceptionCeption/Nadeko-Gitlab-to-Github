@@ -101,6 +101,7 @@ namespace NadekoBot
                     | GatewayIntents.DirectMessages
                     | GatewayIntents.GuildMessageReactions
                     | GatewayIntents.GuildVoiceStates
+                    | GatewayIntents.GuildMembers
             });
 
             CommandService = new CommandService(new CommandServiceConfig()
