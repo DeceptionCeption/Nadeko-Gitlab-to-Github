@@ -219,11 +219,11 @@ namespace NadekoBot.Modules.Administration.Services
             if (type == MuteType.All)
             {
                 try { await usr.ModifyAsync(x => x.Mute = true).ConfigureAwait(false); } catch { }
+
+                await usr.ModifyAsync(x => x.RoleIds = new ulong[0]);
                 var muteRole = await GetMuteRole(usr.Guild).ConfigureAwait(false);
                 if (!usr.RoleIds.Contains(muteRole.Id))
                     await usr.AddRoleAsync(muteRole).ConfigureAwait(false);
-
-                await usr.ModifyAsync(x => x.RoleIds = new ulong[0]);
 
                 StopTimer(usr.GuildId, usr.Id, TimerType.Mute);
                 using (var uow = _db.GetDbContext())
