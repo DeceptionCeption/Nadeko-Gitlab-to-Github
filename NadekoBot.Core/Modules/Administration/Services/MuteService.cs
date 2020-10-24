@@ -11,6 +11,11 @@ using NadekoBot.Extensions;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
 using NLog;
+using NadekoBot.Modules.Utility.Common.Patreon;
+using System.Collections.Generic;
+using Google.Apis.Util.Store;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace NadekoBot.Modules.Administration.Services
 {
@@ -19,6 +24,61 @@ namespace NadekoBot.Modules.Administration.Services
         Voice,
         Chat,
         All
+    }
+
+    public class MuteSaver : INService
+    {
+        private class SavedMute
+        {
+            public int Id { get; set; }
+            public List<ulong> Roles { get; set; }
+        }
+
+        private const string MuteDataPath = "data/mutedata.json";
+        private readonly object _locker = new object();
+        private readonly Dictionary<int, List<ulong>> _savedMutes = new Dictionary<int, List<ulong>>();
+
+        public MuteSaver()
+        {
+            if (!File.Exists(MuteDataPath))
+            {
+                Save();
+            }
+
+            _savedMutes = JsonConvert.DeserializeObject<Dictionary<int, List<ulong>>>(File.ReadAllText(MuteDataPath));
+        }
+
+        private void Save()
+        {
+            lock (_locker)
+            {
+                File.WriteAllText(MuteDataPath, JsonConvert.SerializeObject(_savedMutes));
+            }
+        }
+
+        public void WriteMute(int id, List<IRole> roles)
+        {
+            lock (_locker)
+            {
+                _savedMutes[id] = roles.Select(x => x.Id).ToList();
+                Save();
+            }
+        }
+
+        public List<ulong> TryEraseMute(int id)
+        {
+            lock (_locker)
+            {
+                if (_savedMutes.TryGetValue(id, out var data))
+                {
+                    _savedMutes.Remove(id);
+                    Save();
+                    return data;
+                }
+
+                return new List<ulong>();
+            }
+        }
     }
 
     public class MuteService : INService
@@ -39,11 +99,13 @@ namespace NadekoBot.Modules.Administration.Services
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         private readonly DiscordSocketClient _client;
         private readonly DbService _db;
+        private readonly MuteSaver _muteSaver;
 
-        public MuteService(DiscordSocketClient client, DbService db)
+        public MuteService(DiscordSocketClient client, DbService db, MuteSaver muteSaver)
         {
             _client = client;
             _db = db;
+            _muteSaver = muteSaver;
 
             using (var uow = db.GetDbContext())
             {
@@ -157,9 +219,12 @@ namespace NadekoBot.Modules.Administration.Services
             if (type == MuteType.All)
             {
                 try { await usr.ModifyAsync(x => x.Mute = true).ConfigureAwait(false); } catch { }
-                var muteRole = await GetMuteRole(usr.Guild).ConfigureAwait(false);
-                if (!usr.RoleIds.Contains(muteRole.Id))
-                    await usr.AddRoleAsync(muteRole).ConfigureAwait(false);
+                //var muteRole = await GetMuteRole(usr.Guild).ConfigureAwait(false);
+                //if (!usr.RoleIds.Contains(muteRole.Id))
+                //    await usr.AddRoleAsync(muteRole).ConfigureAwait(false);
+
+                await usr.ModifyAsync(x => x.RoleIds = new ulong[0]);
+
                 StopTimer(usr.GuildId, usr.Id, TimerType.Mute);
                 using (var uow = _db.GetDbContext())
                 {
@@ -173,7 +238,18 @@ namespace NadekoBot.Modules.Administration.Services
                     if (MutedUsers.TryGetValue(usr.Guild.Id, out ConcurrentHashSet<ulong> muted))
                         muted.Add(usr.Id);
 
-                    config.UnmuteTimers.RemoveWhere(x => x.UserId == usr.Id);
+                    var toRemove = config.UnmuteTimers.Where(x => x.UserId == usr.Id).ToList();
+                    uow._context.RemoveRange(toRemove);
+
+                    foreach (var trm in toRemove)
+                    {
+                        // when a user is muted without a timeout
+                        // it means perma, which means any timer
+                        // which would've given the roles back to that user
+                        // (for example, if he was previously temp muted)
+                        // needs to be removed
+                        _muteSaver.TryEraseMute(trm.Id);
+                    }
 
                     await uow.SaveChangesAsync();
                 }
@@ -201,6 +277,7 @@ namespace NadekoBot.Modules.Administration.Services
             if (type == MuteType.All)
             {
                 StopTimer(guildId, usrId, TimerType.Mute);
+                List<ulong> rolesToRestore = null;
                 using (var uow = _db.GetDbContext())
                 {
                     var config = uow.GuildConfigs.ForId(guildId, set => set.Include(gc => gc.MutedUsers)
@@ -217,14 +294,38 @@ namespace NadekoBot.Modules.Administration.Services
                     if (MutedUsers.TryGetValue(guildId, out ConcurrentHashSet<ulong> muted))
                         muted.TryRemove(usrId);
 
-                    config.UnmuteTimers.RemoveWhere(x => x.UserId == usrId);
+                    var timers = config.UnmuteTimers.Where(x => x.UserId == usrId).ToList();
+                    uow._context.RemoveRange(timers);
+                    // there should never be more than 1 timer, just take first one, if there are any
+                    var first = timers.FirstOrDefault();
+                    if (first != null)
+                    {
+                        rolesToRestore = _muteSaver.TryEraseMute(first.Id);
+                    }
 
                     await uow.SaveChangesAsync();
                 }
                 if (usr != null)
                 {
                     try { await usr.ModifyAsync(x => x.Mute = false).ConfigureAwait(false); } catch { }
-                    try { await usr.RemoveRoleAsync(await GetMuteRole(usr.Guild).ConfigureAwait(false)).ConfigureAwait(false); } catch { /*ignore*/ }
+
+                    // restore roles, if they were saved
+                    if (rolesToRestore != null)
+                    {
+                        var roles = rolesToRestore.Select(roleId => usr.Guild.GetRole(roleId)).Where(x => x != null).ToList();
+
+                        try
+                        {
+                            await usr.AddRolesAsync(roles);
+                            _log.Info($"Mute on user {usr} has expired, roles restored:\n{string.Join(", ", roles)}");
+                        }
+                        catch
+                        {
+                            _log.Warn($"Unable to restore following roles to user {usr}:\n{string.Join(", ", roles)}");
+                        }
+                    }
+
+                    // try { await usr.RemoveRoleAsync(await GetMuteRole(usr.Guild).ConfigureAwait(false)).ConfigureAwait(false); } catch { /*ignore*/ }
                     UserUnmuted(usr, mod, MuteType.All);
                 }
             }
@@ -295,16 +396,22 @@ namespace NadekoBot.Modules.Administration.Services
 
         public async Task TimedMute(IGuildUser user, IUser mod, TimeSpan after, MuteType muteType = MuteType.All)
         {
+            var roles = user.GetRoles().Where(x => !x.IsManaged && x.Id != x.Guild.Id).ToList();
+
             await MuteUser(user, mod, muteType).ConfigureAwait(false); // mute the user. This will also remove any previous unmute timers
             using (var uow = _db.GetDbContext())
             {
                 var config = uow.GuildConfigs.ForId(user.GuildId, set => set.Include(x => x.UnmuteTimers));
-                config.UnmuteTimers.Add(new UnmuteTimer()
+                var ut = new UnmuteTimer()
                 {
                     UserId = user.Id,
                     UnmuteAt = DateTime.UtcNow + after,
-                }); // add teh unmute timer to the database
+                };
+                config.UnmuteTimers.Add(ut); // add teh unmute timer to the database
                 uow.SaveChanges();
+
+                if (muteType == MuteType.All)
+                    _muteSaver.WriteMute(ut.Id, roles);
             }
 
             StartUn_Timer(user.GuildId, user.Id, after, TimerType.Mute); // start the timer
@@ -391,7 +498,7 @@ namespace NadekoBot.Modules.Administration.Services
                         _log.Warn(ex);
                     }
                 }
-                else
+                else if (type == TimerType.Mute)
                 {
                     try
                     {

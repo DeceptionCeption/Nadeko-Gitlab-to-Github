@@ -25,6 +25,7 @@ namespace NadekoBot.Core.Services.Database.Models
 
         //list
         public HashSet<ShopEntryItem> Items { get; set; } = new HashSet<ShopEntryItem>();
+        public string Description { get; set; } = null;
     }
 
     public class ShopEntryItem : DbEntity

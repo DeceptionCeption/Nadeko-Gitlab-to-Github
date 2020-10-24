@@ -784,7 +784,8 @@
     "Cmd": "verbose v",
     "Desc": "Toggles or sets whether to show when a command/module is blocked.",
     "Usage": [
-      "{0}v", "{0}verbose true"
+      "{0}v",
+      "{0}verbose true"
     ]
   },
   "srvrmdl": {
@@ -2811,6 +2812,13 @@
       "{0}shoprm 1"
     ]
   },
+  "shopdesc": {
+    "Cmd": "shopdesc",
+    "Desc": "Sets a description for an item in the store on the specified index.",
+    "Usage": [
+      "{0}shopdesc 3 This role lets you talk in a hidden channel!"
+    ]
+  },
   "shop": {
     "Cmd": "shop",
     "Desc": "Lists this server's administrators' shop. Paginated.",
@@ -2886,7 +2894,8 @@
     "Cmd": "verboseerror ve",
     "Desc": "Toggles or sets whether the bot should print command errors when a command is incorrectly used.",
     "Usage": [
-      "{0}ve", "{0}ve false"
+      "{0}ve",
+      "{0}ve false"
     ]
   },
   "streamrolekeyword": {
