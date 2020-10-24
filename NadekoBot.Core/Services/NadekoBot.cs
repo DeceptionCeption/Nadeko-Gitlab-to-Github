@@ -93,7 +93,6 @@ namespace NadekoBot
                     | GatewayIntents.DirectMessages
                     | GatewayIntents.GuildBans
                     | GatewayIntents.GuildEmojis
-                    | GatewayIntents.GuildInvites
                     | GatewayIntents.GuildMessages
                     | GatewayIntents.GuildPresences
                     | GatewayIntents.DirectMessageReactions
