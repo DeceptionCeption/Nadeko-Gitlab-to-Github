@@ -219,9 +219,9 @@ namespace NadekoBot.Modules.Administration.Services
             if (type == MuteType.All)
             {
                 try { await usr.ModifyAsync(x => x.Mute = true).ConfigureAwait(false); } catch { }
-                //var muteRole = await GetMuteRole(usr.Guild).ConfigureAwait(false);
-                //if (!usr.RoleIds.Contains(muteRole.Id))
-                //    await usr.AddRoleAsync(muteRole).ConfigureAwait(false);
+                var muteRole = await GetMuteRole(usr.Guild).ConfigureAwait(false);
+                if (!usr.RoleIds.Contains(muteRole.Id))
+                    await usr.AddRoleAsync(muteRole).ConfigureAwait(false);
 
                 await usr.ModifyAsync(x => x.RoleIds = new ulong[0]);
 
@@ -325,7 +325,7 @@ namespace NadekoBot.Modules.Administration.Services
                         }
                     }
 
-                    // try { await usr.RemoveRoleAsync(await GetMuteRole(usr.Guild).ConfigureAwait(false)).ConfigureAwait(false); } catch { /*ignore*/ }
+                    try { await usr.RemoveRoleAsync(await GetMuteRole(usr.Guild).ConfigureAwait(false)).ConfigureAwait(false); } catch { /*ignore*/ }
                     UserUnmuted(usr, mod, MuteType.All);
                 }
             }
