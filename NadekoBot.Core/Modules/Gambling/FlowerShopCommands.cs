@@ -401,17 +401,17 @@ namespace NadekoBot.Modules.Gambling
                 if (entry.Type == ShopEntryType.Role)
                 {
                     return embed
-                        .AddField(efb => efb.WithName(GetText("name")).WithValue(entry.Name ?? "-").WithIsInline(true))
-                        .AddField(efb => efb.WithName(GetText("desc")).WithValue(entry.Description ?? "-").WithIsInline(true))
-                        .AddField(efb => efb.WithName(GetText("price")).WithValue(entry.Price.ToString()).WithIsInline(true))
-                        .AddField(efb => efb.WithName(GetText("type")).WithValue(entry.Type.ToString()).WithIsInline(true));
+                        .AddField(efb => efb.WithName(GetText("name")).WithValue(entry.Name ?? "-").WithIsInline(false))
+                        .AddField(efb => efb.WithName(GetText("desc")).WithValue(entry.Description ?? "-").WithIsInline(false))
+                        .AddField(efb => efb.WithName(GetText("price")).WithValue(entry.Price.ToString()).WithIsInline(false))
+                        .AddField(efb => efb.WithName(GetText("type")).WithValue(entry.Type.ToString()).WithIsInline(false));
                 }
                 else if (entry.Type == ShopEntryType.List)
                     return embed
-                        .AddField(efb => efb.WithName(GetText("name")).WithValue(entry.Name ?? "-").WithIsInline(true))
-                        .AddField(efb => efb.WithName(GetText("desc")).WithValue(entry.Description ?? "-").WithIsInline(true))
-                        .AddField(efb => efb.WithName(GetText("price")).WithValue(entry.Price.ToString()).WithIsInline(true))
-                        .AddField(efb => efb.WithName(GetText("type")).WithValue(GetText("random_unique_item")).WithIsInline(true));
+                        .AddField(efb => efb.WithName(GetText("name")).WithValue(entry.Name ?? "-").WithIsInline(false))
+                        .AddField(efb => efb.WithName(GetText("desc")).WithValue(entry.Description ?? "-").WithIsInline(false))
+                        .AddField(efb => efb.WithName(GetText("price")).WithValue(entry.Price.ToString()).WithIsInline(false))
+                        .AddField(efb => efb.WithName(GetText("type")).WithValue(GetText("random_unique_item")).WithIsInline(false));
                 //else if (entry.Type == ShopEntryType.Infinite_List)
                 //    return embed.AddField(efb => efb.WithName(GetText("name")).WithValue(GetText("shop_role", Format.Bold(entry.RoleName))).WithIsInline(true))
                 //            .AddField(efb => efb.WithName(GetText("price")).WithValue(entry.Price.ToString()).WithIsInline(true))
@@ -423,7 +423,7 @@ namespace NadekoBot.Modules.Gambling
             {
                 if (entry.Type == ShopEntryType.Role)
                 {
-                    return entry.Description;
+                    return entry.Description ?? "-";
                 }
                 else if (entry.Type == ShopEntryType.List)
                 {
