@@ -95,7 +95,7 @@ namespace NadekoBot.Modules.Xp.Services
             var allGuildConfigs = bot.AllGuildConfigs
                 .Where(x => x.XpSettings != null)
                 .ToList();
-            
+
             _excludedChannels = allGuildConfigs
                 .ToDictionary(
                     x => x.GuildId,
@@ -121,10 +121,10 @@ namespace NadekoBot.Modules.Xp.Services
                     .Select(x => x.GuildId));
 
             _cmd.OnMessageNoTrigger += _cmd_OnMessageNoTrigger;
-            
+
 #if !GLOBAL_NADEKO
             _client.UserVoiceStateUpdated += _client_OnUserVoiceStateUpdated;
-            
+
             // Scan guilds on startup.
             _client.GuildAvailable += _client_OnGuildAvailable;
             foreach (var guild in _client.Guilds)
@@ -208,13 +208,24 @@ namespace NadekoBot.Modules.Xp.Services
                                     curRewards.Add(usr.GuildId, crews);
                                 }
 
-                                var rrew = rrews.FirstOrDefault(x => x.Level == newGuildLevelData.Level);
-                                if (rrew != null)
+                                var rrew2 = rrews.Where(x => x.Level == newGuildLevelData.Level).ToList();
+                                if (rrew2.Count > 0)
                                 {
-                                    var role = first.User.Guild.GetRole(rrew.RoleId);
-                                    if (role != null)
+                                    foreach (var rrew in rrew2)
                                     {
-                                        var __ = first.User.AddRoleAsync(role);
+                                        var role = first.User.Guild.GetRole(rrew.RoleId);
+                                        if (role != null)
+                                        {
+                                            Task throwaway;
+                                            if (rrew.Action == XpRoleRewardAction.Add)
+                                            {
+                                                throwaway = first.User.AddRoleAsync(role);
+                                            }
+                                            else if(first.User.RoleIds.Contains(role.Id))
+                                            {
+                                                throwaway = first.User.RemoveRoleAsync(role);
+                                            }
+                                        }
                                     }
                                 }
 
@@ -278,7 +289,7 @@ namespace NadekoBot.Modules.Xp.Services
                 }
             }
         }
-        
+
 
         private void InternalReloadXpTemplate()
         {
@@ -360,7 +371,7 @@ namespace NadekoBot.Modules.Xp.Services
             }
         }
 
-        public void SetRoleReward(ulong guildId, int level, ulong? roleId)
+        public void SetRoleReward(ulong guildId, int level, ulong? roleId, XpRoleRewardAction action)
         {
             using (var uow = _db.GetDbContext())
             {
@@ -368,7 +379,7 @@ namespace NadekoBot.Modules.Xp.Services
 
                 if (roleId == null)
                 {
-                    var toRemove = settings.RoleRewards.FirstOrDefault(x => x.Level == level);
+                    var toRemove = settings.RoleRewards.FirstOrDefault(x => x.Level == level && x.Action == action);
                     if (toRemove != null)
                     {
                         uow._context.Remove(toRemove);
@@ -377,7 +388,7 @@ namespace NadekoBot.Modules.Xp.Services
                 }
                 else
                 {
-                    var rew = settings.RoleRewards.FirstOrDefault(x => x.Level == level);
+                    var rew = settings.RoleRewards.FirstOrDefault(x => x.Level == level && x.Action == action);
 
                     if (rew != null)
                         rew.RoleId = roleId.Value;
@@ -386,6 +397,7 @@ namespace NadekoBot.Modules.Xp.Services
                         {
                             Level = level,
                             RoleId = roleId.Value,
+                            Action = action,
                         });
                 }
 
@@ -446,10 +458,10 @@ namespace NadekoBot.Modules.Xp.Services
                     ScanChannelForVoiceXp(channel);
                 }
             });
-            
+
             return Task.CompletedTask;
         }
-        
+
         private Task _client_OnUserVoiceStateUpdated(SocketUser socketUser, SocketVoiceState before, SocketVoiceState after)
         {
             if (!(socketUser is SocketGuildUser user) || user.IsBot)
@@ -473,7 +485,7 @@ namespace NadekoBot.Modules.Xp.Services
                     UserLeftVoiceChannel(user, before.VoiceChannel);
                 }
             });
-            
+
             return Task.CompletedTask;
         }
 
@@ -535,13 +547,13 @@ namespace NadekoBot.Modules.Xp.Services
             var key = $"{_creds.RedisKey()}_user_xp_vc_join_{user.Id}";
             var value = _cache.Redis.GetDatabase().StringGet(key);
             _cache.Redis.GetDatabase().KeyDelete(key);
-            
+
             // Allow for if this function gets called multiple times when a user leaves a channel.
             if (value.IsNull) return;
-            
+
             if (!value.TryParse(out long startUnixTime))
                 return;
-            
+
             var dateStart = DateTimeOffset.FromUnixTimeSeconds(startUnixTime);
             var dateEnd = DateTimeOffset.UtcNow;
             var minutes = (dateEnd - dateStart).TotalMinutes;
@@ -563,16 +575,16 @@ namespace NadekoBot.Modules.Xp.Services
         {
             if (_excludedChannels.TryGetValue(user.Guild.Id, out var chans) &&
                 chans.Contains(channelId)) return false;
-            
+
             if (_excludedServers.Contains(user.Guild.Id)) return false;
-            
+
             if (_excludedRoles.TryGetValue(user.Guild.Id, out var roles) &&
                 user.Roles.Any(x => roles.Contains(x.Id)))
                 return false;
 
             return true;
         }
-        
+
         private Task _cmd_OnMessageNoTrigger(IUserMessage arg)
         {
             if (!(arg.Author is SocketGuildUser user) || user.IsBot)
@@ -603,7 +615,7 @@ namespace NadekoBot.Modules.Xp.Services
         public void AddXpDirectly(IGuildUser user, IMessageChannel channel, int amount)
         {
             if (amount <= 0) throw new ArgumentOutOfRangeException(nameof(amount));
-            
+
             _addMessageXp.Enqueue(new UserCacheItem
             {
                 Guild = user.Guild,
@@ -612,7 +624,7 @@ namespace NadekoBot.Modules.Xp.Services
                 XpAmount = amount
             });
         }
-        
+
         public void AddXp(ulong userId, ulong guildId, int amount)
         {
             using (var uow = _db.GetDbContext())
@@ -812,7 +824,7 @@ namespace NadekoBot.Modules.Xp.Services
                         VerticalAlignment = VerticalAlignment.Center,
                     }
                 }.WithFallbackFonts(_fonts.FallBackFonts);
-                
+
                 var clubTextOptions = new TextGraphicsOptions()
                 {
                     TextOptions = new TextOptions()
@@ -821,7 +833,7 @@ namespace NadekoBot.Modules.Xp.Services
                         VerticalAlignment = VerticalAlignment.Top,
                     }
                 }.WithFallbackFonts(_fonts.FallBackFonts);
-                
+
                 using (var img = Image.Load<Rgba32>(_images.XpBackground, out var imageFormat))
                 {
                     if (_template.User.Name.Show)
@@ -857,7 +869,7 @@ namespace NadekoBot.Modules.Xp.Services
 
                         var clubFont = _fonts.NotoSans
                             .CreateFont(_template.Club.Name.FontSize, FontStyle.Regular);
-                        
+
                         img.Mutate(x => x.DrawText(clubTextOptions,
                             clubName,
                             clubFont,

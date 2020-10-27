@@ -288,7 +288,7 @@ namespace NadekoBot.Core.Services.Database
 
             #region XpRoleReward
             modelBuilder.Entity<XpRoleReward>()
-                .HasIndex(x => new { x.XpSettingsId, x.Level })
+                .HasIndex(x => new { x.XpSettingsId, x.Level, x.Action })
                 .IsUnique();
             #endregion
 

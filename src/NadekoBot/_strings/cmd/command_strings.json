@@ -2819,6 +2819,13 @@
       "{0}shopdesc 3 This role lets you talk in a hidden channel!"
     ]
   },
+  "shopname": {
+    "Cmd": "shopname",
+    "Desc": "Sets a name for an item in the store on the specified index.",
+    "Usage": [
+      "{0}shopdesc 3 💳 VIP 💳"
+    ]
+  },
   "shop": {
     "Cmd": "shop",
     "Desc": "Lists this server's administrators' shop. Paginated.",
@@ -2984,9 +2991,10 @@
   },
   "xprolereward": {
     "Cmd": "xprolereward xprr",
-    "Desc": "Sets a role reward on a specified level. Provide no role name in order to remove the role reward.",
+    "Desc": "Sets a role which should be removed or added to the user who reaches the specified level. Provide no role name in order to remove the role reward.",
     "Usage": [
-      "{0}xprr 3 Social"
+      "{0}xprr 3 add Social",
+      "{0}xprr 5 rm Noob"
     ]
   },
   "xpcurrencyreward": {

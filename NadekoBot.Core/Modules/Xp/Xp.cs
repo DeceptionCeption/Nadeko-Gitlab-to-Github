@@ -64,7 +64,13 @@ namespace NadekoBot.Modules.Xp
                 {
                     var str = ctx.Guild.GetRole(x.RoleId)?.ToString();
                     if (str != null)
-                        str = GetText("role_reward", Format.Bold(str));
+                    {
+                        if(x.Action == XpRoleRewardAction.Add)
+                            str = GetText("role_reward", Format.Bold(str));
+                        else
+                            str = GetText("role_reward_rm", Format.Bold(str));
+                    }
+
                     return (x.Level, RoleStr: str);
                 })
                 .Where(x => x.RoleStr != null)
@@ -86,17 +92,19 @@ namespace NadekoBot.Modules.Xp
         [NadekoCommand, Usage, Description, Aliases]
         [UserPerm(GuildPerm.ManageRoles)]
         [RequireContext(ContextType.Guild)]
-        public async Task XpRoleReward(int level, [Leftover] IRole role = null)
+        public async Task XpRoleReward(int level, XpRoleRewardAction addrm, [Leftover] IRole role = null)
         {
             if (level < 1)
                 return;
 
-            _service.SetRoleReward(ctx.Guild.Id, level, role?.Id);
+            _service.SetRoleReward(ctx.Guild.Id, level, role?.Id, addrm);
 
             if (role == null)
                 await ReplyConfirmLocalizedAsync("role_reward_cleared", level).ConfigureAwait(false);
-            else
+            else if(addrm == XpRoleRewardAction.Add)
                 await ReplyConfirmLocalizedAsync("role_reward_added", level, Format.Bold(role.ToString())).ConfigureAwait(false);
+            else
+                await ReplyConfirmLocalizedAsync("role_reward_rm_added", level, Format.Bold(role.ToString())).ConfigureAwait(false);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
@@ -223,7 +231,7 @@ namespace NadekoBot.Modules.Xp
             {
                 await Context.Channel.TriggerTypingAsync().ConfigureAwait(false);
                 await _tracker.EnsureUsersDownloadedAsync(ctx.Guild).ConfigureAwait(false);
-                
+
                 allUsers = _service.GetTopUserXps(ctx.Guild.Id, 1000)
                     .Where(user => !(socketGuild.GetUser(user.UserId) is null))
                     .ToList();

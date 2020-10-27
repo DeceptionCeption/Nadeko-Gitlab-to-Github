@@ -16,23 +16,28 @@ namespace NadekoBot.Core.Services.Database.Models
     }
 
     public enum ExcludedItemType { Channel, Role }
+    public enum XpRoleRewardAction { Add, Rm }
 
     public class XpRoleReward : DbEntity
     {
         public int XpSettingsId { get; set; }
         public XpSettings XpSettings { get; set; }
 
+        public XpRoleRewardAction Action { get; set; }
         public int Level { get; set; }
         public ulong RoleId { get; set; }
 
         public override int GetHashCode()
         {
-            return Level.GetHashCode() ^ XpSettingsId.GetHashCode();
+            return Level.GetHashCode() ^ XpSettingsId.GetHashCode() ^ (Action.GetHashCode() * 99907);
         }
 
         public override bool Equals(object obj)
         {
-            return obj is XpRoleReward xrr && xrr.Level == Level && xrr.XpSettingsId == XpSettingsId;
+            return obj is XpRoleReward xrr
+                && xrr.Level == Level
+                && xrr.XpSettingsId == XpSettingsId
+                && xrr.Action == Action;
         }
     }
 

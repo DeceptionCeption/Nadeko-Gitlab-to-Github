@@ -68,7 +68,10 @@ namespace NadekoBot.Modules.Gambling
                     for (int i = 0; i < theseEntries.Length; i++)
                     {
                         var entry = theseEntries[i];
-                        embed.AddField(efb => efb.WithName($"#{curPage * 9 + i + 1} - {entry.Price}{Bc.BotConfig.CurrencySign}").WithValue(EntryToString(entry)).WithIsInline(true));
+                        embed.AddField(efb => efb
+                            .WithName($"#{curPage * 9 + i + 1} · {entry.Price}{Bc.BotConfig.CurrencySign} · {entry.Name}")
+                            .WithValue(EntryToString(entry))
+                            .WithIsInline(false));
                     }
                     return embed;
                 }, entries.Count, 9, true).ConfigureAwait(false);
@@ -209,7 +212,7 @@ namespace NadekoBot.Modules.Gambling
             {
                 var entry = new ShopEntry()
                 {
-                    Name = "-",
+                    Name = role.Name,
                     Price = price,
                     Type = ShopEntryType.Role,
                     AuthorId = ctx.User.Id,
@@ -234,11 +237,11 @@ namespace NadekoBot.Modules.Gambling
             [NadekoCommand, Usage, Description, Aliases]
             [RequireContext(ContextType.Guild)]
             [UserPerm(GuildPerm.Administrator)]
-            public async Task ShopAdd(List _, int price, [Leftover]string name)
+            public async Task ShopAdd(List _, int price, [Leftover]string description)
             {
                 var entry = new ShopEntry()
                 {
-                    Name = name.TrimTo(100),
+                    Description = description,
                     Price = price,
                     Type = ShopEntryType.List,
                     AuthorId = ctx.User.Id,
@@ -361,22 +364,54 @@ namespace NadekoBot.Modules.Gambling
                     await ReplyConfirmLocalizedAsync("shop_item_desc", index + 1, desc);
             }
 
+            [NadekoCommand, Usage, Description, Aliases]
+            [RequireContext(ContextType.Guild)]
+            [UserPerm(GuildPerm.Administrator)]
+            public async Task ShopName(int index, [Leftover] string name)
+            {
+                if (--index < 0)
+                    return;
+
+                ShopEntry existing;
+                using (var uow = _db.GetDbContext())
+                {
+                    var config = uow.GuildConfigs.ForId(ctx.Guild.Id, set => set
+                        .Include(x => x.ShopEntries)
+                        .ThenInclude(x => x.Items));
+
+                    var entries = new IndexedCollection<ShopEntry>(config.ShopEntries);
+                    existing = entries.ElementAtOrDefault(index);
+                    if (existing != null)
+                    {
+                        existing.Name = name;
+                        uow.SaveChanges();
+                    }
+                }
+
+                if (existing == null)
+                    await ReplyErrorLocalizedAsync("shop_item_not_found").ConfigureAwait(false);
+                else
+                    await ReplyConfirmLocalizedAsync("shop_item_name", index + 1, name);
+            }
+
             public EmbedBuilder EntryToEmbed(ShopEntry entry)
             {
                 var embed = new EmbedBuilder().WithOkColor();
 
                 if (entry.Type == ShopEntryType.Role)
                 {
-                    return embed.AddField(efb => efb
-                                .WithName(GetText("name"))
-                                .WithValue(GetText("shop_role", Format.Bold(ctx.Guild.GetRole(entry.RoleId)?.Name ?? "MISSING_ROLE")) + "\n\n" + entry.Description).WithIsInline(true))
-                            .AddField(efb => efb.WithName(GetText("price")).WithValue(entry.Price.ToString()).WithIsInline(true))
-                            .AddField(efb => efb.WithName(GetText("type")).WithValue(entry.Type.ToString()).WithIsInline(true));
+                    return embed
+                        .AddField(efb => efb.WithName(GetText("name")).WithValue(entry.Name ?? "-").WithIsInline(true))
+                        .AddField(efb => efb.WithName(GetText("desc")).WithValue(entry.Description ?? "-").WithIsInline(true))
+                        .AddField(efb => efb.WithName(GetText("price")).WithValue(entry.Price.ToString()).WithIsInline(true))
+                        .AddField(efb => efb.WithName(GetText("type")).WithValue(entry.Type.ToString()).WithIsInline(true));
                 }
                 else if (entry.Type == ShopEntryType.List)
-                    return embed.AddField(efb => efb.WithName(GetText("name")).WithValue(entry.Name + "\n\n" + entry.Description).WithIsInline(true))
-                            .AddField(efb => efb.WithName(GetText("price")).WithValue(entry.Price.ToString()).WithIsInline(true))
-                            .AddField(efb => efb.WithName(GetText("type")).WithValue(GetText("random_unique_item")).WithIsInline(true));
+                    return embed
+                        .AddField(efb => efb.WithName(GetText("name")).WithValue(entry.Name ?? "-").WithIsInline(true))
+                        .AddField(efb => efb.WithName(GetText("desc")).WithValue(entry.Description ?? "-").WithIsInline(true))
+                        .AddField(efb => efb.WithName(GetText("price")).WithValue(entry.Price.ToString()).WithIsInline(true))
+                        .AddField(efb => efb.WithName(GetText("type")).WithValue(GetText("random_unique_item")).WithIsInline(true));
                 //else if (entry.Type == ShopEntryType.Infinite_List)
                 //    return embed.AddField(efb => efb.WithName(GetText("name")).WithValue(GetText("shop_role", Format.Bold(entry.RoleName))).WithIsInline(true))
                 //            .AddField(efb => efb.WithName(GetText("price")).WithValue(entry.Price.ToString()).WithIsInline(true))
@@ -388,7 +423,7 @@ namespace NadekoBot.Modules.Gambling
             {
                 if (entry.Type == ShopEntryType.Role)
                 {
-                    return GetText("shop_role", Format.Bold(ctx.Guild.GetRole(entry.RoleId)?.Name ?? "MISSING_ROLE")) + "\n\n" + entry.Description;
+                    return entry.Description;
                 }
                 else if (entry.Type == ShopEntryType.List)
                 {
