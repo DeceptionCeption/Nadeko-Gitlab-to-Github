@@ -2994,7 +2994,9 @@
     "Desc": "Sets a role which should be removed or added to the user who reaches the specified level. Provide no role name in order to remove the role reward.",
     "Usage": [
       "{0}xprr 3 add Social",
-      "{0}xprr 5 rm Noob"
+      "{0}xprr 3 add",
+      "{0}xprr 5 rm Noob",
+      "{0}xprr 5 rm"
     ]
   },
   "xpcurrencyreward": {
