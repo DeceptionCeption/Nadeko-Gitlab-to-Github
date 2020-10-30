@@ -784,7 +784,8 @@
     "Cmd": "verbose v",
     "Desc": "Toggles or sets whether to show when a command/module is blocked.",
     "Usage": [
-      "{0}v", "{0}verbose true"
+      "{0}v",
+      "{0}verbose true"
     ]
   },
   "srvrmdl": {
@@ -2886,7 +2887,8 @@
     "Cmd": "verboseerror ve",
     "Desc": "Toggles or sets whether the bot should print command errors when a command is incorrectly used.",
     "Usage": [
-      "{0}ve", "{0}ve false"
+      "{0}ve",
+      "{0}ve false"
     ]
   },
   "streamrolekeyword": {
@@ -3416,6 +3418,15 @@
       "{0}edit 7479498384 Hi :^)"
     ]
   },
+  "delete": {
+    "cmd": "delete del",
+    "desc": "Deletes a single message given the channel and message ID. If channel is ommited, message will be searched for in the current channel. You can also specify time parameter after which the message will be deleted (up to 7 days). This timer won't persist through bot restarts.",
+    "usage": [
+      "{0}del #chat 771562360594628608",
+      "{0}del 771562360594628608",
+      "{0}del 771562360594628608 5m"
+    ]
+  },
   "roleid": {
     "cmd": "roleid rid",
     "desc": "Shows the id of the specified role.",
@@ -3429,6 +3440,13 @@
     "usage": [
       "{0}updatescheck commit",
       "{0}updatescheck release"
+    ]
+  },
+  "nsfwtoggle": {
+    "cmd": "nsfwtoggle nsfw nsfwtgl",
+    "desc": "Toggles the NSFW parameter of the current text channel.",
+    "usage": [
+      "{0}nsfwtoggle"
     ]
   },
   "economy": {
