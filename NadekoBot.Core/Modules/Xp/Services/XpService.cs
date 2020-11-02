@@ -177,10 +177,11 @@ namespace NadekoBot.Modules.Xp.Services
                             if (du.Club != null) du.Club.Xp += xp;
                             var newGuildLevelData = new LevelStats(usr.Xp + usr.AwardedXp);
 
+                            var first = item.First();
+
                             if (oldGlobalLevelData.Level < newGlobalLevelData.Level)
                             {
                                 du.LastLevelUp = DateTime.UtcNow;
-                                var first = item.First();
                                 if (du.NotifyOnLevelUp != XpNotificationLocation.None)
                                     toNotify.Add((first.Guild, first.Channel, first.User, newGlobalLevelData.Level,
                                         du.NotifyOnLevelUp, NotifOf.Global));
@@ -190,45 +191,53 @@ namespace NadekoBot.Modules.Xp.Services
                             {
                                 usr.LastLevelUp = DateTime.UtcNow;
                                 //send level up notification
-                                var first = item.First();
                                 if (usr.NotifyOnLevelUp != XpNotificationLocation.None)
                                     toNotify.Add((first.Guild, first.Channel, first.User, newGuildLevelData.Level,
                                         usr.NotifyOnLevelUp, NotifOf.Server));
+                            }
 
-                                //give role
-                                if (!roleRewards.TryGetValue(usr.GuildId, out var rrews))
-                                {
-                                    rrews = uow.GuildConfigs.XpSettingsFor(usr.GuildId).RoleRewards.ToList();
-                                    roleRewards.Add(usr.GuildId, rrews);
-                                }
+                            //give role
+                            if (!roleRewards.TryGetValue(usr.GuildId, out var rrews))
+                            {
+                                rrews = uow.GuildConfigs.XpSettingsFor(usr.GuildId).RoleRewards.ToList();
+                                roleRewards.Add(usr.GuildId, rrews);
+                            }
 
-                                if (!curRewards.TryGetValue(usr.GuildId, out var crews))
-                                {
-                                    crews = uow.GuildConfigs.XpSettingsFor(usr.GuildId).CurrencyRewards.ToList();
-                                    curRewards.Add(usr.GuildId, crews);
-                                }
+                            if (!curRewards.TryGetValue(usr.GuildId, out var crews))
+                            {
+                                crews = uow.GuildConfigs.XpSettingsFor(usr.GuildId).CurrencyRewards.ToList();
+                                curRewards.Add(usr.GuildId, crews);
+                            }
 
-                                var rrew2 = rrews.Where(x => x.Level == newGuildLevelData.Level).ToList();
-                                if (rrew2.Count > 0)
+                            var rrew2 = rrews.Where(x => x.Level == newGuildLevelData.Level).ToList();
+                            if (rrew2.Count > 0)
+                            {
+                                foreach (var rrew in rrew2)
                                 {
-                                    foreach (var rrew in rrew2)
+                                    var role = first.User.Guild.GetRole(rrew.RoleId);
+                                    if (role != null)
                                     {
-                                        var role = first.User.Guild.GetRole(rrew.RoleId);
-                                        if (role != null)
+                                        Task throwaway;
+                                        if (rrew.Action == XpRoleRewardAction.Add)
                                         {
-                                            Task throwaway;
-                                            if (rrew.Action == XpRoleRewardAction.Add)
+                                            if (!first.User.RoleIds.Contains(role.Id))
                                             {
                                                 throwaway = first.User.AddRoleAsync(role);
                                             }
-                                            else if(first.User.RoleIds.Contains(role.Id))
+                                        }
+                                        else
+                                        {
+                                            if (first.User.RoleIds.Contains(role.Id))
                                             {
                                                 throwaway = first.User.RemoveRoleAsync(role);
                                             }
                                         }
                                     }
                                 }
+                            }
 
+                            if (oldGuildLevelData.Level < newGuildLevelData.Level)
+                            {
                                 //get currency reward for this level
                                 var crew = crews.FirstOrDefault(x => x.Level == newGuildLevelData.Level);
                                 if (crew != null)
@@ -237,6 +246,7 @@ namespace NadekoBot.Modules.Xp.Services
                                     await _cs.AddAsync(item.Key.User.Id, "Level-up Reward", crew.Amount);
                                 }
                             }
+
                         }
 
                         uow.SaveChanges();
@@ -558,7 +568,7 @@ namespace NadekoBot.Modules.Xp.Services
             var dateEnd = DateTimeOffset.UtcNow;
             var minutes = (dateEnd - dateStart).TotalMinutes;
             var xp = _bc.BotConfig.VoiceXpPerMinute * minutes;
-            var actualXp = (int) Math.Floor(xp);
+            var actualXp = (int)Math.Floor(xp);
 
             if (actualXp > 0)
             {
@@ -703,7 +713,7 @@ namespace NadekoBot.Modules.Xp.Services
             var lvl = 1;
             while (true)
             {
-                required = (int) (baseXp + baseXp / 4.0 * (lvl - 1));
+                required = (int)(baseXp + baseXp / 4.0 * (lvl - 1));
 
                 if (required + totalXp > stats.Xp)
                     break;
@@ -913,9 +923,9 @@ namespace NadekoBot.Modules.Xp.Services
                     //xp bar
                     if (_template.User.Xp.Bar.Show)
                     {
-                        var xpPercent = (global.LevelXp / (float) global.RequiredXp);
+                        var xpPercent = (global.LevelXp / (float)global.RequiredXp);
                         DrawXpBar(xpPercent, _template.User.Xp.Bar.Global, img);
-                        xpPercent = (guild.LevelXp / (float) guild.RequiredXp);
+                        xpPercent = (guild.LevelXp / (float)guild.RequiredXp);
                         DrawXpBar(xpPercent, _template.User.Xp.Bar.Guild, img);
                     }
 
@@ -1052,7 +1062,7 @@ namespace NadekoBot.Modules.Xp.Services
                     }
 
                     img.Mutate(x => x.Resize(_template.OutputSize.X, _template.OutputSize.Y));
-                    return ((Stream) img.ToStream(imageFormat), imageFormat);
+                    return ((Stream)img.ToStream(imageFormat), imageFormat);
                 }
             });
 
