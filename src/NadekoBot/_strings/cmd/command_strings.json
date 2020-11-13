@@ -1745,7 +1745,7 @@
     "Cmd": "safebooru",
     "Desc": "Shows a random image from safebooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)",
     "Usage": [
-      "{0}safebooru yuri+kissing"
+      "{0}safebooru yuri kissing"
     ]
   },
   "wiki": {
@@ -1788,35 +1788,35 @@
     "Cmd": "danbooru",
     "Desc": "Shows a random hentai image from danbooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)",
     "Usage": [
-      "{0}danbooru yuri+kissing"
+      "{0}danbooru yuri kissing"
     ]
   },
   "derpibooru": {
     "Cmd": "derpibooru derpi",
     "Desc": "Shows a random image from derpibooru with a given tag. Tag is optional but preferred.",
     "Usage": [
-      "{0}derpi yuri+kissing"
+      "{0}derpi yuri kissing"
     ]
   },
   "gelbooru": {
     "Cmd": "gelbooru",
-    "Desc": "Shows a random hentai image from gelbooru with a given tag. Tag is optional but preferred. (multiple tags are appended with +)",
+    "Desc": "Shows a random hentai image from gelbooru with a given tag. Tags are optional but preferred.",
     "Usage": [
-      "{0}gelbooru yuri+kissing"
+      "{0}gelbooru yuri kissing"
     ]
   },
   "rule34": {
     "Cmd": "rule34",
-    "Desc": "Shows a random image from rule34.xx with a given tag. Tag is optional but preferred. (multiple tags are appended with +)",
+    "Desc": "Shows a random image from rule34.xx with a given tag. Tags are optional but preferred.",
     "Usage": [
-      "{0}rule34 yuri+kissing"
+      "{0}rule34 yuri kissing"
     ]
   },
   "e621": {
     "Cmd": "e621",
-    "Desc": "Shows a random hentai image from e621.net with a given tag. Tag is optional but preferred. (multiple tags are appended with +)",
+    "Desc": "Shows a random hentai image from e621.net with a given tag. Tag are optional but preferred.",
     "Usage": [
-      "{0}e621 yuri+kissing"
+      "{0}e621 yuri kissing"
     ]
   },
   "boobs": {
@@ -2122,9 +2122,9 @@
   },
   "hentaibomb": {
     "Cmd": "hentaibomb",
-    "Desc": "Shows a total 5 images (from gelbooru, danbooru, konachan and yandere). Tag is optional but preferred.",
+    "Desc": "Shows up to 5 images (from gelbooru, danbooru, konachan and yandere). Tags are optional but preferred.",
     "Usage": [
-      "{0}hentaibomb yuri"
+      "{0}hentaibomb yuri kissing"
     ]
   },
   "cleverbot": {
@@ -2299,7 +2299,7 @@
     "Cmd": "autohentai",
     "Desc": "Posts a hentai every X seconds with a random tag from the provided tags. Use `|` to separate tag groups. Random group will be chosen every time the image is sent. Use `+` for multiple tags (max 2 per group). 20 seconds minimum. Provide no parameters to disable.",
     "Usage": [
-      "{0}autohentai 30 yuri+kissing|tail+long_hair",
+      "{0}autohentai 30 yuri kissing|tail+long_hair",
       "{0}autohentai"
     ]
   },
