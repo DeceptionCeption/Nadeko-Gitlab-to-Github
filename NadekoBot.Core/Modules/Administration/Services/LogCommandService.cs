@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
+using NadekoBot.Common.Collections;
 using NadekoBot.Core.Services;
 using NadekoBot.Core.Services.Database.Models;
 using NadekoBot.Core.Services.Impl;
@@ -109,6 +110,18 @@ namespace NadekoBot.Modules.Administration.Services
             _mute.UserUnmuted += MuteCommands_UserUnmuted;
 
             _prot.OnAntiProtectionTriggered += TriggeredAntiProtection;
+
+            _clearTimer = new Timer(_ =>
+            {
+                _ignoreMessageIds.Clear();
+            }, null, TimeSpan.FromHours(1), TimeSpan.FromHours(1));
+        }
+
+        private readonly Timer _clearTimer;
+        private readonly ConcurrentHashSet<ulong> _ignoreMessageIds = new ConcurrentHashSet<ulong>();
+        public void AddDeleteIgnore(ulong messageId)
+        {
+            _ignoreMessageIds.Add(messageId);
         }
 
         public bool LogIgnore(ulong gid, ulong cid)
@@ -243,7 +256,7 @@ namespace NadekoBot.Modules.Administration.Services
             return Task.CompletedTask;
         }
 
-        public bool Log(ulong gid, ulong? cid, LogType type)
+        public bool Log(ulong gid, ulong? cid, LogType type/*, string options*/)
         {
             ulong? channelId = null;
             using (var uow = _db.GetDbContext())
@@ -260,6 +273,7 @@ namespace NadekoBot.Modules.Administration.Services
                         break;
                     case LogType.MessageDeleted:
                         channelId = logSetting.MessageDeletedId = (logSetting.MessageDeletedId == null ? cid : default);
+                        //logSetting.DontLogBotMessageDeleted = (options == "nobot");
                         break;
                     case LogType.UserJoined:
                         channelId = logSetting.UserJoinedId = (logSetting.UserJoinedId == null ? cid : default);
@@ -358,7 +372,7 @@ namespace NadekoBot.Modules.Administration.Services
             return Task.CompletedTask;
         }
 
-        private void MuteCommands_UserMuted(IGuildUser usr, IUser mod, MuteType muteType)
+        private void MuteCommands_UserMuted(IGuildUser usr, IUser mod, MuteType muteType, string reason)
         {
             var _ = Task.Run(async () =>
             {
@@ -402,7 +416,7 @@ namespace NadekoBot.Modules.Administration.Services
             });
         }
 
-        private void MuteCommands_UserUnmuted(IGuildUser usr, IUser mod, MuteType muteType)
+        private void MuteCommands_UserUnmuted(IGuildUser usr, IUser mod, MuteType muteType, string reason)
         {
             var _ = Task.Run(async () =>
             {
@@ -437,6 +451,9 @@ namespace NadekoBot.Modules.Administration.Services
                         .WithTitle($"{usr.Username}#{usr.Discriminator} | {usr.Id}")
                         .WithFooter(fb => fb.WithText($"{CurrentTime(usr.Guild)}"))
                         .WithOkColor();
+
+                    if (!string.IsNullOrWhiteSpace(reason))
+                        embed.WithDescription(reason);
 
                     await logChannel.EmbedAsync(embed).ConfigureAwait(false);
                 }
@@ -985,6 +1002,9 @@ namespace NadekoBot.Modules.Administration.Services
                 {
                     var msg = (optMsg.HasValue ? optMsg.Value : null) as IUserMessage;
                     if (msg == null || msg.IsAuthor(_client))
+                        return;
+
+                    if (_ignoreMessageIds.Contains(msg.Id))
                         return;
 
                     if (!(ch is ITextChannel channel))

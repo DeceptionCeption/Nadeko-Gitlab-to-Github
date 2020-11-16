@@ -24,12 +24,14 @@ namespace NadekoBot.Modules.Administration.Services
         private readonly Logger _log;
         private readonly NadekoBot _bot;
         private readonly DbService _db;
+        private readonly LogCommandService _logService;
 
-        public AdministrationService(NadekoBot bot, CommandHandler cmdHandler, DbService db)
+        public AdministrationService(NadekoBot bot, CommandHandler cmdHandler, DbService db, LogCommandService logService)
         {
             _log = LogManager.GetCurrentClassLogger();
             _bot = bot;
             _db = db;
+            _logService = logService;
 
             DeleteMessagesOnCommand = new ConcurrentHashSet<ulong>(bot.AllGuildConfigs
                 .Where(g => g.DeleteMessageOnCommand)
@@ -66,13 +68,8 @@ namespace NadekoBot.Modules.Administration.Services
                 {
                     if (state && cmd.Name != "prune" && cmd.Name != "pick")
                     {
-                        try
-                        {
-                            await msg.DeleteAsync().ConfigureAwait(false);
-                        }
-                        catch
-                        {
-                        }
+                        _logService.AddDeleteIgnore(msg.Id);
+                        try { await msg.DeleteAsync().ConfigureAwait(false); } catch { }
                     }
 
                     //if state is false, that means do not do it
@@ -80,13 +77,8 @@ namespace NadekoBot.Modules.Administration.Services
                 else if (DeleteMessagesOnCommand.Contains(channel.Guild.Id) && cmd.Name != "prune" &&
                          cmd.Name != "pick")
                 {
-                    try
-                    {
-                        await msg.DeleteAsync().ConfigureAwait(false);
-                    }
-                    catch
-                    {
-                    }
+                    _logService.AddDeleteIgnore(msg.Id);
+                    try { await msg.DeleteAsync().ConfigureAwait(false); } catch { }
                 }
             });
             return Task.CompletedTask;
@@ -167,9 +159,9 @@ namespace NadekoBot.Modules.Administration.Services
             }
         }
 
-        public async Task EditMessage(ICommandContext context, ulong messageId, string text)
+        public async Task EditMessage(ICommandContext context, ITextChannel chanl, ulong messageId, string text)
         {
-            var msg = await context.Channel.GetMessageAsync(messageId);
+            var msg = await chanl.GetMessageAsync(messageId);
 
             if (!(msg is IUserMessage umsg) || msg.Author.Id != context.Client.CurrentUser.Id)
                 return;
@@ -189,8 +181,11 @@ namespace NadekoBot.Modules.Administration.Services
             }
             else
             {
-                await umsg.ModifyAsync(x => x.Content = text.SanitizeMentions())
-                    .ConfigureAwait(false);
+                await umsg.ModifyAsync(x =>
+                {
+                    x.Content = text.SanitizeMentions();
+                    x.Embed = null;
+                }).ConfigureAwait(false);
             }
         }
     }
