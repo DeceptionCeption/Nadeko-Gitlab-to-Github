@@ -1,4 +1,12 @@
-﻿#if !GLOBAL_NADEKO
+﻿#if GLOBAL_NADEKO
+using NadekoBot.Core.Services;
+namespace NadekoBot.Modules.Administration.Services
+{
+public class LogCommandService : INService {
+    public void AddDeleteIgnore(ulong id){}
+}
+}
+#elif !GLOBAL_NADEKO
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
