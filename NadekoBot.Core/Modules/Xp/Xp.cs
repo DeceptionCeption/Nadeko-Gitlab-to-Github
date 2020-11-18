@@ -94,7 +94,7 @@ namespace NadekoBot.Modules.Xp
         [RequireContext(ContextType.Guild)]
         public async Task XpRoleReward(int level, XpRoleRewardAction addrm, [Leftover] IRole role = null)
         {
-            if (level < 1)
+            if (level < 0)
                 return;
 
             _service.SetRoleReward(ctx.Guild.Id, level, role?.Id, addrm);
@@ -112,7 +112,7 @@ namespace NadekoBot.Modules.Xp
         [OwnerOnly]
         public async Task XpCurrencyReward(int level, int amount = 0)
         {
-            if (level < 1 || amount < 0)
+            if (level < 0 || amount < 0)
                 return;
 
             _service.SetCurrencyReward(ctx.Guild.Id, level, amount);
