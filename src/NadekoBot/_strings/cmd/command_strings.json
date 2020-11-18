@@ -3385,6 +3385,20 @@
       "{0}rerorm 1"
     ]
   },
+  "uniquereaction": {
+    "cmd": "uniquerero urero",
+    "desc": "Assigns a single reaction to the previous message in this channel. User clicking on the reaction will receive the specified role, and lose all other roles. User removing previous reaction will receive old roles back and lose the reaction role. Only one reaction/role allowed per server.",
+    "usage": [
+      "{0}urero :eagle: Eagle Eye"
+    ]
+  },
+  "uniquereactionrm": {
+    "cmd": "urerorm",
+    "desc": "Disables previously enabled Unique Reaction Role feature in this server.",
+    "usage": [
+      "{0}urerorm"
+    ]
+  },
   "blackjack": {
     "cmd": "blackjack bj",
     "desc": "Start or join a blackjack game. You must specify the amount you're betting. Use `{0}hit`, `{0}stand` and `{0}double` commands to play. Game is played with 4 decks. Dealer hits on soft 17 and wins draws.",
