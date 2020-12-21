@@ -7,6 +7,7 @@ namespace NadekoBot.Core.Services.Database.Models
         public ulong UserId { get; set; }
         public ulong GuildId { get; set; }
         public int Xp { get; set; }
+        public int VoiceXp { get; set; }
         public int AwardedXp { get; set; }
         public XpNotificationLocation NotifyOnLevelUp { get; set; }
         public DateTime LastLevelUp { get; set; } = DateTime.UtcNow;

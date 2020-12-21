@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using NadekoBot.Migrations;
 using StackExchange.Redis;
 using Image = SixLabors.ImageSharp.Image;
 
@@ -81,7 +82,7 @@ namespace NadekoBot.Modules.Xp.Services
             _cs = cs;
             _httpFactory = http;
             _client = client;
-
+            
             InternalReloadXpTemplate();
 
             if (client.ShardId == 0)
@@ -158,7 +159,8 @@ namespace NadekoBot.Modules.Xp.Services
                     {
                         foreach (var item in group)
                         {
-                            var xp = item.Sum(x => x.XpAmount);
+                            var textXp = item.Where(x => x.XpGainType == XpGainType.Text).Sum(x => x.XpAmount);
+                            var voiceXp = item.Where(x => x.XpGainType == XpGainType.Voice).Sum(x => x.XpAmount);
 
                             //1. Mass query discord users and userxpstats and get them from local dict
                             //2. (better but much harder) Move everything to the database, and get old and new xp
@@ -167,25 +169,19 @@ namespace NadekoBot.Modules.Xp.Services
                             var usr = uow.Xp.GetOrCreateUser(item.Key.GuildId, item.Key.User.Id);
                             var du = uow.DiscordUsers.GetOrCreate(item.Key.User);
 
-                            var globalXp = du.TotalXp;
-                            var oldGlobalLevelData = new LevelStats(globalXp);
-                            var newGlobalLevelData = new LevelStats(globalXp + xp);
-
                             var oldGuildLevelData = new LevelStats(usr.Xp + usr.AwardedXp);
-                            usr.Xp += xp;
-                            du.TotalXp += xp;
-                            if (du.Club != null) du.Club.Xp += xp;
+                            var oldGuildVoiceLevelData = new LevelStats(usr.VoiceXp + usr.AwardedXp);
+                            
+                            usr.Xp += textXp;
+                            usr.VoiceXp += voiceXp;
+                            
+                            if (du.Club != null) du.Club.Xp += textXp + voiceXp;
+                            
+                            
                             var newGuildLevelData = new LevelStats(usr.Xp + usr.AwardedXp);
+                            var newGuildVoiceLevelData = new LevelStats(usr.VoiceXp + usr.AwardedXp);
 
                             var first = item.First();
-
-                            if (oldGlobalLevelData.Level < newGlobalLevelData.Level)
-                            {
-                                du.LastLevelUp = DateTime.UtcNow;
-                                if (du.NotifyOnLevelUp != XpNotificationLocation.None)
-                                    toNotify.Add((first.Guild, first.Channel, first.User, newGlobalLevelData.Level,
-                                        du.NotifyOnLevelUp, NotifOf.Global));
-                            }
 
                             if (oldGuildLevelData.Level < newGuildLevelData.Level)
                             {
@@ -194,6 +190,14 @@ namespace NadekoBot.Modules.Xp.Services
                                 if (usr.NotifyOnLevelUp != XpNotificationLocation.None)
                                     toNotify.Add((first.Guild, first.Channel, first.User, newGuildLevelData.Level,
                                         usr.NotifyOnLevelUp, NotifOf.Server));
+                            }
+                            if (oldGuildVoiceLevelData.Level < newGuildVoiceLevelData.Level)
+                            {
+                                usr.LastLevelUp = DateTime.UtcNow;
+                                //send level up notification
+                                if (usr.NotifyOnLevelUp != XpNotificationLocation.None)
+                                    toNotify.Add((first.Guild, first.Channel, first.User, newGuildLevelData.Level,
+                                        usr.NotifyOnLevelUp, NotifOf.Global));
                             }
 
                             //give role
@@ -263,8 +267,7 @@ namespace NadekoBot.Modules.Xp.Services
                                     await chan.SendConfirmAsync(_strings.GetText("level_up_dm",
                                         x.Guild.Id,
                                         "xp",
-                                        x.User.Mention, Format.Bold(x.Level.ToString()),
-                                        Format.Bold(x.Guild.ToString() ?? "-")));
+                                        x.User.Mention, Format.Bold(x.Level.ToString())));
                             }
                             else if (x.MessageChannel != null) // channel
                             {
@@ -276,20 +279,22 @@ namespace NadekoBot.Modules.Xp.Services
                         }
                         else
                         {
-                            IMessageChannel chan;
                             if (x.NotifyType == XpNotificationLocation.Dm)
                             {
-                                chan = await x.User.GetOrCreateDMChannelAsync();
+                                var chan = await x.User.GetOrCreateDMChannelAsync();
+                                if (chan != null)
+                                    await chan.SendConfirmAsync(_strings.GetText("level_up_global",
+                                        x.Guild.Id,
+                                        "xp",
+                                        x.User.Mention, Format.Bold(x.Level.ToString())));
                             }
-                            else // channel
+                            else if (x.MessageChannel != null) // channel
                             {
-                                chan = x.MessageChannel;
+                                await x.MessageChannel.SendConfirmAsync(_strings.GetText("level_up_global",
+                                    x.Guild.Id,
+                                    "xp",
+                                    x.User.Mention, Format.Bold(x.Level.ToString())));
                             }
-
-                            await chan.SendConfirmAsync(_strings.GetText("level_up_global",
-                                x.Guild.Id,
-                                "xp",
-                                x.User.Mention, Format.Bold(x.Level.ToString())));
                         }
                     }));
                 }
@@ -576,7 +581,8 @@ namespace NadekoBot.Modules.Xp.Services
                 {
                     Guild = channel.Guild,
                     User = user,
-                    XpAmount = actualXp
+                    XpAmount = actualXp,
+                    XpGainType = XpGainType.Voice
                 });
             }
         }
@@ -700,6 +706,7 @@ namespace NadekoBot.Modules.Xp.Services
                 stats,
                 new LevelStats(totalXp),
                 new LevelStats(stats.Xp + stats.AwardedXp),
+                new LevelStats(stats.VoiceXp),
                 globalRank,
                 guildRank);
         }
@@ -917,7 +924,7 @@ namespace NadekoBot.Modules.Xp.Services
 
                     var pen = new Pen(SixLabors.ImageSharp.Color.Black, 1);
 
-                    var global = stats.Global;
+                    var global = stats.GuildVoice;
                     var guild = stats.Guild;
 
                     //xp bar

@@ -2976,10 +2976,10 @@
   },
   "xpnotify": {
     "Cmd": "xpnotify xpn",
-    "Desc": "Sets how the bot should notify you when you get a `server` or `global` level. You can set `dm` (for the bot to send a direct message), `channel` (to get notified in the channel you sent the last message in) or `none` to disable.",
+    "Desc": "Sets how the bot should notify you when you get a `voice` or `chat` level. You can set `dm` (for the bot to send a direct message), `channel` (to get notified in the channel you sent the last message in) or `none` to disable.",
     "Usage": [
-      "{0}xpn global dm",
-      "{0}xpn server channel"
+      "{0}xpn dm",
+      "{0}xpn channel"
     ]
   },
   "xpleveluprewards": {

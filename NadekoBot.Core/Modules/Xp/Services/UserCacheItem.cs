@@ -8,6 +8,7 @@ namespace NadekoBot.Modules.Xp.Services
         public IGuild Guild { get; set; }
         public IMessageChannel Channel { get; set; }
         public int XpAmount { get; set; }
+        public XpGainType XpGainType { get; set; }
 
         public override int GetHashCode()
         {
@@ -18,5 +19,11 @@ namespace NadekoBot.Modules.Xp.Services
         {
             return obj is UserCacheItem uci && uci.User == User;
         }
+    }
+
+    public enum XpGainType
+    {
+        Text,
+        Voice
     }
 }

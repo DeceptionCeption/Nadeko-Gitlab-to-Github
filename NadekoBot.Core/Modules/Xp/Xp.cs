@@ -127,17 +127,14 @@ namespace NadekoBot.Modules.Xp
         {
             Server = 0,
             Guild = 0,
-            Global = 1,
+            Voice = 1,
         }
 
         [NadekoCommand, Usage, Description, Aliases]
         [RequireContext(ContextType.Guild)]
-        public async Task XpNotify(NotifyPlace place = NotifyPlace.Guild, XpNotificationLocation type = XpNotificationLocation.Channel)
+        public async Task XpNotify(XpNotificationLocation type = XpNotificationLocation.Channel)
         {
-            if (place == NotifyPlace.Guild)
-                await _service.ChangeNotificationType(ctx.User.Id, ctx.Guild.Id, type).ConfigureAwait(false);
-            else
-                await _service.ChangeNotificationType(ctx.User, type).ConfigureAwait(false);
+            await _service.ChangeNotificationType(ctx.User.Id, ctx.Guild.Id, type).ConfigureAwait(false);
             await ctx.Channel.SendConfirmAsync("👌").ConfigureAwait(false);
         }
 
